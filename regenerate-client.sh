@@ -9,6 +9,21 @@ CAN_PUSH=false
 CAN_DELETE=false
 CURRENT_VERSION=`cat setup.py | grep 'VERSION =' | cut -d\" -f2`
 NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
+TRAVIS_DIFF='diff --git a/.travis.yml b/.travis.yml
+index 40dc5f2..0955ce2 100644
+--- a/.travis.yml
++++ b/.travis.yml
+@@ -2,9 +2,6 @@
+ language: python
+ python:
+   - "2.7"
+-  - "3.2"
+-  - "3.3"
+-  - "3.4"
+   - "3.5"
+   - "3.6"
+   - "3.7"
+'
 
 function print_usage() {
     echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
@@ -60,8 +75,10 @@ fi
 
 # Generate the client
 echo -n "Generating client..."
-echo "{\"packageVersion\": \"$NEW_VERSION\"}" > $CLIENT_DIR/config.json
-openapi-generator-cli generate -o /tmp/client -c $CLIENT_DIR/config.json -g python --package-name ibutsu_client -D skipFormModel=true -i $OPENAPI_FILE > $CLIENT_DIR/generate.log 2>&1
+openapi-generator-cli generate -o /tmp/client -g python --package-name ibutsu_client \
+    -D skipFormModel=true -p packageVersion=1.0.9 \
+    -p packageUrl=https://github.com/ibutsu/ibutsu-client-python \
+    -i $OPENAPI_FILE > $CLIENT_DIR/generate.log 2>&1
 if [ $? -ne 0 ]; then
     echo "error"
     echo "Error: Generating client failed. Please see generate.log for errors"
@@ -77,9 +94,11 @@ cat <<EOF >> /tmp/client/.gitignore
 .ibutsu-env
 EOF
 rm /tmp/client/git_push.sh
+echo "$TRAVIS_DIFF" | patch -p 1 -d /tmp/client
 
 # Copy all the files
-find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' -not -name 'regenerate-client.sh' -not -name 'LICENSE' -exec rm -fr {} +
+find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' \
+    -not -name 'regenerate-client.sh' -not -name 'LICENSE' -exec rm -fr {} +
 cp -r /tmp/client/. $CLIENT_DIR
 
 # Clean up afterward
@@ -90,8 +109,6 @@ if [[ "$CAN_COMMIT" = true ]]; then
     echo -n "Committing code..."
     BRANCH_NAME="regenerate-$NEW_VERSION"
     git checkout -b $BRANCH_NAME > /dev/null 2>&1
-    # For now, remove the updates to .gitlab-ci.yml
-    git checkout -- .gitlab-ci.yml
     git add . > /dev/null 2>&1
     git commit -q -m "Regenerated client"
     echo "done, new branch created: $BRANCH_NAME"
