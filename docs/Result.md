@@ -5,7 +5,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Unique ID of the test result | [optional] 
 **test_id** | **str** | Unique id | [optional] 
-**start_time** | **float** | Timestamp of starttime. | [optional] 
+**start_time** | **str** | Timestamp of starttime. | [optional] 
 **duration** | **float** | Duration of test in seconds. | [optional] 
 **result** | **str** | Status of result. | [optional] 
 **metadata** | [**object**](.md) |  | [optional] 

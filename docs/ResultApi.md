@@ -133,7 +133,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_result_list**
-> ResultList get_result_list(filter=filter, page=page, page_size=page_size)
+> ResultList get_result_list(filter=filter, apply_max=apply_max, page=page, page_size=page_size)
 
 Get the list of results.
 
@@ -159,12 +159,13 @@ with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = ibutsu_client.ResultApi(api_client)
     filter = ['filter_example'] # list[str] | Fields to filter by (optional)
+apply_max = True # bool | Use a max to limit documents returned (optional)
 page = 56 # int | Set the page of items to return, defaults to 1 (optional)
 page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
 
     try:
         # Get the list of results.
-        api_response = api_instance.get_result_list(filter=filter, page=page, page_size=page_size)
+        api_response = api_instance.get_result_list(filter=filter, apply_max=apply_max, page=page, page_size=page_size)
         pprint(api_response)
     except ApiException as e:
         print("Exception when calling ResultApi->get_result_list: %s\n" % e)
@@ -175,6 +176,7 @@ page_size = 56 # int | Set the number of items per page, defaults to 25 (optiona
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **filter** | [**list[str]**](str.md)| Fields to filter by | [optional] 
+ **apply_max** | **bool**| Use a max to limit documents returned | [optional] 
  **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
  **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
 

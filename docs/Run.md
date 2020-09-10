@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **created** | **str** | The time this record was created | [optional] 
 **duration** | **float** | Duration of tests in seconds | [optional] 
 **source** | **str** | A source for this test run | [optional] 
-**start_time** | **float** | The time the test run started | [optional] 
+**start_time** | **str** | The time the test run started | [optional] 
 **summary** | [**object**](.md) | A summary of the test results | [optional] 
 **metadata** | [**object**](.md) | Extra data for this run | [optional] 
 
