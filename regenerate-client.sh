@@ -68,15 +68,15 @@ if [[ ! $OPENAPI_FILE == http* ]] && [[ ! -f "$OPENAPI_FILE" ]]; then
     echo "Error: No OpenAPI file or incorrect path to file"
     exit 1
 fi
-if [[ ! -x "$(command -v openapi-generator-cli)" ]]; then
+if [[ ! -x "$(command -v openapi-generator)" ]]; then
     echo "Error: openapi-generator-cli is not installed. Please see https://openapi-generator.tech/"
     exit 2
 fi
 
 # Generate the client
 echo -n "Generating client..."
-openapi-generator-cli generate -o /tmp/client -g python --package-name ibutsu_client \
-    -D skipFormModel=true -p packageVersion=1.0.9 \
+openapi-generator generate -o /tmp/client -g python --package-name ibutsu_client \
+    -D skipFormModel=true -p packageVersion=1.1.0 \
     -p packageUrl=https://github.com/ibutsu/ibutsu-client-python \
     -i $OPENAPI_FILE > $CLIENT_DIR/generate.log 2>&1
 if [ $? -ne 0 ]; then
