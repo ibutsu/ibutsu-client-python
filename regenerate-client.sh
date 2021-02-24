@@ -53,7 +53,7 @@ if [[ ! $OPENAPI_FILE == http* ]] && [[ ! -f "$OPENAPI_FILE" ]]; then
     echo "Error: No OpenAPI file or incorrect path to file"
     exit 1
 fi
-if [[ ! -x "$(command -v openapi-generator)" ]]; then
+if [[ ! -x "$(command -v openapi-generator-cli)" ]]; then
     echo "Error: openapi-generator-cli is not installed. Please see https://openapi-generator.tech/"
     exit 2
 fi
@@ -66,7 +66,7 @@ openapi-generator-cli generate -o /tmp/client -g python --package-name ibutsu_cl
     -i $OPENAPI_FILE > $CLIENT_DIR/generate.log 2>&1
 if [ $? -ne 0 ]; then
     echo "error"
-    echo "Error: Generating client failed. Please see generate.log for errors"
+    echo "Error: Generating client failed. Please see $CLIENT_DIR/generate.log for errors"
     exit 3
 fi
 echo "done"
@@ -81,7 +81,9 @@ rm /tmp/client/git_push.sh
 
 # Copy all the files
 find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' \
-    -not -name 'regenerate-client.sh' -not -name 'LICENSE' -exec rm -fr {} +
+    -not -name 'regenerate-client.sh' -not -name 'LICENSE' \
+    -not -path "$CLIENT_DIR/.github/*" -not -name '.github' \
+    -exec rm -fr {} +
 cp -r /tmp/client/. $CLIENT_DIR
 
 # Clean up afterward
