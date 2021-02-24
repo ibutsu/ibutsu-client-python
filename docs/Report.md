@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | Unique ID of the project | [optional] 
+**id** | **str** | Unique ID of the report | [optional] 
 **filename** | **str** | The filename of the report | [optional] 
 **mimetype** | **str** | The mime type of the downloadable file | [optional] 
 **url** | **str** | The URL to the downloadable report (deprecated) | [optional] 

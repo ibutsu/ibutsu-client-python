@@ -8,8 +8,8 @@ Name | Type | Description | Notes
 **start_time** | **str** | Timestamp of starttime. | [optional] 
 **duration** | **float** | Duration of test in seconds. | [optional] 
 **result** | **str** | Status of result. | [optional] 
-**metadata** | [**object**](.md) |  | [optional] 
-**params** | [**object**](.md) |  | [optional] 
+**metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** |  | [optional] 
+**params** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** |  | [optional] 
 **source** | **str** | Where the data came from (useful for filtering) | [optional] 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

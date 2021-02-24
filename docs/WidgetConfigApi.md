@@ -12,17 +12,17 @@ Method | HTTP request | Description
 
 
 # **add_widget_config**
-> WidgetConfig add_widget_config(widget_config=widget_config)
+> WidgetConfig add_widget_config()
 
 Create a widget configuration
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import widget_config_api
+from ibutsu_client.model.widget_config import WidgetConfig
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -34,14 +34,24 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.WidgetConfigApi(api_client)
-    widget_config = ibutsu_client.WidgetConfig() # WidgetConfig | Widget configuration (optional)
+    api_instance = widget_config_api.WidgetConfigApi(api_client)
+    widget_config = WidgetConfig(
+        id="afbcf5c7-1ffd-4367-b228-5a868c29e0ef",
+        type="widget",
+        widget="jenkins-heatmap",
+        project_id="44941c55-9736-42f6-acce-ca3c4739d0f3",
+        weight=0,
+        params={},
+        title="Job Health",
+    ) # WidgetConfig | Widget configuration (optional)
 
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Create a widget configuration
         api_response = api_instance.add_widget_config(widget_config=widget_config)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling WidgetConfigApi->add_widget_config: %s\n" % e)
 ```
 
@@ -49,7 +59,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **widget_config** | [**WidgetConfig**](WidgetConfig.md)| Widget configuration | [optional] 
+ **widget_config** | [**WidgetConfig**](WidgetConfig.md)| Widget configuration | [optional]
 
 ### Return type
 
@@ -80,10 +90,9 @@ Delete a widget configuration
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import widget_config_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -95,13 +104,14 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.WidgetConfigApi(api_client)
-    id = 'id_example' # str | ID of widget configuration to delete
+    api_instance = widget_config_api.WidgetConfigApi(api_client)
+    id = "id_example" # str | ID of widget configuration to delete
 
+    # example passing only required values which don't have defaults set
     try:
         # Delete a widget configuration
         api_instance.delete_widget_config(id)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling WidgetConfigApi->delete_widget_config: %s\n" % e)
 ```
 
@@ -109,7 +119,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of widget configuration to delete | 
+ **id** | **str**| ID of widget configuration to delete |
 
 ### Return type
 
@@ -140,10 +150,10 @@ Get a single widget configuration
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import widget_config_api
+from ibutsu_client.model.widget_config import WidgetConfig
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -155,14 +165,15 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.WidgetConfigApi(api_client)
-    id = 'id_example' # str | ID of widget config to return
+    api_instance = widget_config_api.WidgetConfigApi(api_client)
+    id = "id_example" # str | ID of widget config to return
 
+    # example passing only required values which don't have defaults set
     try:
         # Get a single widget configuration
         api_response = api_instance.get_widget_config(id)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling WidgetConfigApi->get_widget_config: %s\n" % e)
 ```
 
@@ -170,7 +181,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of widget config to return | 
+ **id** | **str**| ID of widget config to return |
 
 ### Return type
 
@@ -194,7 +205,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_widget_config_list**
-> WidgetConfigList get_widget_config_list(filter=filter, page=page, page_size=page_size)
+> WidgetConfigList get_widget_config_list()
 
 Get the list of widget configurations
 
@@ -203,10 +214,10 @@ A list of widget configurations
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import widget_config_api
+from ibutsu_client.model.widget_config_list import WidgetConfigList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -218,16 +229,20 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.WidgetConfigApi(api_client)
-    filter = ['filter_example'] # list[str] | Fields to filter by (optional)
-page = 56 # int | Set the page of items to return, defaults to 1 (optional)
-page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
+    api_instance = widget_config_api.WidgetConfigApi(api_client)
+    filter = [
+        "filter_example",
+    ] # [str] | Fields to filter by (optional)
+    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
 
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get the list of widget configurations
         api_response = api_instance.get_widget_config_list(filter=filter, page=page, page_size=page_size)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling WidgetConfigApi->get_widget_config_list: %s\n" % e)
 ```
 
@@ -235,9 +250,9 @@ page_size = 56 # int | Set the number of items per page, defaults to 25 (optiona
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | [**list[str]**](str.md)| Fields to filter by | [optional] 
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
+ **filter** | **[str]**| Fields to filter by | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
 
 ### Return type
 
@@ -260,17 +275,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_widget_config**
-> WidgetConfig update_widget_config(id, widget_config=widget_config)
+> WidgetConfig update_widget_config(id)
 
 Updates a single widget configuration
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import widget_config_api
+from ibutsu_client.model.widget_config import WidgetConfig
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -282,15 +297,33 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.WidgetConfigApi(api_client)
-    id = 'id_example' # str | ID of widget configuration to update
-widget_config = ibutsu_client.WidgetConfig() # WidgetConfig | Widget configuration (optional)
+    api_instance = widget_config_api.WidgetConfigApi(api_client)
+    id = "id_example" # str | ID of widget configuration to update
+    widget_config = WidgetConfig(
+        id="afbcf5c7-1ffd-4367-b228-5a868c29e0ef",
+        type="widget",
+        widget="jenkins-heatmap",
+        project_id="44941c55-9736-42f6-acce-ca3c4739d0f3",
+        weight=0,
+        params={},
+        title="Job Health",
+    ) # WidgetConfig | Widget configuration (optional)
 
+    # example passing only required values which don't have defaults set
+    try:
+        # Updates a single widget configuration
+        api_response = api_instance.update_widget_config(id)
+        pprint(api_response)
+    except ibutsu_client.ApiException as e:
+        print("Exception when calling WidgetConfigApi->update_widget_config: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Updates a single widget configuration
         api_response = api_instance.update_widget_config(id, widget_config=widget_config)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling WidgetConfigApi->update_widget_config: %s\n" % e)
 ```
 
@@ -298,8 +331,8 @@ widget_config = ibutsu_client.WidgetConfig() # WidgetConfig | Widget configurati
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of widget configuration to update | 
- **widget_config** | [**WidgetConfig**](WidgetConfig.md)| Widget configuration | [optional] 
+ **id** | **str**| ID of widget configuration to update |
+ **widget_config** | [**WidgetConfig**](WidgetConfig.md)| Widget configuration | [optional]
 
 ### Return type
 
