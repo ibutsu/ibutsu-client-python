@@ -17,10 +17,10 @@ Get a health report for the database
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import health_api
+from ibutsu_client.model.health import Health
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -32,13 +32,14 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.HealthApi(api_client)
-    
+    api_instance = health_api.HealthApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
     try:
         # Get a health report for the database
         api_response = api_instance.get_database_health()
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling HealthApi->get_database_health: %s\n" % e)
 ```
 
@@ -74,10 +75,10 @@ Get a general health report
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import health_api
+from ibutsu_client.model.health import Health
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -89,13 +90,14 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.HealthApi(api_client)
-    
+    api_instance = health_api.HealthApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
     try:
         # Get a general health report
         api_response = api_instance.get_health()
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling HealthApi->get_health: %s\n" % e)
 ```
 
@@ -130,10 +132,10 @@ Get information about the server
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import health_api
+from ibutsu_client.model.health_info import HealthInfo
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -145,13 +147,14 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.HealthApi(api_client)
-    
+    api_instance = health_api.HealthApi(api_client)
+
+    # example, this endpoint has no required or optional parameters
     try:
         # Get information about the server
         api_response = api_instance.get_health_info()
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling HealthApi->get_health_info: %s\n" % e)
 ```
 

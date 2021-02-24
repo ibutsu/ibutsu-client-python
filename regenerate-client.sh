@@ -8,7 +8,9 @@ CAN_COMMIT=false
 CAN_PUSH=false
 CAN_DELETE=false
 CURRENT_VERSION=`cat setup.py | grep 'VERSION =' | cut -d\" -f2`
-NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
+if [[ "$NEW_VERSION" == "" ]]; then
+    NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
+fi
 
 function print_usage() {
     echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
