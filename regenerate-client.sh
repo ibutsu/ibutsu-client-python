@@ -9,21 +9,6 @@ CAN_PUSH=false
 CAN_DELETE=false
 CURRENT_VERSION=`cat setup.py | grep 'VERSION =' | cut -d\" -f2`
 NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
-TRAVIS_DIFF='diff --git a/.travis.yml b/.travis.yml
-index 40dc5f2..0955ce2 100644
---- a/.travis.yml
-+++ b/.travis.yml
-@@ -2,9 +2,6 @@
- language: python
- python:
-   - "2.7"
--  - "3.2"
--  - "3.3"
--  - "3.4"
-   - "3.5"
-   - "3.6"
-   - "3.7"
-'
 
 function print_usage() {
     echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
@@ -75,8 +60,8 @@ fi
 
 # Generate the client
 echo -n "Generating client..."
-openapi-generator generate -o /tmp/client -g python --package-name ibutsu_client \
-    -D skipFormModel=true -p packageVersion=1.1.0 \
+openapi-generator-cli generate -o /tmp/client -g python --package-name ibutsu_client \
+    --global-property skipFormModel=true -p packageVersion=$NEW_VERSION
     -p packageUrl=https://github.com/ibutsu/ibutsu-client-python \
     -i $OPENAPI_FILE > $CLIENT_DIR/generate.log 2>&1
 if [ $? -ne 0 ]; then
@@ -84,7 +69,6 @@ if [ $? -ne 0 ]; then
     echo "Error: Generating client failed. Please see generate.log for errors"
     exit 3
 fi
-rm $CLIENT_DIR/config.json
 echo "done"
 
 # Modify various files
@@ -94,7 +78,6 @@ cat <<EOF >> /tmp/client/.gitignore
 .ibutsu-env
 EOF
 rm /tmp/client/git_push.sh
-echo "$TRAVIS_DIFF" | patch -p 1 -d /tmp/client
 
 # Copy all the files
 find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' \
