@@ -8,7 +8,24 @@ CAN_COMMIT=false
 CAN_PUSH=false
 CAN_DELETE=false
 CURRENT_VERSION=`cat setup.py | grep 'VERSION =' | cut -d\" -f2`
-NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
+if [[ "$NEW_VERSION" == "" ]]; then
+    # If there's no new version defined externally, generate a new version
+    NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
+fi
+FIXES_DIFF='diff --git a/ibutsu_client/api/widget_api.py b/ibutsu_client/api/widget_api.py
+index 0f64c89..b888879 100644
+--- a/ibutsu_client/api/widget_api.py
++++ b/ibutsu_client/api/widget_api.py
+@@ -22,7 +22,6 @@ from ibutsu_client.model_utils import (  # noqa: F401
+     validate_and_convert_types
+ )
+ from ibutsu_client.model.widget_type_list import WidgetTypeList
+-from ibutsu_client.model.str_bool_date_datetime_dict_float_int_list_str_none_type import StrBoolDateDatetimeDictFloatIntListStrNoneType
+ 
+ 
+ class WidgetApi(object):
+'
+
 
 function print_usage() {
     echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
@@ -78,11 +95,13 @@ cat <<EOF >> /tmp/client/.gitignore
 .ibutsu-env
 EOF
 rm /tmp/client/git_push.sh
+echo "$FIXES_DIFF" | patch -p 1 -d /tmp/client
 
 # Copy all the files
 find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' \
-    -not -name 'regenerate-client.sh' -not -name 'LICENSE' \
     -not -path "$CLIENT_DIR/.github/*" -not -name '.github' \
+    -not -path "$CLIENT_DIR/.ibutsu-env/*" -not -name '.ibutsu-env' \
+    -not -name 'regenerate-client.sh' -not -name 'LICENSE' \
     -exec rm -fr {} +
 cp -r /tmp/client/. $CLIENT_DIR
 
