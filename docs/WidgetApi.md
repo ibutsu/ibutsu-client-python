@@ -9,17 +9,17 @@ Method | HTTP request | Description
 
 
 # **get_widget**
-> object get_widget(id, params=params)
+> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} get_widget(id)
 
 Generate data for a dashboard widget
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import widget_api
+from ibutsu_client.model.str_bool_date_datetime_dict_float_int_list_str_none_type import StrBoolDateDatetimeDictFloatIntListStrNoneType
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -31,15 +31,25 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.WidgetApi(api_client)
-    id = 'id_example' # str | The widget identifier
-params = None # object | The parameters for the widget (optional)
+    api_instance = widget_api.WidgetApi(api_client)
+    id = "id_example" # str | The widget identifier
+    params = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | The parameters for the widget (optional)
 
+    # example passing only required values which don't have defaults set
+    try:
+        # Generate data for a dashboard widget
+        api_response = api_instance.get_widget(id)
+        pprint(api_response)
+    except ibutsu_client.ApiException as e:
+        print("Exception when calling WidgetApi->get_widget: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Generate data for a dashboard widget
         api_response = api_instance.get_widget(id, params=params)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling WidgetApi->get_widget: %s\n" % e)
 ```
 
@@ -47,12 +57,12 @@ params = None # object | The parameters for the widget (optional)
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The widget identifier | 
- **params** | [**object**](.md)| The parameters for the widget | [optional] 
+ **id** | **str**| The widget identifier |
+ **params** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**| The parameters for the widget | [optional]
 
 ### Return type
 
-**object**
+**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
 
 ### Authorization
 
@@ -76,13 +86,15 @@ No authorization required
 
 Get a list of widget types
 
+A list of widget types
+
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import widget_api
+from ibutsu_client.model.widget_type_list import WidgetTypeList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -94,18 +106,24 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.WidgetApi(api_client)
-    
+    api_instance = widget_api.WidgetApi(api_client)
+    type = "type_example" # str | Filter by type of widget (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get a list of widget types
-        api_response = api_instance.get_widget_types()
+        api_response = api_instance.get_widget_types(type=type)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling WidgetApi->get_widget_types: %s\n" % e)
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **type** | **str**| Filter by type of widget | [optional]
 
 ### Return type
 
