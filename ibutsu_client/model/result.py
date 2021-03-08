@@ -85,6 +85,10 @@ class Result(ModelNormal):
             'start_time': (str,),  # noqa: E501
             'duration': (float,),  # noqa: E501
             'result': (str,),  # noqa: E501
+            'component': (str, none_type,),  # noqa: E501
+            'env': (str, none_type,),  # noqa: E501
+            'run_id': (str, none_type,),  # noqa: E501
+            'project_id': (str, none_type,),  # noqa: E501
             'metadata': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
             'params': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
             'source': (str,),  # noqa: E501
@@ -101,6 +105,10 @@ class Result(ModelNormal):
         'start_time': 'start_time',  # noqa: E501
         'duration': 'duration',  # noqa: E501
         'result': 'result',  # noqa: E501
+        'component': 'component',  # noqa: E501
+        'env': 'env',  # noqa: E501
+        'run_id': 'run_id',  # noqa: E501
+        'project_id': 'project_id',  # noqa: E501
         'metadata': 'metadata',  # noqa: E501
         'params': 'params',  # noqa: E501
         'source': 'source',  # noqa: E501
@@ -157,6 +165,10 @@ class Result(ModelNormal):
             start_time (str): Timestamp of starttime.. [optional]  # noqa: E501
             duration (float): Duration of test in seconds.. [optional]  # noqa: E501
             result (str): Status of result.. [optional]  # noqa: E501
+            component (str, none_type): A component. [optional]  # noqa: E501
+            env (str, none_type): The environment which is being tested. [optional]  # noqa: E501
+            run_id (str, none_type): The run this result is associated with. [optional]  # noqa: E501
+            project_id (str, none_type): The project this run is associated with. [optional]  # noqa: E501
             metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): [optional]  # noqa: E501
             params ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): [optional]  # noqa: E501
             source (str): Where the data came from (useful for filtering). [optional]  # noqa: E501

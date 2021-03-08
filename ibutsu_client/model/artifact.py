@@ -76,6 +76,7 @@ class Artifact(ModelNormal):
             'result_id': (str,),  # noqa: E501
             'filename': (str,),  # noqa: E501
             'additional_metadata': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'upload_date': (str,),  # noqa: E501
         }
 
     @cached_property
@@ -87,7 +88,8 @@ class Artifact(ModelNormal):
         'id': 'id',  # noqa: E501
         'result_id': 'result_id',  # noqa: E501
         'filename': 'filename',  # noqa: E501
-        'additional_metadata': 'additionalMetadata',  # noqa: E501
+        'additional_metadata': 'additional_metadata',  # noqa: E501
+        'upload_date': 'upload_date',  # noqa: E501
     }
 
     _composed_schemas = {}
@@ -140,6 +142,7 @@ class Artifact(ModelNormal):
             result_id (str): ID of test result to attach artifact to. [optional]  # noqa: E501
             filename (str): ID of pet to update. [optional]  # noqa: E501
             additional_metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Additional data to pass to server. [optional]  # noqa: E501
+            upload_date (str): The date this artifact was uploaded. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
