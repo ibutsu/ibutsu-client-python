@@ -20,10 +20,9 @@ Delete an artifact
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import artifact_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -35,13 +34,14 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ArtifactApi(api_client)
-    id = 'id_example' # str | ID of artifact to delete
+    api_instance = artifact_api.ArtifactApi(api_client)
+    id = "id_example" # str | ID of artifact to delete
 
+    # example passing only required values which don't have defaults set
     try:
         # Delete an artifact
         api_instance.delete_artifact(id)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->delete_artifact: %s\n" % e)
 ```
 
@@ -49,7 +49,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of artifact to delete | 
+ **id** | **str**| ID of artifact to delete |
 
 ### Return type
 
@@ -73,17 +73,16 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **download_artifact**
-> file download_artifact(id)
+> file_type download_artifact(id)
 
 Download an artifact
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import artifact_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -95,14 +94,15 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ArtifactApi(api_client)
-    id = 'id_example' # str | ID of artifact to return
+    api_instance = artifact_api.ArtifactApi(api_client)
+    id = "id_example" # str | ID of artifact to return
 
+    # example passing only required values which don't have defaults set
     try:
         # Download an artifact
         api_response = api_instance.download_artifact(id)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->download_artifact: %s\n" % e)
 ```
 
@@ -110,11 +110,11 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of artifact to return | 
+ **id** | **str**| ID of artifact to return |
 
 ### Return type
 
-**file**
+**file_type**
 
 ### Authorization
 
@@ -141,10 +141,10 @@ Get a single artifact
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import artifact_api
+from ibutsu_client.model.artifact import Artifact
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -156,14 +156,15 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ArtifactApi(api_client)
-    id = 'id_example' # str | ID of artifact to return
+    api_instance = artifact_api.ArtifactApi(api_client)
+    id = "id_example" # str | ID of artifact to return
 
+    # example passing only required values which don't have defaults set
     try:
         # Get a single artifact
         api_response = api_instance.get_artifact(id)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->get_artifact: %s\n" % e)
 ```
 
@@ -171,7 +172,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of artifact to return | 
+ **id** | **str**| ID of artifact to return |
 
 ### Return type
 
@@ -195,17 +196,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_artifact_list**
-> ArtifactList get_artifact_list(result_id=result_id, page=page, page_size=page_size)
+> ArtifactList get_artifact_list()
 
 Get a (filtered) list of artifacts
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import artifact_api
+from ibutsu_client.model.artifact_list import ArtifactList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -217,16 +218,18 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ArtifactApi(api_client)
-    result_id = 'result_id_example' # str | The result ID to filter by (optional)
-page = 56 # int | Set the page of items to return, defaults to 1 (optional)
-page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
+    api_instance = artifact_api.ArtifactApi(api_client)
+    result_id = "resultId_example" # str | The result ID to filter by (optional)
+    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
 
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get a (filtered) list of artifacts
         api_response = api_instance.get_artifact_list(result_id=result_id, page=page, page_size=page_size)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->get_artifact_list: %s\n" % e)
 ```
 
@@ -234,9 +237,9 @@ page_size = 56 # int | Set the number of items per page, defaults to 25 (optiona
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **result_id** | **str**| The result ID to filter by | [optional] 
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
+ **result_id** | **str**| The result ID to filter by | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
 
 ### Return type
 
@@ -259,17 +262,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **upload_artifact**
-> Artifact upload_artifact(result_id, filename, file, additional_metadata=additional_metadata)
+> Artifact upload_artifact(result_id, filename, file)
 
 Uploads a test run artifact
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import artifact_api
+from ibutsu_client.model.artifact import Artifact
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -281,17 +284,27 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ArtifactApi(api_client)
-    result_id = 'result_id_example' # str | ID of result to attach artifact to
-filename = 'filename_example' # str | ID of pet to update
-file = '/path/to/file' # file | file to upload
-additional_metadata = None # object | Additional data to pass to server (optional)
+    api_instance = artifact_api.ArtifactApi(api_client)
+    result_id = "result_id_example" # str | ID of result to attach artifact to
+    filename = "filename_example" # str | ID of pet to update
+    file = open('/path/to/file', 'rb') # file_type | file to upload
+    additional_metadata = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Additional data to pass to server (optional)
 
+    # example passing only required values which don't have defaults set
+    try:
+        # Uploads a test run artifact
+        api_response = api_instance.upload_artifact(result_id, filename, file)
+        pprint(api_response)
+    except ibutsu_client.ApiException as e:
+        print("Exception when calling ArtifactApi->upload_artifact: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Uploads a test run artifact
         api_response = api_instance.upload_artifact(result_id, filename, file, additional_metadata=additional_metadata)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->upload_artifact: %s\n" % e)
 ```
 
@@ -299,10 +312,10 @@ additional_metadata = None # object | Additional data to pass to server (optiona
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **result_id** | **str**| ID of result to attach artifact to | 
- **filename** | **str**| ID of pet to update | 
- **file** | **file**| file to upload | 
- **additional_metadata** | [**object**](object.md)| Additional data to pass to server | [optional] 
+ **result_id** | **str**| ID of result to attach artifact to |
+ **filename** | **str**| ID of pet to update |
+ **file** | **file_type**| file to upload |
+ **additional_metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**| Additional data to pass to server | [optional]
 
 ### Return type
 
@@ -326,17 +339,16 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **view_artifact**
-> file view_artifact(id)
+> file_type view_artifact(id)
 
 Stream an artifact directly to the client/browser
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import artifact_api
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -348,14 +360,15 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ArtifactApi(api_client)
-    id = 'id_example' # str | ID of artifact to return
+    api_instance = artifact_api.ArtifactApi(api_client)
+    id = "id_example" # str | ID of artifact to return
 
+    # example passing only required values which don't have defaults set
     try:
         # Stream an artifact directly to the client/browser
         api_response = api_instance.view_artifact(id)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->view_artifact: %s\n" % e)
 ```
 
@@ -363,11 +376,11 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of artifact to return | 
+ **id** | **str**| ID of artifact to return |
 
 ### Return type
 
-**file**
+**file_type**
 
 ### Authorization
 

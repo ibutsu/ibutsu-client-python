@@ -11,17 +11,17 @@ Method | HTTP request | Description
 
 
 # **add_result**
-> Result add_result(result=result)
+> Result add_result()
 
 Create a test result
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import result_api
+from ibutsu_client.model.result import Result
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -33,14 +33,29 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ResultApi(api_client)
-    result = ibutsu_client.Result() # Result | Result item (optional)
+    api_instance = result_api.ResultApi(api_client)
+    result = Result(
+        id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
+        test_id="test_click_on_button",
+        start_time="start_time_example",
+        duration=3.14,
+        result="passed",
+        component="login",
+        env="qa",
+        run_id="64c2ab9e-cd64-4815-bf73-83b00c2e650f",
+        project_id="44941c55-9736-42f6-acce-ca3c4739d0f3",
+        metadata={},
+        params={},
+        source="source_example",
+    ) # Result | Result item (optional)
 
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Create a test result
         api_response = api_instance.add_result(result=result)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ResultApi->add_result: %s\n" % e)
 ```
 
@@ -48,7 +63,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **result** | [**Result**](Result.md)| Result item | [optional] 
+ **result** | [**Result**](Result.md)| Result item | [optional]
 
 ### Return type
 
@@ -79,10 +94,10 @@ Get a single result
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import result_api
+from ibutsu_client.model.result import Result
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -94,14 +109,15 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ResultApi(api_client)
-    id = 'id_example' # str | ID of pet to return
+    api_instance = result_api.ResultApi(api_client)
+    id = "id_example" # str | ID of result to return (uuid required)
 
+    # example passing only required values which don't have defaults set
     try:
         # Get a single result
         api_response = api_instance.get_result(id)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ResultApi->get_result: %s\n" % e)
 ```
 
@@ -109,7 +125,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of pet to return | 
+ **id** | **str**| ID of result to return (uuid required) |
 
 ### Return type
 
@@ -133,7 +149,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_result_list**
-> ResultList get_result_list(filter=filter, apply_max=apply_max, page=page, page_size=page_size)
+> ResultList get_result_list()
 
 Get the list of results.
 
@@ -142,10 +158,10 @@ The `filter` parameter takes a list of filters to apply in the form of:      {na
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import result_api
+from ibutsu_client.model.result_list import ResultList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -157,17 +173,21 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ResultApi(api_client)
-    filter = ['filter_example'] # list[str] | Fields to filter by (optional)
-apply_max = True # bool | Use a max to limit documents returned (optional)
-page = 56 # int | Set the page of items to return, defaults to 1 (optional)
-page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
+    api_instance = result_api.ResultApi(api_client)
+    filter = [
+        "filter_example",
+    ] # [str] | Fields to filter by (optional)
+    estimate = True # bool | Return an estimated count (optional)
+    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
 
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get the list of results.
-        api_response = api_instance.get_result_list(filter=filter, apply_max=apply_max, page=page, page_size=page_size)
+        api_response = api_instance.get_result_list(filter=filter, estimate=estimate, page=page, page_size=page_size)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ResultApi->get_result_list: %s\n" % e)
 ```
 
@@ -175,10 +195,10 @@ page_size = 56 # int | Set the number of items per page, defaults to 25 (optiona
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | [**list[str]**](str.md)| Fields to filter by | [optional] 
- **apply_max** | **bool**| Use a max to limit documents returned | [optional] 
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
+ **filter** | **[str]**| Fields to filter by | [optional]
+ **estimate** | **bool**| Return an estimated count | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
 
 ### Return type
 
@@ -201,17 +221,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_result**
-> Result update_result(id, result=result)
+> Result update_result(id)
 
 Updates a single result
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import result_api
+from ibutsu_client.model.result import Result
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -223,15 +243,38 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ResultApi(api_client)
-    id = 'id_example' # str | ID of result to update
-result = ibutsu_client.Result() # Result | Result item (optional)
+    api_instance = result_api.ResultApi(api_client)
+    id = "id_example" # str | ID of result to update
+    result = Result(
+        id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
+        test_id="test_click_on_button",
+        start_time="start_time_example",
+        duration=3.14,
+        result="passed",
+        component="login",
+        env="qa",
+        run_id="64c2ab9e-cd64-4815-bf73-83b00c2e650f",
+        project_id="44941c55-9736-42f6-acce-ca3c4739d0f3",
+        metadata={},
+        params={},
+        source="source_example",
+    ) # Result | Result item (optional)
 
+    # example passing only required values which don't have defaults set
+    try:
+        # Updates a single result
+        api_response = api_instance.update_result(id)
+        pprint(api_response)
+    except ibutsu_client.ApiException as e:
+        print("Exception when calling ResultApi->update_result: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Updates a single result
         api_response = api_instance.update_result(id, result=result)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ResultApi->update_result: %s\n" % e)
 ```
 
@@ -239,8 +282,8 @@ result = ibutsu_client.Result() # Result | Result item (optional)
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of result to update | 
- **result** | [**Result**](Result.md)| Result item | [optional] 
+ **id** | **str**| ID of result to update |
+ **result** | [**Result**](Result.md)| Result item | [optional]
 
 ### Return type
 

@@ -18,10 +18,10 @@ Create a project
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import project_api
+from ibutsu_client.model.project import Project
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -33,14 +33,21 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ProjectApi(api_client)
-    project = ibutsu_client.Project() # Project | Project
+    api_instance = project_api.ProjectApi(api_client)
+    project = Project(
+        id="44941c55-9736-42f6-acce-ca3c4739d0f3",
+        name="my-project",
+        title="My project",
+        owner_id="6b8b01ad-a17e-4ca1-8df5-fadb41439567",
+        group_id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
+    ) # Project | Project
 
+    # example passing only required values which don't have defaults set
     try:
         # Create a project
         api_response = api_instance.add_project(project)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ProjectApi->add_project: %s\n" % e)
 ```
 
@@ -48,7 +55,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **project** | [**Project**](Project.md)| Project | 
+ **project** | [**Project**](Project.md)| Project |
 
 ### Return type
 
@@ -79,10 +86,10 @@ Get a single project by ID
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import project_api
+from ibutsu_client.model.project import Project
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -94,14 +101,15 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ProjectApi(api_client)
-    id = 'id_example' # str | ID of test project
+    api_instance = project_api.ProjectApi(api_client)
+    id = "id_example" # str | ID of test project
 
+    # example passing only required values which don't have defaults set
     try:
         # Get a single project by ID
         api_response = api_instance.get_project(id)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ProjectApi->get_project: %s\n" % e)
 ```
 
@@ -109,7 +117,7 @@ with ibutsu_client.ApiClient() as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of test project | 
+ **id** | **str**| ID of test project |
 
 ### Return type
 
@@ -133,17 +141,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_project_list**
-> ProjectList get_project_list(owner_id=owner_id, group_id=group_id, page=page, page_size=page_size)
+> ProjectList get_project_list()
 
 Get a list of projects
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import project_api
+from ibutsu_client.model.project_list import ProjectList
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -155,17 +163,19 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ProjectApi(api_client)
-    owner_id = 'owner_id_example' # str | Filter projects by owner ID (optional)
-group_id = 'group_id_example' # str | Filter projects by group ID (optional)
-page = 56 # int | Set the page of items to return, defaults to 1 (optional)
-page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
+    api_instance = project_api.ProjectApi(api_client)
+    owner_id = "ownerId_example" # str | Filter projects by owner ID (optional)
+    group_id = "groupId_example" # str | Filter projects by group ID (optional)
+    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
 
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Get a list of projects
         api_response = api_instance.get_project_list(owner_id=owner_id, group_id=group_id, page=page, page_size=page_size)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ProjectApi->get_project_list: %s\n" % e)
 ```
 
@@ -173,10 +183,10 @@ page_size = 56 # int | Set the number of items per page, defaults to 25 (optiona
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **owner_id** | **str**| Filter projects by owner ID | [optional] 
- **group_id** | **str**| Filter projects by group ID | [optional] 
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
+ **owner_id** | **str**| Filter projects by owner ID | [optional]
+ **group_id** | **str**| Filter projects by group ID | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
 
 ### Return type
 
@@ -199,17 +209,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_project**
-> Project update_project(id, project=project)
+> Project update_project(id)
 
 Update a project
 
 ### Example
 
 ```python
-from __future__ import print_function
 import time
 import ibutsu_client
-from ibutsu_client.rest import ApiException
+from ibutsu_client.api import project_api
+from ibutsu_client.model.project import Project
 from pprint import pprint
 # Defining the host is optional and defaults to http://localhost/api
 # See configuration.py for a list of all supported configuration parameters.
@@ -221,15 +231,31 @@ configuration = ibutsu_client.Configuration(
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
-    api_instance = ibutsu_client.ProjectApi(api_client)
-    id = 'id_example' # str | ID of test project
-project = ibutsu_client.Project() # Project | Project (optional)
+    api_instance = project_api.ProjectApi(api_client)
+    id = "id_example" # str | ID of test project
+    project = Project(
+        id="44941c55-9736-42f6-acce-ca3c4739d0f3",
+        name="my-project",
+        title="My project",
+        owner_id="6b8b01ad-a17e-4ca1-8df5-fadb41439567",
+        group_id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
+    ) # Project | Project (optional)
 
+    # example passing only required values which don't have defaults set
+    try:
+        # Update a project
+        api_response = api_instance.update_project(id)
+        pprint(api_response)
+    except ibutsu_client.ApiException as e:
+        print("Exception when calling ProjectApi->update_project: %s\n" % e)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
     try:
         # Update a project
         api_response = api_instance.update_project(id, project=project)
         pprint(api_response)
-    except ApiException as e:
+    except ibutsu_client.ApiException as e:
         print("Exception when calling ProjectApi->update_project: %s\n" % e)
 ```
 
@@ -237,8 +263,8 @@ project = ibutsu_client.Project() # Project | Project (optional)
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of test project | 
- **project** | [**Project**](Project.md)| Project | [optional] 
+ **id** | **str**| ID of test project |
+ **project** | [**Project**](Project.md)| Project | [optional]
 
 ### Return type
 
