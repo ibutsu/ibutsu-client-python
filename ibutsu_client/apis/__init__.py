@@ -23,5 +23,6 @@ from ibutsu_client.api.project_api import ProjectApi
 from ibutsu_client.api.report_api import ReportApi
 from ibutsu_client.api.result_api import ResultApi
 from ibutsu_client.api.run_api import RunApi
+from ibutsu_client.api.task_api import TaskApi
 from ibutsu_client.api.widget_api import WidgetApi
 from ibutsu_client.api.widget_config_api import WidgetConfigApi

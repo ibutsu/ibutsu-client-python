@@ -8,26 +8,26 @@
 """
 
 
-import sys
 import unittest
 
 import ibutsu_client
-from ibutsu_client.model.update_run import UpdateRun
+from ibutsu_client.api.task_api import TaskApi  # noqa: E501
 
 
-class TestUpdateRun(unittest.TestCase):
-    """UpdateRun unit test stubs"""
+class TestTaskApi(unittest.TestCase):
+    """TaskApi unit test stubs"""
 
     def setUp(self):
-        pass
+        self.api = TaskApi()  # noqa: E501
 
     def tearDown(self):
         pass
 
-    def testUpdateRun(self):
-        """Test UpdateRun"""
-        # FIXME: construct object with mandatory attributes with example values
-        # model = UpdateRun()  # noqa: E501
+    def test_get_task(self):
+        """Test case for get_task
+
+        Get the status or result of a task  # noqa: E501
+        """
         pass
 
 

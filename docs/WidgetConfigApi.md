@@ -55,6 +55,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling WidgetConfigApi->add_widget_config: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -73,6 +74,7 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -115,6 +117,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling WidgetConfigApi->delete_widget_config: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -133,6 +136,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -177,6 +181,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling WidgetConfigApi->get_widget_config: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -195,6 +200,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -246,6 +252,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling WidgetConfigApi->get_widget_config_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -266,6 +273,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -327,6 +335,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling WidgetConfigApi->update_widget_config: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -346,6 +355,7 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

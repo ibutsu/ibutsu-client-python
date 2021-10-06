@@ -45,6 +45,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->delete_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -63,6 +64,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -106,6 +108,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->download_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -124,6 +127,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, image/jpeg, image/png, image/gif, application/octet-stream
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -168,6 +172,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->get_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -186,6 +191,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -220,6 +226,7 @@ with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
     result_id = "resultId_example" # str | The result ID to filter by (optional)
+    run_id = "runId_example" # str | The run ID to filter by (optional)
     page = 1 # int | Set the page of items to return, defaults to 1 (optional)
     page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
 
@@ -227,17 +234,19 @@ with ibutsu_client.ApiClient() as api_client:
     # and optional values
     try:
         # Get a (filtered) list of artifacts
-        api_response = api_instance.get_artifact_list(result_id=result_id, page=page, page_size=page_size)
+        api_response = api_instance.get_artifact_list(result_id=result_id, run_id=run_id, page=page, page_size=page_size)
         pprint(api_response)
     except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->get_artifact_list: %s\n" % e)
 ```
+
 
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **result_id** | **str**| The result ID to filter by | [optional]
+ **run_id** | **str**| The run ID to filter by | [optional]
  **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
  **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
 
@@ -254,6 +263,7 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
+
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
@@ -262,7 +272,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **upload_artifact**
-> Artifact upload_artifact(result_id, filename, file)
+> Artifact upload_artifact(filename, file)
 
 Uploads a test run artifact
 
@@ -285,15 +295,16 @@ configuration = ibutsu_client.Configuration(
 with ibutsu_client.ApiClient() as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
-    result_id = "result_id_example" # str | ID of result to attach artifact to
     filename = "filename_example" # str | ID of pet to update
     file = open('/path/to/file', 'rb') # file_type | file to upload
+    result_id = "result_id_example" # str | ID of result to attach artifact to (optional)
+    run_id = "run_id_example" # str | ID of run to attach artifact to (optional)
     additional_metadata = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Additional data to pass to server (optional)
 
     # example passing only required values which don't have defaults set
     try:
         # Uploads a test run artifact
-        api_response = api_instance.upload_artifact(result_id, filename, file)
+        api_response = api_instance.upload_artifact(filename, file)
         pprint(api_response)
     except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->upload_artifact: %s\n" % e)
@@ -302,19 +313,21 @@ with ibutsu_client.ApiClient() as api_client:
     # and optional values
     try:
         # Uploads a test run artifact
-        api_response = api_instance.upload_artifact(result_id, filename, file, additional_metadata=additional_metadata)
+        api_response = api_instance.upload_artifact(filename, file, result_id=result_id, run_id=run_id, additional_metadata=additional_metadata)
         pprint(api_response)
     except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->upload_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **result_id** | **str**| ID of result to attach artifact to |
  **filename** | **str**| ID of pet to update |
  **file** | **file_type**| file to upload |
+ **result_id** | **str**| ID of result to attach artifact to | [optional]
+ **run_id** | **str**| ID of run to attach artifact to | [optional]
  **additional_metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**| Additional data to pass to server | [optional]
 
 ### Return type
@@ -329,6 +342,7 @@ No authorization required
 
  - **Content-Type**: multipart/form-data
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -372,6 +386,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->view_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -390,6 +405,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, image/jpeg, image/png, image/gif, application/octet-stream
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

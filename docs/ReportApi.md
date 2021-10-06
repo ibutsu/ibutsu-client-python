@@ -53,6 +53,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->add_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -71,6 +72,7 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -113,6 +115,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->delete_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -131,6 +134,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -175,6 +179,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->download_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -194,6 +199,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/csv, application/json, text/html, application/zip
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -238,6 +244,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->get_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -256,6 +263,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -303,6 +311,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->get_report_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -323,6 +332,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -365,6 +375,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->get_report_types: %s\n" % e)
 ```
 
+
 ### Parameters
 This endpoint does not need any parameter.
 
@@ -380,6 +391,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -423,6 +435,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->view_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -442,6 +455,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/csv, application/json, text/html, application/zip
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

@@ -51,6 +51,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->add_project: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -69,6 +70,7 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -113,6 +115,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->get_project: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -131,6 +134,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -179,6 +183,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->get_project_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -200,6 +205,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -259,6 +265,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->update_project: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -278,6 +285,7 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
