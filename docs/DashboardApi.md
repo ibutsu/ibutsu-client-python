@@ -18,6 +18,7 @@ Create a dashboard
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -30,9 +31,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = dashboard_api.DashboardApi(api_client)
     dashboard = Dashboard(
@@ -53,6 +63,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling DashboardApi->add_dashboard: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -65,12 +76,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -87,6 +99,7 @@ Delete a dashboard
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -98,9 +111,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = dashboard_api.DashboardApi(api_client)
     id = "id_example" # str | ID of dashboard to delete
@@ -112,6 +134,7 @@ with ibutsu_client.ApiClient() as api_client:
     except ibutsu_client.ApiException as e:
         print("Exception when calling DashboardApi->delete_dashboard: %s\n" % e)
 ```
+
 
 ### Parameters
 
@@ -125,12 +148,13 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -147,6 +171,7 @@ Get a single dashboard by ID
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -159,9 +184,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = dashboard_api.DashboardApi(api_client)
     id = "id_example" # str | ID of test dashboard
@@ -175,6 +209,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling DashboardApi->get_dashboard: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -187,12 +222,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -209,6 +245,7 @@ Get a list of dashboards
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -221,9 +258,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = dashboard_api.DashboardApi(api_client)
     project_id = "project_id_example" # str | Filter dashboards by project ID (optional)
@@ -241,6 +287,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling DashboardApi->get_dashboard_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -256,12 +303,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -277,6 +325,7 @@ Update a dashboard
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -289,9 +338,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = dashboard_api.DashboardApi(api_client)
     id = "id_example" # str | ID of test dashboard
@@ -322,6 +380,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling DashboardApi->update_dashboard: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -335,12 +394,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

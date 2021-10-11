@@ -15,6 +15,7 @@ Generate data for a dashboard widget
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -27,9 +28,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = widget_api.WidgetApi(api_client)
     id = "id_example" # str | The widget identifier
@@ -53,6 +63,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling WidgetApi->get_widget: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -66,12 +77,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -90,6 +102,7 @@ A list of widget types
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -102,9 +115,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = widget_api.WidgetApi(api_client)
     type = "type_example" # str | Filter by type of widget (optional)
@@ -119,6 +141,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling WidgetApi->get_widget_types: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -131,12 +154,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

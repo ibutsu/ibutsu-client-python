@@ -19,6 +19,7 @@ Delete an artifact
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -30,9 +31,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
     id = "id_example" # str | ID of artifact to delete
@@ -44,6 +54,7 @@ with ibutsu_client.ApiClient() as api_client:
     except ibutsu_client.ApiException as e:
         print("Exception when calling ArtifactApi->delete_artifact: %s\n" % e)
 ```
+
 
 ### Parameters
 
@@ -57,12 +68,13 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -79,6 +91,7 @@ Download an artifact
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -90,9 +103,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
     id = "id_example" # str | ID of artifact to return
@@ -106,6 +128,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->download_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -118,12 +141,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, image/jpeg, image/png, image/gif, application/octet-stream
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -140,6 +164,7 @@ Get a single artifact
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -152,9 +177,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
     id = "id_example" # str | ID of artifact to return
@@ -168,6 +202,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->get_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -180,12 +215,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -202,6 +238,7 @@ Get a (filtered) list of artifacts
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -214,9 +251,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
     result_id = "resultId_example" # str | The result ID to filter by (optional)
@@ -233,6 +279,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->get_artifact_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -247,12 +294,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -268,6 +316,7 @@ Uploads a test run artifact
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -280,9 +329,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
     result_id = "result_id_example" # str | ID of result to attach artifact to
@@ -308,6 +366,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->upload_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -323,12 +382,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: multipart/form-data
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -345,6 +405,7 @@ Stream an artifact directly to the client/browser
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -356,9 +417,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = artifact_api.ArtifactApi(api_client)
     id = "id_example" # str | ID of artifact to return
@@ -372,6 +442,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ArtifactApi->view_artifact: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -384,12 +455,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, image/jpeg, image/png, image/gif, application/octet-stream
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

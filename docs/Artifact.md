@@ -1,5 +1,6 @@
 # Artifact
 
+
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
@@ -8,6 +9,7 @@ Name | Type | Description | Notes
 **filename** | **str** | ID of pet to update | [optional] 
 **additional_metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}** | Additional data to pass to server | [optional] 
 **upload_date** | **str** | The date this artifact was uploaded | [optional] 
+**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

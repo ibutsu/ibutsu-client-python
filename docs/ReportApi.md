@@ -20,6 +20,7 @@ Create a new report
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -33,9 +34,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = report_api.ReportApi(api_client)
     report_parameters = ReportParameters(
@@ -53,6 +63,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->add_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -65,12 +76,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -87,6 +99,7 @@ Delete a report
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -98,9 +111,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = report_api.ReportApi(api_client)
     id = "id_example" # str | ID of report to delete
@@ -112,6 +134,7 @@ with ibutsu_client.ApiClient() as api_client:
     except ibutsu_client.ApiException as e:
         print("Exception when calling ReportApi->delete_report: %s\n" % e)
 ```
+
 
 ### Parameters
 
@@ -125,12 +148,13 @@ void (empty response body)
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -147,6 +171,7 @@ Download a report
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -158,9 +183,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = report_api.ReportApi(api_client)
     id = "id_example" # str | The ID of the report
@@ -175,6 +209,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->download_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -188,12 +223,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/csv, application/json, text/html, application/zip
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -210,6 +246,7 @@ Get a report
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -222,9 +259,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = report_api.ReportApi(api_client)
     id = "id_example" # str | The ID of the report
@@ -238,6 +284,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->get_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -250,12 +297,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -272,6 +320,7 @@ Get a list of reports
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -284,9 +333,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = report_api.ReportApi(api_client)
     page = 1 # int | Set the page of items to return, defaults to 1 (optional)
@@ -303,6 +361,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->get_report_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -317,12 +376,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -338,6 +398,7 @@ Get a list of report types
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -350,9 +411,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = report_api.ReportApi(api_client)
 
@@ -365,6 +435,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->get_report_types: %s\n" % e)
 ```
 
+
 ### Parameters
 This endpoint does not need any parameter.
 
@@ -374,12 +445,13 @@ This endpoint does not need any parameter.
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -395,6 +467,7 @@ View a report
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -406,9 +479,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = report_api.ReportApi(api_client)
     id = "id_example" # str | The ID of the report
@@ -423,6 +505,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ReportApi->view_report: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -436,12 +519,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/csv, application/json, text/html, application/zip
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

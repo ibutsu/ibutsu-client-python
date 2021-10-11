@@ -17,6 +17,7 @@ Create a project
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -29,9 +30,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = project_api.ProjectApi(api_client)
     project = Project(
@@ -51,6 +61,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->add_project: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -63,12 +74,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -85,6 +97,7 @@ Get a single project by ID
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -97,9 +110,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = project_api.ProjectApi(api_client)
     id = "id_example" # str | ID of test project
@@ -113,6 +135,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->get_project: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -125,12 +148,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -147,6 +171,7 @@ Get a list of projects
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -159,9 +184,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = project_api.ProjectApi(api_client)
     owner_id = "ownerId_example" # str | Filter projects by owner ID (optional)
@@ -179,6 +213,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->get_project_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -194,12 +229,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -215,6 +251,7 @@ Update a project
 
 ### Example
 
+* Bearer (JWT) Authentication (jwt):
 ```python
 import time
 import ibutsu_client
@@ -227,9 +264,18 @@ configuration = ibutsu_client.Configuration(
     host = "http://localhost/api"
 )
 
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = project_api.ProjectApi(api_client)
     id = "id_example" # str | ID of test project
@@ -259,6 +305,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling ProjectApi->update_project: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -272,12 +319,13 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-No authorization required
+[jwt](../README.md#jwt)
 
 ### HTTP request headers
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
