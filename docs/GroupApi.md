@@ -48,6 +48,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling GroupApi->add_group: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -66,6 +67,7 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -110,6 +112,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling GroupApi->get_group: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -128,6 +131,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -174,6 +178,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling GroupApi->get_group_list: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -193,6 +198,7 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |
@@ -240,6 +246,7 @@ with ibutsu_client.ApiClient() as api_client:
         print("Exception when calling GroupApi->update_group: %s\n" % e)
 ```
 
+
 ### Parameters
 
 Name | Type | Description  | Notes
@@ -259,6 +266,7 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
 
 ### HTTP response details
 | Status code | Description | Response headers |

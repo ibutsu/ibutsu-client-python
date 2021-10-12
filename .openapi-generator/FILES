@@ -32,6 +32,7 @@ docs/ResultList.md
 docs/Run.md
 docs/RunApi.md
 docs/RunList.md
+docs/TaskApi.md
 docs/UpdateRun.md
 docs/WidgetApi.md
 docs/WidgetConfig.md
@@ -52,6 +53,7 @@ ibutsu_client/api/project_api.py
 ibutsu_client/api/report_api.py
 ibutsu_client/api/result_api.py
 ibutsu_client/api/run_api.py
+ibutsu_client/api/task_api.py
 ibutsu_client/api/widget_api.py
 ibutsu_client/api/widget_config_api.py
 ibutsu_client/api_client.py
@@ -86,7 +88,6 @@ ibutsu_client/model/widget_param.py
 ibutsu_client/model/widget_type.py
 ibutsu_client/model/widget_type_list.py
 ibutsu_client/model_utils.py
-ibutsu_client/models/__init__.py
 ibutsu_client/models/__init__.py
 ibutsu_client/rest.py
 requirements.txt
@@ -123,6 +124,7 @@ test/test_result_list.py
 test/test_run.py
 test/test_run_api.py
 test/test_run_list.py
+test/test_task_api.py
 test/test_update_run.py
 test/test_widget_api.py
 test/test_widget_config.py
