@@ -105,7 +105,9 @@ class ArtifactApi(object):
         self.delete_artifact = _Endpoint(
             settings={
                 'response_type': None,
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/artifact/{id}',
                 'operation_id': 'delete_artifact',
                 'http_method': 'DELETE',
@@ -219,7 +221,9 @@ class ArtifactApi(object):
         self.download_artifact = _Endpoint(
             settings={
                 'response_type': (file_type,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/artifact/{id}/download',
                 'operation_id': 'download_artifact',
                 'http_method': 'GET',
@@ -339,7 +343,9 @@ class ArtifactApi(object):
         self.get_artifact = _Endpoint(
             settings={
                 'response_type': (Artifact,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/artifact/{id}',
                 'operation_id': 'get_artifact',
                 'http_method': 'GET',
@@ -402,7 +408,6 @@ class ArtifactApi(object):
 
             Keyword Args:
                 result_id (str): The result ID to filter by. [optional]
-                run_id (str): The run ID to filter by. [optional]
                 page (int): Set the page of items to return, defaults to 1. [optional]
                 page_size (int): Set the number of items per page, defaults to 25. [optional]
                 _return_http_data_only (bool): response data without head status
@@ -454,7 +459,9 @@ class ArtifactApi(object):
         self.get_artifact_list = _Endpoint(
             settings={
                 'response_type': (ArtifactList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/artifact',
                 'operation_id': 'get_artifact_list',
                 'http_method': 'GET',
@@ -463,7 +470,6 @@ class ArtifactApi(object):
             params_map={
                 'all': [
                     'result_id',
-                    'run_id',
                     'page',
                     'page_size',
                 ],
@@ -483,8 +489,6 @@ class ArtifactApi(object):
                 'openapi_types': {
                     'result_id':
                         (str,),
-                    'run_id':
-                        (str,),
                     'page':
                         (int,),
                     'page_size':
@@ -492,13 +496,11 @@ class ArtifactApi(object):
                 },
                 'attribute_map': {
                     'result_id': 'resultId',
-                    'run_id': 'runId',
                     'page': 'page',
                     'page_size': 'pageSize',
                 },
                 'location_map': {
                     'result_id': 'query',
-                    'run_id': 'query',
                     'page': 'query',
                     'page_size': 'query',
                 },
@@ -517,6 +519,7 @@ class ArtifactApi(object):
 
         def __upload_artifact(
             self,
+            result_id,
             filename,
             file,
             **kwargs
@@ -526,16 +529,15 @@ class ArtifactApi(object):
             This method makes a synchronous HTTP request by default. To make an
             asynchronous HTTP request, please pass async_req=True
 
-            >>> thread = api.upload_artifact(filename, file, async_req=True)
+            >>> thread = api.upload_artifact(result_id, filename, file, async_req=True)
             >>> result = thread.get()
 
             Args:
+                result_id (str): ID of result to attach artifact to
                 filename (str): ID of pet to update
                 file (file_type): file to upload
 
             Keyword Args:
-                result_id (str): ID of result to attach artifact to. [optional]
-                run_id (str): ID of run to attach artifact to. [optional]
                 additional_metadata ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): Additional data to pass to server. [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
@@ -581,6 +583,8 @@ class ArtifactApi(object):
                 '_check_return_type', True
             )
             kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['result_id'] = \
+                result_id
             kwargs['filename'] = \
                 filename
             kwargs['file'] = \
@@ -590,7 +594,9 @@ class ArtifactApi(object):
         self.upload_artifact = _Endpoint(
             settings={
                 'response_type': (Artifact,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/artifact',
                 'operation_id': 'upload_artifact',
                 'http_method': 'POST',
@@ -598,13 +604,13 @@ class ArtifactApi(object):
             },
             params_map={
                 'all': [
+                    'result_id',
                     'filename',
                     'file',
-                    'result_id',
-                    'run_id',
                     'additional_metadata',
                 ],
                 'required': [
+                    'result_id',
                     'filename',
                     'file',
                 ],
@@ -621,29 +627,25 @@ class ArtifactApi(object):
                 'allowed_values': {
                 },
                 'openapi_types': {
+                    'result_id':
+                        (str,),
                     'filename':
                         (str,),
                     'file':
                         (file_type,),
-                    'result_id':
-                        (str,),
-                    'run_id':
-                        (str,),
                     'additional_metadata':
                         ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
                 },
                 'attribute_map': {
+                    'result_id': 'resultId',
                     'filename': 'filename',
                     'file': 'file',
-                    'result_id': 'resultId',
-                    'run_id': 'runId',
                     'additional_metadata': 'additionalMetadata',
                 },
                 'location_map': {
+                    'result_id': 'form',
                     'filename': 'form',
                     'file': 'form',
-                    'result_id': 'form',
-                    'run_id': 'form',
                     'additional_metadata': 'form',
                 },
                 'collection_format_map': {
@@ -729,7 +731,9 @@ class ArtifactApi(object):
         self.view_artifact = _Endpoint(
             settings={
                 'response_type': (file_type,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/artifact/{id}/view',
                 'operation_id': 'view_artifact',
                 'http_method': 'GET',

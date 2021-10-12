@@ -105,7 +105,9 @@ class GroupApi(object):
         self.add_group = _Endpoint(
             settings={
                 'response_type': (Group,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/group',
                 'operation_id': 'add_group',
                 'http_method': 'POST',
@@ -222,7 +224,9 @@ class GroupApi(object):
         self.get_group = _Endpoint(
             settings={
                 'response_type': (Group,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/group/{id}',
                 'operation_id': 'get_group',
                 'http_method': 'GET',
@@ -335,7 +339,9 @@ class GroupApi(object):
         self.get_group_list = _Endpoint(
             settings={
                 'response_type': (GroupList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/group',
                 'operation_id': 'get_group_list',
                 'http_method': 'GET',
@@ -458,7 +464,9 @@ class GroupApi(object):
         self.update_group = _Endpoint(
             settings={
                 'response_type': (Group,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/group/{id}',
                 'operation_id': 'update_group',
                 'http_method': 'PUT',

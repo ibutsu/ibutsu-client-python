@@ -105,7 +105,9 @@ class DashboardApi(object):
         self.add_dashboard = _Endpoint(
             settings={
                 'response_type': (Dashboard,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/dashboard',
                 'operation_id': 'add_dashboard',
                 'http_method': 'POST',
@@ -222,7 +224,9 @@ class DashboardApi(object):
         self.delete_dashboard = _Endpoint(
             settings={
                 'response_type': None,
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/dashboard/{id}',
                 'operation_id': 'delete_dashboard',
                 'http_method': 'DELETE',
@@ -336,7 +340,9 @@ class DashboardApi(object):
         self.get_dashboard = _Endpoint(
             settings={
                 'response_type': (Dashboard,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/dashboard/{id}',
                 'operation_id': 'get_dashboard',
                 'http_method': 'GET',
@@ -451,7 +457,9 @@ class DashboardApi(object):
         self.get_dashboard_list = _Endpoint(
             settings={
                 'response_type': (DashboardList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/dashboard',
                 'operation_id': 'get_dashboard_list',
                 'http_method': 'GET',
@@ -581,7 +589,9 @@ class DashboardApi(object):
         self.update_dashboard = _Endpoint(
             settings={
                 'response_type': (Dashboard,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/dashboard/{id}',
                 'operation_id': 'update_dashboard',
                 'http_method': 'PUT',

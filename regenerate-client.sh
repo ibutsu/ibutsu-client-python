@@ -12,7 +12,7 @@ if [[ "$NEW_VERSION" == "" ]]; then
     # If there's no new version defined externally, generate a new version
     NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
 fi
-FIXES_DIFF='diff --git a/ibutsu_client/api/widget_api.py b/ibutsu_client/api/widget_api.py
+WIDGETS_DIFF='diff --git a/ibutsu_client/api/widget_api.py b/ibutsu_client/api/widget_api.py
 index 0f64c89..b888879 100644
 --- a/ibutsu_client/api/widget_api.py
 +++ b/ibutsu_client/api/widget_api.py
@@ -25,7 +25,19 @@ index 0f64c89..b888879 100644
  
  class WidgetApi(object):
 '
-
+LOGIN_DIFF='diff --git a/ibutsu_client/api/login_api.py b/ibutsu_client/api/login_api.py
+index 70e1340..594f684 100644
+--- a/ibutsu_client/api/login_api.py
++++ b/ibutsu_client/api/login_api.py
+@@ -27,7 +27,6 @@ from ibutsu_client.model.account_reset import AccountReset
+ from ibutsu_client.model.login_config import LoginConfig
+ from ibutsu_client.model.login_error import LoginError
+ from ibutsu_client.model.login_token import LoginToken
+-from ibutsu_client.model.unknownbasetype import UNKNOWNBASETYPE
+ 
+ 
+ class LoginApi(object):
+'
 
 function print_usage() {
     echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
@@ -78,6 +90,7 @@ fi
 # Generate the client
 echo -n "Generating client..."
 openapi-generator-cli generate -o /tmp/client -g python --package-name ibutsu_client \
+    --git-repo-id ibutsu-client-python --git-user-id ibutsu \
     --global-property skipFormModel=true -p packageVersion=$NEW_VERSION \
     -p packageUrl=https://github.com/ibutsu/ibutsu-client-python \
     -i $OPENAPI_FILE > $CLIENT_DIR/generate.log 2>&1
@@ -95,7 +108,8 @@ cat <<EOF >> /tmp/client/.gitignore
 .ibutsu-env
 EOF
 rm /tmp/client/git_push.sh
-echo "$FIXES_DIFF" | patch -p 1 -d /tmp/client
+echo "$WIDGETS_DIFF" | patch -p 1 -d /tmp/client
+echo "$LOGIN_DIFF" | patch -p 1 -d /tmp/client
 
 # Copy all the files
 find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' \

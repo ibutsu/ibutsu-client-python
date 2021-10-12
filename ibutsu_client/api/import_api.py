@@ -106,7 +106,9 @@ class ImportApi(object):
         self.add_import = _Endpoint(
             settings={
                 'response_type': (ModelImport,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/import',
                 'operation_id': 'add_import',
                 'http_method': 'POST',
@@ -234,7 +236,9 @@ class ImportApi(object):
         self.get_import = _Endpoint(
             settings={
                 'response_type': (ModelImport,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/import/{id}',
                 'operation_id': 'get_import',
                 'http_method': 'GET',

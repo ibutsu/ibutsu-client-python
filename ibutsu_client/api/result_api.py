@@ -101,7 +101,9 @@ class ResultApi(object):
         self.add_result = _Endpoint(
             settings={
                 'response_type': (Result,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/result',
                 'operation_id': 'add_result',
                 'http_method': 'POST',
@@ -216,7 +218,9 @@ class ResultApi(object):
         self.get_result = _Endpoint(
             settings={
                 'response_type': (Result,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/result/{id}',
                 'operation_id': 'get_result',
                 'http_method': 'GET',
@@ -332,7 +336,9 @@ class ResultApi(object):
         self.get_result_list = _Endpoint(
             settings={
                 'response_type': (ResultList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/result',
                 'operation_id': 'get_result_list',
                 'http_method': 'GET',
@@ -463,7 +469,9 @@ class ResultApi(object):
         self.update_result = _Endpoint(
             settings={
                 'response_type': (Result,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/result/{id}',
                 'operation_id': 'update_result',
                 'http_method': 'PUT',

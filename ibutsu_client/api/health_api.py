@@ -100,7 +100,9 @@ class HealthApi(object):
         self.get_database_health = _Endpoint(
             settings={
                 'response_type': (Health,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/health/database',
                 'operation_id': 'get_database_health',
                 'http_method': 'GET',
@@ -204,7 +206,9 @@ class HealthApi(object):
         self.get_health = _Endpoint(
             settings={
                 'response_type': (Health,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/health',
                 'operation_id': 'get_health',
                 'http_method': 'GET',
@@ -308,7 +312,9 @@ class HealthApi(object):
         self.get_health_info = _Endpoint(
             settings={
                 'response_type': (HealthInfo,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/health/info',
                 'operation_id': 'get_health_info',
                 'http_method': 'GET',

@@ -105,7 +105,9 @@ class ProjectApi(object):
         self.add_project = _Endpoint(
             settings={
                 'response_type': (Project,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/project',
                 'operation_id': 'add_project',
                 'http_method': 'POST',
@@ -222,7 +224,9 @@ class ProjectApi(object):
         self.get_project = _Endpoint(
             settings={
                 'response_type': (Project,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/project/{id}',
                 'operation_id': 'get_project',
                 'http_method': 'GET',
@@ -337,7 +341,9 @@ class ProjectApi(object):
         self.get_project_list = _Endpoint(
             settings={
                 'response_type': (ProjectList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/project',
                 'operation_id': 'get_project_list',
                 'http_method': 'GET',
@@ -467,7 +473,9 @@ class ProjectApi(object):
         self.update_project = _Endpoint(
             settings={
                 'response_type': (Project,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/project/{id}',
                 'operation_id': 'update_project',
                 'http_method': 'PUT',

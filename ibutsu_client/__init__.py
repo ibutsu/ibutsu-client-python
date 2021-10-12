@@ -10,7 +10,7 @@
 """
 
 
-__version__ = "2.1"
+__version__ = "2.2"
 
 # import ApiClient
 from ibutsu_client.api_client import ApiClient

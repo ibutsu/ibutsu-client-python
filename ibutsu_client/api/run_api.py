@@ -102,7 +102,9 @@ class RunApi(object):
         self.add_run = _Endpoint(
             settings={
                 'response_type': (Run,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/run',
                 'operation_id': 'add_run',
                 'http_method': 'POST',
@@ -219,7 +221,9 @@ class RunApi(object):
         self.bulk_update = _Endpoint(
             settings={
                 'response_type': (RunList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/runs/bulk-update',
                 'operation_id': 'bulk_update',
                 'http_method': 'POST',
@@ -347,7 +351,9 @@ class RunApi(object):
         self.get_run = _Endpoint(
             settings={
                 'response_type': (Run,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/run/{id}',
                 'operation_id': 'get_run',
                 'http_method': 'GET',
@@ -463,7 +469,9 @@ class RunApi(object):
         self.get_run_list = _Endpoint(
             settings={
                 'response_type': (RunList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/run',
                 'operation_id': 'get_run_list',
                 'http_method': 'GET',
@@ -597,7 +605,9 @@ class RunApi(object):
         self.update_run = _Endpoint(
             settings={
                 'response_type': (Run,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/run/{id}',
                 'operation_id': 'update_run',
                 'http_method': 'PUT',

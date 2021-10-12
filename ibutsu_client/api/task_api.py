@@ -103,7 +103,9 @@ class TaskApi(object):
         self.get_task = _Endpoint(
             settings={
                 'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/task/{id}',
                 'operation_id': 'get_task',
                 'http_method': 'GET',

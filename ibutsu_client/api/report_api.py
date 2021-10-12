@@ -107,7 +107,9 @@ class ReportApi(object):
         self.add_report = _Endpoint(
             settings={
                 'response_type': (Report,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/report',
                 'operation_id': 'add_report',
                 'http_method': 'POST',
@@ -224,7 +226,9 @@ class ReportApi(object):
         self.delete_report = _Endpoint(
             settings={
                 'response_type': None,
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/report/{id}',
                 'operation_id': 'delete_report',
                 'http_method': 'DELETE',
@@ -342,7 +346,9 @@ class ReportApi(object):
         self.download_report = _Endpoint(
             settings={
                 'response_type': (file_type,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/report/{id}/download/{filename}',
                 'operation_id': 'download_report',
                 'http_method': 'GET',
@@ -468,7 +474,9 @@ class ReportApi(object):
         self.get_report = _Endpoint(
             settings={
                 'response_type': (Report,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/report/{id}',
                 'operation_id': 'get_report',
                 'http_method': 'GET',
@@ -582,7 +590,9 @@ class ReportApi(object):
         self.get_report_list = _Endpoint(
             settings={
                 'response_type': (ReportList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/report',
                 'operation_id': 'get_report_list',
                 'http_method': 'GET',
@@ -701,7 +711,9 @@ class ReportApi(object):
         self.get_report_types = _Endpoint(
             settings={
                 'response_type': ([InlineResponse200],),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/report/types',
                 'operation_id': 'get_report_types',
                 'http_method': 'GET',
@@ -814,7 +826,9 @@ class ReportApi(object):
         self.view_report = _Endpoint(
             settings={
                 'response_type': (file_type,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/report/{id}/view/{filename}',
                 'operation_id': 'view_report',
                 'http_method': 'GET',

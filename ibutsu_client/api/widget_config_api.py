@@ -101,7 +101,9 @@ class WidgetConfigApi(object):
         self.add_widget_config = _Endpoint(
             settings={
                 'response_type': (WidgetConfig,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/widget-config',
                 'operation_id': 'add_widget_config',
                 'http_method': 'POST',
@@ -216,7 +218,9 @@ class WidgetConfigApi(object):
         self.delete_widget_config = _Endpoint(
             settings={
                 'response_type': None,
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/widget-config/{id}',
                 'operation_id': 'delete_widget_config',
                 'http_method': 'DELETE',
@@ -330,7 +334,9 @@ class WidgetConfigApi(object):
         self.get_widget_config = _Endpoint(
             settings={
                 'response_type': (WidgetConfig,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/widget-config/{id}',
                 'operation_id': 'get_widget_config',
                 'http_method': 'GET',
@@ -445,7 +451,9 @@ class WidgetConfigApi(object):
         self.get_widget_config_list = _Endpoint(
             settings={
                 'response_type': (WidgetConfigList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/widget-config',
                 'operation_id': 'get_widget_config_list',
                 'http_method': 'GET',
@@ -571,7 +579,9 @@ class WidgetConfigApi(object):
         self.update_widget_config = _Endpoint(
             settings={
                 'response_type': (WidgetConfig,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/widget-config/{id}',
                 'operation_id': 'update_widget_config',
                 'http_method': 'PUT',

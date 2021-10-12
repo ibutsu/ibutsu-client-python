@@ -105,7 +105,9 @@ class WidgetApi(object):
         self.get_widget = _Endpoint(
             settings={
                 'response_type': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/widget/{id}',
                 'operation_id': 'get_widget',
                 'http_method': 'GET',
@@ -223,7 +225,9 @@ class WidgetApi(object):
         self.get_widget_types = _Endpoint(
             settings={
                 'response_type': (WidgetTypeList,),
-                'auth': [],
+                'auth': [
+                    'jwt'
+                ],
                 'endpoint_path': '/widget/types',
                 'operation_id': 'get_widget_types',
                 'http_method': 'GET',
