@@ -62,6 +62,8 @@ class Result(ModelNormal):
             'SKIPPED': "skipped",
             'XPASSED': "xpassed",
             'XFAILED': "xfailed",
+            'MANUAL': "manual",
+            'BLOCKED': "blocked",
         },
     }
 
