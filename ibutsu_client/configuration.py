@@ -73,29 +73,10 @@ class Configuration(object):
     :param server_operation_variables: Mapping from operation ID to a mapping with
       string values to replace variables in templated server configuration.
       The validation of enums is performed for variables with defined enum values before.
-    :param ssl_ca_cert: str - the path to a file of concatenated CA certificates 
+    :param ssl_ca_cert: str - the path to a file of concatenated CA certificates
       in PEM format
 
     :Example:
-
-    API Key Authentication Example.
-    Given the following security scheme in the OpenAPI specification:
-      components:
-        securitySchemes:
-          cookieAuth:         # name for the security scheme
-            type: apiKey
-            in: cookie
-            name: JSESSIONID  # cookie name
-
-    You can programmatically set the cookie:
-
-conf = ibutsu_client.Configuration(
-    api_key={'cookieAuth': 'abc123'}
-    api_key_prefix={'cookieAuth': 'JSESSIONID'}
-)
-
-    The following cookie will be added to the HTTP request:
-       Cookie: JSESSIONID abc123
     """
 
     _default = None
@@ -386,14 +367,13 @@ conf = ibutsu_client.Configuration(
         :return: The Auth Settings information dict.
         """
         auth = {}
-        if 'api_key' in self.api_key:
-            auth['api_key'] = {
-                'type': 'api_key',
+        if self.access_token is not None:
+            auth['jwt'] = {
+                'type': 'bearer',
                 'in': 'header',
-                'key': 'api_key',
-                'value': self.get_api_key_with_prefix(
-                    'api_key',
-                ),
+                'format': 'JWT',
+                'key': 'Authorization',
+                'value': 'Bearer ' + self.access_token
             }
         return auth
 
@@ -406,7 +386,7 @@ conf = ibutsu_client.Configuration(
                "OS: {env}\n"\
                "Python Version: {pyversion}\n"\
                "Version of the API: 1.13.4\n"\
-               "SDK Package Version: 2.1".\
+               "SDK Package Version: 2.2".\
                format(env=sys.platform, pyversion=sys.version)
 
     def get_host_settings(self):
