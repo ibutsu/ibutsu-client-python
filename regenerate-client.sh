@@ -78,6 +78,7 @@ fi
 # Generate the client
 echo -n "Generating client..."
 openapi-generator-cli generate -o /tmp/client -g python --package-name ibutsu_client \
+    --git-repo-id ibutsu-client-python --git-user-id ibutsu \
     --global-property skipFormModel=true -p packageVersion=$NEW_VERSION \
     -p packageUrl=https://github.com/ibutsu/ibutsu-client-python \
     -i $OPENAPI_FILE > $CLIENT_DIR/generate.log 2>&1
