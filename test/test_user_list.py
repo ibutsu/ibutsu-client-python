@@ -12,11 +12,15 @@ import sys
 import unittest
 
 import ibutsu_client
-from ibutsu_client.model.widget_config import WidgetConfig
+from ibutsu_client.model.pagination import Pagination
+from ibutsu_client.model.user import User
+globals()['Pagination'] = Pagination
+globals()['User'] = User
+from ibutsu_client.model.user_list import UserList
 
 
-class TestWidgetConfig(unittest.TestCase):
-    """WidgetConfig unit test stubs"""
+class TestUserList(unittest.TestCase):
+    """UserList unit test stubs"""
 
     def setUp(self):
         pass
@@ -24,10 +28,10 @@ class TestWidgetConfig(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testWidgetConfig(self):
-        """Test WidgetConfig"""
+    def testUserList(self):
+        """Test UserList"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = WidgetConfig()  # noqa: E501
+        # model = UserList()  # noqa: E501
         pass
 
 

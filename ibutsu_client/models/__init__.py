@@ -42,6 +42,7 @@ from ibutsu_client.model.token import Token
 from ibutsu_client.model.token_list import TokenList
 from ibutsu_client.model.update_run import UpdateRun
 from ibutsu_client.model.user import User
+from ibutsu_client.model.user_list import UserList
 from ibutsu_client.model.widget_config import WidgetConfig
 from ibutsu_client.model.widget_config_list import WidgetConfigList
 from ibutsu_client.model.widget_param import WidgetParam

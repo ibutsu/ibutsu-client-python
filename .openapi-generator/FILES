@@ -48,6 +48,7 @@ docs/TokenList.md
 docs/UpdateRun.md
 docs/User.md
 docs/UserApi.md
+docs/UserList.md
 docs/WidgetApi.md
 docs/WidgetConfig.md
 docs/WidgetConfigApi.md
@@ -110,6 +111,7 @@ ibutsu_client/model/token.py
 ibutsu_client/model/token_list.py
 ibutsu_client/model/update_run.py
 ibutsu_client/model/user.py
+ibutsu_client/model/user_list.py
 ibutsu_client/model/widget_config.py
 ibutsu_client/model/widget_config_list.py
 ibutsu_client/model/widget_param.py
@@ -168,6 +170,7 @@ test/test_token_list.py
 test/test_update_run.py
 test/test_user.py
 test/test_user_api.py
+test/test_user_list.py
 test/test_widget_api.py
 test/test_widget_config.py
 test/test_widget_config_api.py

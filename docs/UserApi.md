@@ -1,6 +1,6 @@
 # ibutsu_client.UserApi
 
-All URIs are relative to *http://localhost/api*
+All URIs are relative to */api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**get_token**](UserApi.md#get_token) | **GET** /user/token/{id} | Retrieve a single token for the current user
 [**get_token_list**](UserApi.md#get_token_list) | **GET** /user/token | Return the tokens for the user
 [**get_user**](UserApi.md#get_user) | **GET** /user | Return the user details for the current user
+[**get_user_list**](UserApi.md#get_user_list) | **GET** /users | Return list of users
 
 
 # **add_token**
@@ -27,10 +28,10 @@ from ibutsu_client.api import user_api
 from ibutsu_client.model.token import Token
 from ibutsu_client.model.create_token import CreateToken
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -106,10 +107,10 @@ import time
 import ibutsu_client
 from ibutsu_client.api import user_api
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -181,10 +182,10 @@ import ibutsu_client
 from ibutsu_client.api import user_api
 from ibutsu_client.model.token import Token
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -257,10 +258,10 @@ import ibutsu_client
 from ibutsu_client.api import user_api
 from ibutsu_client.model.token_list import TokenList
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -336,10 +337,10 @@ import ibutsu_client
 from ibutsu_client.api import user_api
 from ibutsu_client.model.user import User
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -390,6 +391,90 @@ This endpoint does not need any parameter.
 |-------------|-------------|------------------|
 **200** | The details of the logged in user |  -  |
 **401** | The user needs to be logged in |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **get_user_list**
+> UserList get_user_list()
+
+Return list of users
+
+### Example
+
+* Bearer (JWT) Authentication (jwt):
+
+```python
+import time
+import ibutsu_client
+from ibutsu_client.api import user_api
+from ibutsu_client.model.user_list import UserList
+from pprint import pprint
+# Defining the host is optional and defaults to /api
+# See configuration.py for a list of all supported configuration parameters.
+configuration = ibutsu_client.Configuration(
+    host = "/api"
+)
+
+# The client must configure the authentication and authorization parameters
+# in accordance with the API server security policy.
+# Examples for each auth method are provided below, use the example that
+# satisfies your auth use case.
+
+# Configure Bearer authorization (JWT): jwt
+configuration = ibutsu_client.Configuration(
+    access_token = 'YOUR_BEARER_TOKEN'
+)
+
+# Enter a context with an instance of the API client
+with ibutsu_client.ApiClient(configuration) as api_client:
+    # Create an instance of the API class
+    api_instance = user_api.UserApi(api_client)
+    filter = [
+        "filter_example",
+    ] # [str] | Fields to filter by (optional)
+    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
+
+    # example passing only required values which don't have defaults set
+    # and optional values
+    try:
+        # Return list of users
+        api_response = api_instance.get_user_list(filter=filter, page=page, page_size=page_size)
+        pprint(api_response)
+    except ibutsu_client.ApiException as e:
+        print("Exception when calling UserApi->get_user_list: %s\n" % e)
+```
+
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **filter** | **[str]**| Fields to filter by | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
+
+### Return type
+
+[**UserList**](UserList.md)
+
+### Authorization
+
+[jwt](../README.md#jwt)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+**200** | Returns a list of users |  -  |
+**401** | The user needs to be logged in |  -  |
+**403** | The user needs to be a superadmin |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

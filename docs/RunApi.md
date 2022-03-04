@@ -1,6 +1,6 @@
 # ibutsu_client.RunApi
 
-All URIs are relative to *http://localhost/api*
+All URIs are relative to */api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -26,10 +26,10 @@ import ibutsu_client
 from ibutsu_client.api import run_api
 from ibutsu_client.model.run import Run
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -115,10 +115,10 @@ from ibutsu_client.api import run_api
 from ibutsu_client.model.run_list import RunList
 from ibutsu_client.model.update_run import UpdateRun
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -211,10 +211,10 @@ import ibutsu_client
 from ibutsu_client.api import run_api
 from ibutsu_client.model.run import Run
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -289,10 +289,10 @@ import ibutsu_client
 from ibutsu_client.api import run_api
 from ibutsu_client.model.run_list import RunList
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -374,10 +374,10 @@ import ibutsu_client
 from ibutsu_client.api import run_api
 from ibutsu_client.model.run import Run
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
