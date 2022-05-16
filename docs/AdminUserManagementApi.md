@@ -349,7 +349,6 @@ import time
 import ibutsu_client
 from ibutsu_client.api import admin_user_management_api
 from ibutsu_client.model.user import User
-from ibutsu_client.model.unknownbasetype import UNKNOWNBASETYPE
 from pprint import pprint
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
@@ -372,14 +371,14 @@ with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = admin_user_management_api.AdminUserManagementApi(api_client)
     id = "id_example" # str | The ID of the user to update
-    unknown_base_type = {
+    user = User(
         id="81e2c9d6-1593-4559-af4f-90f6f1f8fa03",
         email="user@domain.com",
         name="Namey McNameface",
         is_superadmin=False,
         is_active=True,
         group_id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
-    } # UNKNOWN_BASE_TYPE |  (optional)
+    ) # User |  (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -393,7 +392,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
     # and optional values
     try:
         # Administration endpoint to update a user. Only accessible to superadmins.
-        api_response = api_instance.admin_update_user(id, unknown_base_type=unknown_base_type)
+        api_response = api_instance.admin_update_user(id, user=user)
         pprint(api_response)
     except ibutsu_client.ApiException as e:
         print("Exception when calling AdminUserManagementApi->admin_update_user: %s\n" % e)
@@ -405,7 +404,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **id** | **str**| The ID of the user to update |
- **unknown_base_type** | [**UNKNOWN_BASE_TYPE**](UNKNOWN_BASE_TYPE.md)|  | [optional]
+ **user** | [**User**](User.md)|  | [optional]
 
 ### Return type
 

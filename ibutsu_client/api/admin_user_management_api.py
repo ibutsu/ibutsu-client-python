@@ -260,7 +260,7 @@ class AdminUserManagementApi(object):
             params_map={
                 'all': [
                     'id',
-                    'unknown_base_type',
+                    'user',
                 ],
                 'required': [
                     'id',
@@ -280,15 +280,15 @@ class AdminUserManagementApi(object):
                 'openapi_types': {
                     'id':
                         (str,),
-                    'unknown_base_type':
-                        (UNKNOWN_BASE_TYPE,),
+                    'user':
+                        (User,),
                 },
                 'attribute_map': {
                     'id': 'id',
                 },
                 'location_map': {
                     'id': 'path',
-                    'unknown_base_type': 'body',
+                    'user': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -623,7 +623,7 @@ class AdminUserManagementApi(object):
             id (str): The ID of the user to update
 
         Keyword Args:
-            unknown_base_type (UNKNOWN_BASE_TYPE): [optional]
+            user (User): [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
