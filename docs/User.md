@@ -4,8 +4,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **str** | The ID of the user | 
 **email** | **str** | The user&#39;s e-mail address | 
+**id** | **str** | The ID of the user | [optional] 
 **name** | **str, none_type** | The user&#39;s name | [optional] 
 **is_superadmin** | **bool** | Flag to show if a user is a super-admin | [optional] 
 **is_active** | **bool** | Flag to show if the user is active | [optional] 

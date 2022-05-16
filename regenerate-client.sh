@@ -25,26 +25,19 @@ index 0f64c89..b888879 100644
  
  class WidgetApi(object):
 '
-PARAM_FIXES_DIFF="diff --git a/ibutsu_client/api_client.py b/ibutsu_client/api_client.py
-index 4b41ac5..67072f5 100644
---- a/ibutsu_client/api_client.py
-+++ b/ibutsu_client/api_client.py
-@@ -741,11 +741,11 @@ class Endpoint(object):
-                 base_name = self.attribute_map[param_name]
-                 if (param_location == 'form' and
-                         self.openapi_types[param_name] == (file_type,)):
--                    params['file'][param_name] = [param_value]
-+                    params['file'][base_name] = [param_value]
-                 elif (param_location == 'form' and
-                         self.openapi_types[param_name] == ([file_type],)):
-                     # param_value is already a list
--                    params['file'][param_name] = param_value
-+                    params['file'][base_name] = param_value
-                 elif param_location in {'form', 'query'}:
-                     param_value_full = (base_name, param_value)
-                     params[param_location].append(param_value_full)
-"
-
+USERAPI_FIXES_DIFF='diff --git a/ibutsu_client/api/admin_user_management_api.py b/ibutsu_client/api/admin_user_management_api.py
+index 988f08a..e626a24 100644
+--- a/ibutsu_client/api/admin_user_management_api.py
++++ b/ibutsu_client/api/admin_user_management_api.py
+@@ -21,7 +21,6 @@ from ibutsu_client.model_utils import (  # noqa: F401
+     none_type,
+     validate_and_convert_types
+ )
+-from ibutsu_client.model.unknownbasetype import UNKNOWNBASETYPE
+ from ibutsu_client.model.user import User
+ from ibutsu_client.model.user_list import UserList
+ 
+'
 
 function print_usage() {
     echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
@@ -116,7 +109,7 @@ cat <<EOF >> /tmp/client/.gitignore
 EOF
 rm /tmp/client/git_push.sh
 echo "$WIDGET_FIXES_DIFF" | patch -p 1 -d /tmp/client
-echo "$PARAM_FIXES_DIFF" | patch -p 1 -d /tmp/client
+echo "$USERAPI_FIXES_DIFF" | patch -p 1 -d /tmp/client
 
 # Copy all the files
 find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' \

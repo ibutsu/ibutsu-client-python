@@ -6,6 +6,8 @@ README.md
 docs/AccountRecovery.md
 docs/AccountRegistration.md
 docs/AccountReset.md
+docs/AdminProjectManagementApi.md
+docs/AdminUserManagementApi.md
 docs/Artifact.md
 docs/ArtifactApi.md
 docs/ArtifactList.md
@@ -48,6 +50,7 @@ docs/TokenList.md
 docs/UpdateRun.md
 docs/User.md
 docs/UserApi.md
+docs/UserList.md
 docs/WidgetApi.md
 docs/WidgetConfig.md
 docs/WidgetConfigApi.md
@@ -58,6 +61,8 @@ docs/WidgetTypeList.md
 git_push.sh
 ibutsu_client/__init__.py
 ibutsu_client/api/__init__.py
+ibutsu_client/api/admin_project_management_api.py
+ibutsu_client/api/admin_user_management_api.py
 ibutsu_client/api/artifact_api.py
 ibutsu_client/api/dashboard_api.py
 ibutsu_client/api/group_api.py
@@ -110,6 +115,7 @@ ibutsu_client/model/token.py
 ibutsu_client/model/token_list.py
 ibutsu_client/model/update_run.py
 ibutsu_client/model/user.py
+ibutsu_client/model/user_list.py
 ibutsu_client/model/widget_config.py
 ibutsu_client/model/widget_config_list.py
 ibutsu_client/model/widget_param.py
@@ -126,6 +132,8 @@ test/__init__.py
 test/test_account_recovery.py
 test/test_account_registration.py
 test/test_account_reset.py
+test/test_admin_project_management_api.py
+test/test_admin_user_management_api.py
 test/test_artifact.py
 test/test_artifact_api.py
 test/test_artifact_list.py
@@ -168,6 +176,7 @@ test/test_token_list.py
 test/test_update_run.py
 test/test_user.py
 test/test_user_api.py
+test/test_user_list.py
 test/test_widget_api.py
 test/test_widget_config.py
 test/test_widget_config_api.py
