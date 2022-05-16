@@ -1,6 +1,6 @@
 # ibutsu_client.LoginApi
 
-All URIs are relative to *http://localhost/api*
+All URIs are relative to */api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -27,10 +27,10 @@ import time
 import ibutsu_client
 from ibutsu_client.api import login_api
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 
@@ -90,10 +90,10 @@ import time
 import ibutsu_client
 from ibutsu_client.api import login_api
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 
@@ -153,10 +153,10 @@ import ibutsu_client
 from ibutsu_client.api import login_api
 from ibutsu_client.model.login_config import LoginConfig
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 
@@ -219,10 +219,10 @@ from ibutsu_client.model.login_token import LoginToken
 from ibutsu_client.model.login_error import LoginError
 from ibutsu_client.model.credentials import Credentials
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 
@@ -288,10 +288,10 @@ import ibutsu_client
 from ibutsu_client.api import login_api
 from ibutsu_client.model.account_recovery import AccountRecovery
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 
@@ -356,10 +356,10 @@ from ibutsu_client.api import login_api
 from ibutsu_client.model.login_error import LoginError
 from ibutsu_client.model.account_registration import AccountRegistration
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 
@@ -424,10 +424,10 @@ import ibutsu_client
 from ibutsu_client.api import login_api
 from ibutsu_client.model.account_reset import AccountReset
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 
@@ -492,10 +492,10 @@ import ibutsu_client
 from ibutsu_client.api import login_api
 from ibutsu_client.model.login_support import LoginSupport
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 

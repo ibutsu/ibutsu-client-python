@@ -1,6 +1,6 @@
 # ibutsu_client.WidgetConfigApi
 
-All URIs are relative to *http://localhost/api*
+All URIs are relative to */api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -26,10 +26,10 @@ import ibutsu_client
 from ibutsu_client.api import widget_config_api
 from ibutsu_client.model.widget_config import WidgetConfig
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -110,10 +110,10 @@ import time
 import ibutsu_client
 from ibutsu_client.api import widget_config_api
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -185,10 +185,10 @@ import ibutsu_client
 from ibutsu_client.api import widget_config_api
 from ibutsu_client.model.widget_config import WidgetConfig
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -263,10 +263,10 @@ import ibutsu_client
 from ibutsu_client.api import widget_config_api
 from ibutsu_client.model.widget_config_list import WidgetConfigList
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -345,10 +345,10 @@ import ibutsu_client
 from ibutsu_client.api import widget_config_api
 from ibutsu_client.model.widget_config import WidgetConfig
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters

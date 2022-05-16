@@ -1,6 +1,6 @@
 # ibutsu_client.DashboardApi
 
-All URIs are relative to *http://localhost/api*
+All URIs are relative to */api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -26,10 +26,10 @@ import ibutsu_client
 from ibutsu_client.api import dashboard_api
 from ibutsu_client.model.dashboard import Dashboard
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -108,10 +108,10 @@ import time
 import ibutsu_client
 from ibutsu_client.api import dashboard_api
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -183,10 +183,10 @@ import ibutsu_client
 from ibutsu_client.api import dashboard_api
 from ibutsu_client.model.dashboard import Dashboard
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -259,10 +259,10 @@ import ibutsu_client
 from ibutsu_client.api import dashboard_api
 from ibutsu_client.model.dashboard_list import DashboardList
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -279,6 +279,9 @@ configuration = ibutsu_client.Configuration(
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = dashboard_api.DashboardApi(api_client)
+    filter = [
+        "filter_example",
+    ] # [str] | Fields to filter by (optional)
     project_id = "project_id_example" # str | Filter dashboards by project ID (optional)
     user_id = "user_id_example" # str | Filter dashboards by user ID (optional)
     page = 1 # int | Set the page of items to return, defaults to 1 (optional)
@@ -288,7 +291,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
     # and optional values
     try:
         # Get a list of dashboards
-        api_response = api_instance.get_dashboard_list(project_id=project_id, user_id=user_id, page=page, page_size=page_size)
+        api_response = api_instance.get_dashboard_list(filter=filter, project_id=project_id, user_id=user_id, page=page, page_size=page_size)
         pprint(api_response)
     except ibutsu_client.ApiException as e:
         print("Exception when calling DashboardApi->get_dashboard_list: %s\n" % e)
@@ -299,6 +302,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **filter** | **[str]**| Fields to filter by | [optional]
  **project_id** | **str**| Filter dashboards by project ID | [optional]
  **user_id** | **str**| Filter dashboards by user ID | [optional]
  **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
@@ -341,10 +345,10 @@ import ibutsu_client
 from ibutsu_client.api import dashboard_api
 from ibutsu_client.model.dashboard import Dashboard
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters

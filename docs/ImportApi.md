@@ -1,6 +1,6 @@
 # ibutsu_client.ImportApi
 
-All URIs are relative to *http://localhost/api*
+All URIs are relative to */api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -23,10 +23,10 @@ import ibutsu_client
 from ibutsu_client.api import import_api
 from ibutsu_client.model.model_import import ModelImport
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -46,6 +46,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
     import_file = open('/path/to/file', 'rb') # file_type | The file to import
     project = "project_example" # str | The project associated with this import (optional)
     metadata = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Additional metadata about imported run (optional)
+    source = "source_example" # str | The source of this import (optional)
 
     # example passing only required values which don't have defaults set
     try:
@@ -59,7 +60,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
     # and optional values
     try:
         # Import a file into Ibutsu. This can be either a JUnit XML file, or an Ibutsu archive
-        api_response = api_instance.add_import(import_file, project=project, metadata=metadata)
+        api_response = api_instance.add_import(import_file, project=project, metadata=metadata, source=source)
         pprint(api_response)
     except ibutsu_client.ApiException as e:
         print("Exception when calling ImportApi->add_import: %s\n" % e)
@@ -73,6 +74,7 @@ Name | Type | Description  | Notes
  **import_file** | **file_type**| The file to import |
  **project** | **str**| The project associated with this import | [optional]
  **metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**| Additional metadata about imported run | [optional]
+ **source** | **str**| The source of this import | [optional]
 
 ### Return type
 
@@ -113,10 +115,10 @@ import ibutsu_client
 from ibutsu_client.api import import_api
 from ibutsu_client.model.model_import import ModelImport
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters

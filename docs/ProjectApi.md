@@ -1,6 +1,6 @@
 # ibutsu_client.ProjectApi
 
-All URIs are relative to *http://localhost/api*
+All URIs are relative to */api*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -25,10 +25,10 @@ import ibutsu_client
 from ibutsu_client.api import project_api
 from ibutsu_client.model.project import Project
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -107,10 +107,10 @@ import ibutsu_client
 from ibutsu_client.api import project_api
 from ibutsu_client.model.project import Project
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -183,10 +183,10 @@ import ibutsu_client
 from ibutsu_client.api import project_api
 from ibutsu_client.model.project_list import ProjectList
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters
@@ -203,6 +203,9 @@ configuration = ibutsu_client.Configuration(
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = project_api.ProjectApi(api_client)
+    filter = [
+        "filter_example",
+    ] # [str] | Fields to filter by (optional)
     owner_id = "ownerId_example" # str | Filter projects by owner ID (optional)
     group_id = "groupId_example" # str | Filter projects by group ID (optional)
     page = 1 # int | Set the page of items to return, defaults to 1 (optional)
@@ -212,7 +215,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
     # and optional values
     try:
         # Get a list of projects
-        api_response = api_instance.get_project_list(owner_id=owner_id, group_id=group_id, page=page, page_size=page_size)
+        api_response = api_instance.get_project_list(filter=filter, owner_id=owner_id, group_id=group_id, page=page, page_size=page_size)
         pprint(api_response)
     except ibutsu_client.ApiException as e:
         print("Exception when calling ProjectApi->get_project_list: %s\n" % e)
@@ -223,6 +226,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **filter** | **[str]**| Fields to filter by | [optional]
  **owner_id** | **str**| Filter projects by owner ID | [optional]
  **group_id** | **str**| Filter projects by group ID | [optional]
  **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
@@ -265,10 +269,10 @@ import ibutsu_client
 from ibutsu_client.api import project_api
 from ibutsu_client.model.project import Project
 from pprint import pprint
-# Defining the host is optional and defaults to http://localhost/api
+# Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
-    host = "http://localhost/api"
+    host = "/api"
 )
 
 # The client must configure the authentication and authorization parameters

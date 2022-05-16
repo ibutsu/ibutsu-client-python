@@ -6,7 +6,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from .api.artifact_api import ArtifactApi
+#   from .api.admin_project_management_api import AdminProjectManagementApi
 #
 # or import this package, but before doing it, use:
 #
@@ -14,6 +14,8 @@
 #   sys.setrecursionlimit(n)
 
 # Import APIs into API package:
+from ibutsu_client.api.admin_project_management_api import AdminProjectManagementApi
+from ibutsu_client.api.admin_user_management_api import AdminUserManagementApi
 from ibutsu_client.api.artifact_api import ArtifactApi
 from ibutsu_client.api.dashboard_api import DashboardApi
 from ibutsu_client.api.group_api import GroupApi
