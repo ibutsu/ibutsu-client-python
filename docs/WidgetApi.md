@@ -21,7 +21,6 @@ Generate data for a dashboard widget
 import time
 import ibutsu_client
 from ibutsu_client.api import widget_api
-from ibutsu_client.model.str_bool_date_datetime_dict_float_int_list_str_none_type import StrBoolDateDatetimeDictFloatIntListStrNoneType
 from pprint import pprint
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.

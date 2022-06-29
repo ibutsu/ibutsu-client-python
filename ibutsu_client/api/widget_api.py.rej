@@ -1,0 +1,10 @@
+--- ibutsu_client/api/widget_api.py
++++ ibutsu_client/api/widget_api.py
+@@ -22,7 +22,6 @@ from ibutsu_client.model_utils import (  # noqa: F401
+     validate_and_convert_types
+ )
+ from ibutsu_client.model.widget_type_list import WidgetTypeList
+-from ibutsu_client.model.str_bool_date_datetime_dict_float_int_list_str_none_type import StrBoolDateDatetimeDictFloatIntListStrNoneType
+ 
+ 
+ class WidgetApi(object):

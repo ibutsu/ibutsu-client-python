@@ -402,7 +402,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_report_types**
-> [InlineResponse200] get_report_types()
+> [GetReportTypes200ResponseInner] get_report_types()
 
 Get a list of report types
 
@@ -414,7 +414,7 @@ Get a list of report types
 import time
 import ibutsu_client
 from ibutsu_client.api import report_api
-from ibutsu_client.model.inline_response200 import InlineResponse200
+from ibutsu_client.model.get_report_types200_response_inner import GetReportTypes200ResponseInner
 from pprint import pprint
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
@@ -452,7 +452,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**[InlineResponse200]**](InlineResponse200.md)
+[**[GetReportTypes200ResponseInner]**](GetReportTypes200ResponseInner.md)
 
 ### Authorization
 

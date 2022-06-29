@@ -6,7 +6,7 @@
 # raise a `RecursionError`.
 # In order to avoid this, import only the API that you directly need like:
 #
-#   from .api.admin_project_management_api import AdminProjectManagementApi
+#   from ibutsu_client.api.admin_project_management_api import AdminProjectManagementApi
 #
 # or import this package, but before doing it, use:
 #
