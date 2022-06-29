@@ -1,4 +1,4 @@
-# InlineResponse200
+# GetReportTypes200ResponseInner
 
 
 ## Properties

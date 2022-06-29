@@ -18,11 +18,11 @@ from ibutsu_client.model.create_token import CreateToken
 from ibutsu_client.model.credentials import Credentials
 from ibutsu_client.model.dashboard import Dashboard
 from ibutsu_client.model.dashboard_list import DashboardList
+from ibutsu_client.model.get_report_types200_response_inner import GetReportTypes200ResponseInner
 from ibutsu_client.model.group import Group
 from ibutsu_client.model.group_list import GroupList
 from ibutsu_client.model.health import Health
 from ibutsu_client.model.health_info import HealthInfo
-from ibutsu_client.model.inline_response200 import InlineResponse200
 from ibutsu_client.model.login_config import LoginConfig
 from ibutsu_client.model.login_error import LoginError
 from ibutsu_client.model.login_support import LoginSupport

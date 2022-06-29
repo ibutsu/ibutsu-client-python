@@ -12,11 +12,11 @@ import sys
 import unittest
 
 import ibutsu_client
-from ibutsu_client.model.update_run import UpdateRun
+from ibutsu_client.model.get_report_types200_response_inner import GetReportTypes200ResponseInner
 
 
-class TestUpdateRun(unittest.TestCase):
-    """UpdateRun unit test stubs"""
+class TestGetReportTypes200ResponseInner(unittest.TestCase):
+    """GetReportTypes200ResponseInner unit test stubs"""
 
     def setUp(self):
         pass
@@ -24,10 +24,10 @@ class TestUpdateRun(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testUpdateRun(self):
-        """Test UpdateRun"""
+    def testGetReportTypes200ResponseInner(self):
+        """Test GetReportTypes200ResponseInner"""
         # FIXME: construct object with mandatory attributes with example values
-        # model = UpdateRun()  # noqa: E501
+        # model = GetReportTypes200ResponseInner()  # noqa: E501
         pass
 
 
