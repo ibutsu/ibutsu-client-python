@@ -12,19 +12,6 @@ if [[ "$NEW_VERSION" == "" ]]; then
     # If there's no new version defined externally, generate a new version
     NEW_VERSION="${CURRENT_VERSION%.*}.$((${CURRENT_VERSION##*.}+1))"
 fi
-WIDGET_FIXES_DIFF='diff --git a/ibutsu_client/api/widget_api.py b/ibutsu_client/api/widget_api.py
-index 0f64c89..b888879 100644
---- a/ibutsu_client/api/widget_api.py
-+++ b/ibutsu_client/api/widget_api.py
-@@ -22,7 +22,6 @@ from ibutsu_client.model_utils import (  # noqa: F401
-     validate_and_convert_types
- )
- from ibutsu_client.model.widget_type_list import WidgetTypeList
--from ibutsu_client.model.str_bool_date_datetime_dict_float_int_list_str_none_type import StrBoolDateDatetimeDictFloatIntListStrNoneType
- 
- 
- class WidgetApi(object):
-'
 
 function print_usage() {
     echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
@@ -46,22 +33,37 @@ if [[ $# -eq 0 ]]; then
 fi
 
 # Parse the arguments
-for ARG in $*; do
-    if [[ "$ARG" == "-c" ]] || [[ "$ARG" == "--commit" ]]; then
-        CAN_COMMIT=true
-    elif [[ "$ARG" == "-p" ]] || [[ "$ARG" == "--push" ]]; then
-        CAN_PUSH=true
-    elif [[ "$ARG" == "-d" ]] || [[ "$ARG" == "--delete" ]]; then
-        CAN_DELETE=true
-    elif [[ "$ARG" == "-v" ]] || [[ "$ARG" == "--version" ]]; then
-        echo "Prospective version number: $NEW_VERSION"
-        exit 0
-    elif [[ "$ARG" == "-h" ]] || [[ "$ARG" == "--help" ]]; then
-        print_usage
-        exit 0
-    else
-        OPENAPI_FILE=$ARG
-    fi
+while (( "$#" )); do
+    case "$1" in
+        -h|--help)
+            print_usage
+            exit 0
+            ;;
+        -v|--version)
+            echo "Prospective version number: $NEW_VERSION"
+            exit 0
+            ;;
+        -c|--commit)
+            CAN_COMMIT=true
+            shift
+            ;;
+        -p|--push)
+            CAN_PUSH=true
+            shift
+            ;;
+        -d|--delete)
+            CAN_PUSH=true
+            shift
+            ;;
+        -*|--*)
+            echo "Error: unsupported option $1" >&2
+            exit 1
+            ;;
+        *)
+            OPENAPI_FILE=$1
+            shift
+            ;;
+    esac
 done
 
 # Check if the files exist
@@ -95,7 +97,7 @@ cat <<EOF >> /tmp/client/.gitignore
 .ibutsu-env
 EOF
 rm /tmp/client/git_push.sh
-echo "$WIDGET_FIXES_DIFF" | patch -p 1 -d /tmp/client
+rm .travis.yml
 
 # Copy all the files
 find $CLIENT_DIR -not -path $CLIENT_DIR -not -path "$CLIENT_DIR/.git/*" -not -name '.git' \
