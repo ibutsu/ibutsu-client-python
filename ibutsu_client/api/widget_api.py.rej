@@ -5,6 +5,6 @@
  )
  from ibutsu_client.model.widget_type_list import WidgetTypeList
 -from ibutsu_client.model.str_bool_date_datetime_dict_float_int_list_str_none_type import StrBoolDateDatetimeDictFloatIntListStrNoneType
- 
- 
+
+
  class WidgetApi(object):

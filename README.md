@@ -125,14 +125,14 @@ Class | Method | HTTP request | Description
 *HealthApi* | [**get_health_info**](docs/HealthApi.md#get_health_info) | **GET** /health/info | Get information about the server
 *ImportApi* | [**add_import**](docs/ImportApi.md#add_import) | **POST** /import | Import a file into Ibutsu. This can be either a JUnit XML file, or an Ibutsu archive
 *ImportApi* | [**get_import**](docs/ImportApi.md#get_import) | **GET** /import/{id} | Get the status of an import
-*LoginApi* | [**activate**](docs/LoginApi.md#activate) | **GET** /login/activate/{activation_code} | 
-*LoginApi* | [**auth**](docs/LoginApi.md#auth) | **GET** /login/auth/{provider} | 
-*LoginApi* | [**config**](docs/LoginApi.md#config) | **GET** /login/config/{provider} | 
-*LoginApi* | [**login**](docs/LoginApi.md#login) | **POST** /login | 
-*LoginApi* | [**recover**](docs/LoginApi.md#recover) | **POST** /login/recover | 
-*LoginApi* | [**register**](docs/LoginApi.md#register) | **POST** /login/register | 
-*LoginApi* | [**reset_password**](docs/LoginApi.md#reset_password) | **POST** /login/reset-password | 
-*LoginApi* | [**support**](docs/LoginApi.md#support) | **GET** /login/support | 
+*LoginApi* | [**activate**](docs/LoginApi.md#activate) | **GET** /login/activate/{activation_code} |
+*LoginApi* | [**auth**](docs/LoginApi.md#auth) | **GET** /login/auth/{provider} |
+*LoginApi* | [**config**](docs/LoginApi.md#config) | **GET** /login/config/{provider} |
+*LoginApi* | [**login**](docs/LoginApi.md#login) | **POST** /login |
+*LoginApi* | [**recover**](docs/LoginApi.md#recover) | **POST** /login/recover |
+*LoginApi* | [**register**](docs/LoginApi.md#register) | **POST** /login/register |
+*LoginApi* | [**reset_password**](docs/LoginApi.md#reset_password) | **POST** /login/reset-password |
+*LoginApi* | [**support**](docs/LoginApi.md#support) | **GET** /login/support |
 *ProjectApi* | [**add_project**](docs/ProjectApi.md#add_project) | **POST** /project | Create a project
 *ProjectApi* | [**get_project**](docs/ProjectApi.md#get_project) | **GET** /project/{id} | Get a single project by ID
 *ProjectApi* | [**get_project_list**](docs/ProjectApi.md#get_project_list) | **GET** /project | Get a list of projects
@@ -243,4 +243,3 @@ import ibutsu_client
 from ibutsu_client.apis import *
 from ibutsu_client.models import *
 ```
-

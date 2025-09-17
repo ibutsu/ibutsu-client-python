@@ -120,7 +120,7 @@ if [[ "$CAN_COMMIT" = true ]]; then
     echo "done, new branch created: $BRANCH_NAME"
     if [[ "$CAN_PUSH" = true ]]; then
         echo -n "Pushing up to origin/$BRANCH_NAME..."
-        git push -q origin $BRANCH_NAME 
+        git push -q origin $BRANCH_NAME
         git checkout master
         if [[ "$CAN_DELETE" = true ]]; then
             git branch -D $BRANCH_NAME
