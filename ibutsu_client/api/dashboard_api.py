@@ -707,8 +707,7 @@ class DashboardApi:
             StrictStr | None, Field(description="Filter dashboards by user ID")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -790,8 +789,7 @@ class DashboardApi:
             StrictStr | None, Field(description="Filter dashboards by user ID")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -873,8 +871,7 @@ class DashboardApi:
             StrictStr | None, Field(description="Filter dashboards by user ID")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,

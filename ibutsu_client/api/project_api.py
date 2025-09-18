@@ -714,8 +714,7 @@ class ProjectApi:
             StrictStr | None, Field(description="Filter projects by group ID")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -797,8 +796,7 @@ class ProjectApi:
             StrictStr | None, Field(description="Filter projects by group ID")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -880,8 +878,7 @@ class ProjectApi:
             StrictStr | None, Field(description="Filter projects by group ID")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,

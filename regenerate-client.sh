@@ -26,7 +26,7 @@ get_versions() {
     fi
 
     if [[ "${NEW_VERSION:-}" == "" ]]; then
-        # If there's no new version defined externally, generate a new version
+        # If there's no new version defined externally (e.g., via --target-version), generate a new version
         # Handle version formats like "2.3.0" or "2.3.0.d20250918"
         if [[ "$CURRENT_VERSION" =~ ^([0-9]+\.[0-9]+\.[0-9]+) ]]; then
             BASE_VERSION="${BASH_REMATCH[1]}"
@@ -37,6 +37,13 @@ get_versions() {
             echo "Error: Unexpected version format: $CURRENT_VERSION"
             exit 1
         fi
+    else
+        # Validate the provided target version format
+        if ! [[ "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Invalid version format '$NEW_VERSION'. Expected format: X.Y.Z (e.g., 3.0.0)"
+            exit 1
+        fi
+        echo "Using specified target version: $NEW_VERSION"
     fi
 }
 
@@ -51,11 +58,12 @@ function check_dependencies() {
 }
 
 function print_usage() {
-    echo "Usage: regenerate-client.sh [-h|--help] [-v|--version] OPENAPI_FILE"
+    echo "Usage: regenerate-client.sh [-h|--help] [-v|--version] [--target-version VERSION] OPENAPI_FILE"
     echo ""
     echo "optional arguments:"
-    echo "  -h, --help       show this help message"
-    echo "  -v, --version    show the prospective new version number"
+    echo "  -h, --help                   show this help message"
+    echo "  -v, --version                show the prospective new version number"
+    echo "  --target-version VERSION     specify a target version (e.g., 3.0.0)"
     echo ""
     echo "This script regenerates the client on the current branch and leaves"
     echo "uncommitted changes in the working tree after running pre-commit."
@@ -84,6 +92,15 @@ while (( "$#" )); do
             echo "Current version: $CURRENT_VERSION"
             echo "Prospective version number: $NEW_VERSION"
             exit 0
+            ;;
+        --target-version)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                NEW_VERSION="$2"
+                shift 2
+            else
+                echo "Error: --target-version requires a version number argument" >&2
+                exit 1
+            fi
             ;;
         -*|--*)
             echo "Error: unsupported option $1" >&2

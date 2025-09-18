@@ -956,8 +956,7 @@ class ReportApi:
     def get_report_list(
         self,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -1029,8 +1028,7 @@ class ReportApi:
     def get_report_list_with_http_info(
         self,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -1102,8 +1100,7 @@ class ReportApi:
     def get_report_list_without_preload_content(
         self,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,

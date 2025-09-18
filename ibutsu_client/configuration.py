@@ -506,7 +506,7 @@ class Configuration:
             f"OS: {sys.platform}\n"
             f"Python Version: {sys.version}\n"
             "Version of the API: 2.7.4\n"
-            "SDK Package Version: 2.3.2"
+            "SDK Package Version: 3.0.0"
         )
 
     def get_host_settings(self) -> list[HostSetting]:
@@ -543,7 +543,8 @@ class Configuration:
             server = servers[index]
         except IndexError:
             raise ValueError(
-                f"Invalid index {index} when selecting the host settings. Must be less than {len(servers)}"
+                f"Invalid index {index} when selecting the host settings. "
+                f"Must be less than {len(servers)}"
             )
 
         url = server["url"]

@@ -226,6 +226,7 @@ ignore = [
     "RUF002", # Docstring contains ambiguous unicode characters - generated code
     "C409", # Unnecessary list literal passed to tuple() - generated code patterns
     "N818", # Exception name should be named with an Error suffix - generated code
+    "SIM105", # Use contextlib.suppress(Exception) instead of try-except-pass - generated code
     "TCH003", # Move standard library import into type-checking block - UUID needed at runtime for Pydantic
 ]
 "setup.py" = [

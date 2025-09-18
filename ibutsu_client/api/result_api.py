@@ -489,8 +489,7 @@ class ResultApi:
             StrictBool | None, Field(description="Return an estimated count")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -568,8 +567,7 @@ class ResultApi:
             StrictBool | None, Field(description="Return an estimated count")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -647,8 +645,7 @@ class ResultApi:
             StrictBool | None, Field(description="Return an estimated count")
         ] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,

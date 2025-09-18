@@ -707,8 +707,7 @@ class WidgetConfigApi:
         self,
         filter: Annotated[list[StrictStr] | None, Field(description="Fields to filter by")] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -779,8 +778,7 @@ class WidgetConfigApi:
         self,
         filter: Annotated[list[StrictStr] | None, Field(description="Fields to filter by")] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -851,8 +849,7 @@ class WidgetConfigApi:
         self,
         filter: Annotated[list[StrictStr] | None, Field(description="Fields to filter by")] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,

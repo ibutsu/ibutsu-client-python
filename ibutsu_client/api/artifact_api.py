@@ -694,8 +694,7 @@ class ArtifactApi:
         result_id: Annotated[UUID | None, Field(description="The result ID to filter by")] = None,
         run_id: Annotated[UUID | None, Field(description="The run ID to filter by")] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -769,8 +768,7 @@ class ArtifactApi:
         result_id: Annotated[UUID | None, Field(description="The result ID to filter by")] = None,
         run_id: Annotated[UUID | None, Field(description="The run ID to filter by")] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
@@ -844,8 +842,7 @@ class ArtifactApi:
         result_id: Annotated[UUID | None, Field(description="The result ID to filter by")] = None,
         run_id: Annotated[UUID | None, Field(description="The run ID to filter by")] = None,
         page: Annotated[
-            StrictInt | None,
-            Field(description="Set the page of items to return, defaults to 1"),
+            StrictInt | None, Field(description="Set the page of items to return, defaults to 1")
         ] = None,
         page_size: Annotated[
             Annotated[int, Field(strict=True, ge=1)] | None,
