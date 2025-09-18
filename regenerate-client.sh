@@ -26,7 +26,7 @@ get_versions() {
     fi
 
     if [[ "${NEW_VERSION:-}" == "" ]]; then
-        # If there's no new version defined externally, generate a new version
+        # If there's no new version defined externally (e.g., via --target-version), generate a new version
         # Handle version formats like "2.3.0" or "2.3.0.d20250918"
         if [[ "$CURRENT_VERSION" =~ ^([0-9]+\.[0-9]+\.[0-9]+) ]]; then
             BASE_VERSION="${BASH_REMATCH[1]}"
@@ -37,6 +37,13 @@ get_versions() {
             echo "Error: Unexpected version format: $CURRENT_VERSION"
             exit 1
         fi
+    else
+        # Validate the provided target version format
+        if ! [[ "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: Invalid version format '$NEW_VERSION'. Expected format: X.Y.Z (e.g., 3.0.0)"
+            exit 1
+        fi
+        echo "Using specified target version: $NEW_VERSION"
     fi
 }
 
@@ -51,11 +58,12 @@ function check_dependencies() {
 }
 
 function print_usage() {
-    echo "Usage: regenerate-client.sh [-h|--help] [-v|--version] OPENAPI_FILE"
+    echo "Usage: regenerate-client.sh [-h|--help] [-v|--version] [--target-version VERSION] OPENAPI_FILE"
     echo ""
     echo "optional arguments:"
-    echo "  -h, --help       show this help message"
-    echo "  -v, --version    show the prospective new version number"
+    echo "  -h, --help                   show this help message"
+    echo "  -v, --version                show the prospective new version number"
+    echo "  --target-version VERSION     specify a target version (e.g., 3.0.0)"
     echo ""
     echo "This script regenerates the client on the current branch and leaves"
     echo "uncommitted changes in the working tree after running pre-commit."
@@ -85,6 +93,15 @@ while (( "$#" )); do
             echo "Prospective version number: $NEW_VERSION"
             exit 0
             ;;
+        --target-version)
+            if [[ -n "$2" && "$2" != -* ]]; then
+                NEW_VERSION="$2"
+                shift 2
+            else
+                echo "Error: --target-version requires a version number argument" >&2
+                exit 1
+            fi
+            ;;
         -*|--*)
             echo "Error: unsupported option $1" >&2
             exit 1
@@ -113,7 +130,7 @@ echo "Generating client with OpenAPI Generator v${OPENAPI_GENERATOR_VERSION}..."
 mkdir -p "$(dirname "${TEMP_DIR}")"
 
 podman run --rm \
-    -v "${CLIENT_DIR}:/local" \
+    -v "${CLIENT_DIR}:/local:Z" \
     "openapitools/openapi-generator-cli:v${OPENAPI_GENERATOR_VERSION}" \
     generate \
     -i "/local/${OPENAPI_FILE}" \
@@ -125,7 +142,7 @@ podman run --rm \
     --global-property skipFormModel=true \
     -p packageVersion="${NEW_VERSION}" \
     -p packageUrl=https://github.com/ibutsu/ibutsu-client-python \
-    -p pythonVersion=3.8 \
+    -p pythonVersion=3.11 \
     -p generateSourceCodeOnly=false \
     -p library=urllib3 \
     > "${CLIENT_DIR}/generate.log" 2>&1
@@ -152,18 +169,28 @@ EOF
 
 # Copy generated files while preserving important directories
 echo "Copying generated files..."
-# Remove old generated content but preserve important directories and files
-find "${CLIENT_DIR}" -mindepth 1 -maxdepth 1 \
-    ! -name '.git' \
-    ! -name '.github' \
-    ! -name '.ibutsu-env' \
-    ! -name 'regenerate-client.sh' \
-    ! -name 'LICENSE' \
-    ! -name 'tmp' \
-    -exec rm -rf {} +
 
-# Copy new generated content
-cp -r "${TEMP_DIR}"/. "${CLIENT_DIR}/"
+# Only remove and update the specific directories that contain generated content
+echo "Removing old generated content..."
+rm -rf "${CLIENT_DIR}/ibutsu_client"
+rm -rf "${CLIENT_DIR}/docs"
+rm -rf "${CLIENT_DIR}/test"
+
+# Copy only the generated content directories we want to update
+echo "Copying new generated content..."
+if [[ -d "${TEMP_DIR}/ibutsu_client" ]]; then
+    cp -r "${TEMP_DIR}/ibutsu_client" "${CLIENT_DIR}/"
+fi
+if [[ -d "${TEMP_DIR}/docs" ]]; then
+    cp -r "${TEMP_DIR}/docs" "${CLIENT_DIR}/"
+fi
+if [[ -d "${TEMP_DIR}/test" ]]; then
+    cp -r "${TEMP_DIR}/test" "${CLIENT_DIR}/"
+fi
+
+# Note: We only copy the specific directories we need (ibutsu_client, docs, test)
+# All packaging files (README.md, pyproject.toml, LICENSE, AGENTS.md) are preserved
+# We do NOT copy any CI/CD files, setup files, or other generated project files
 
 # Clean up temporary directory
 rm -rf "${CLIENT_DIR}/tmp"

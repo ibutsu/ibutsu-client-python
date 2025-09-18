@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **str** | Unique ID of the report | [optional] 
@@ -12,8 +13,24 @@ Name | Type | Description | Notes
 **view_url** | **str** | The URL to the viewable report | [optional] 
 **parameters** | [**ReportParameters**](ReportParameters.md) |  | [optional] 
 **status** | **str** | The status of the report, one of \&quot;pending\&quot;, \&quot;running\&quot;, \&quot;done\&quot; | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
+## Example
+
+```python
+from ibutsu_client.models.report import Report
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of Report from a JSON string
+report_instance = Report.from_json(json)
+# print the JSON string representation of the object
+print(Report.to_json())
+
+# convert the object into a dict
+report_dict = report_instance.to_dict()
+# create an instance of Report from a dict
+report_from_dict = Report.from_dict(report_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

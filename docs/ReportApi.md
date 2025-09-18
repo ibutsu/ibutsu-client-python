@@ -23,12 +23,12 @@ Create a new report
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import report_api
-from ibutsu_client.model.report_parameters import ReportParameters
-from ibutsu_client.model.report import Report
+from ibutsu_client.models.report import Report
+from ibutsu_client.models.report_parameters import ReportParameters
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -42,34 +42,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = report_api.ReportApi(api_client)
-    report_parameters = ReportParameters(
-        type="dashboard",
-        filter="test_navigation",
-        source="iqe-jenkins",
-    ) # ReportParameters | The parameters for the report
+    api_instance = ibutsu_client.ReportApi(api_client)
+    report_parameters = ibutsu_client.ReportParameters() # ReportParameters | The parameters for the report
 
-    # example passing only required values which don't have defaults set
     try:
         # Create a new report
         api_response = api_instance.add_report(report_parameters)
+        print("The response of ReportApi->add_report:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportApi->add_report: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **report_parameters** | [**ReportParameters**](ReportParameters.md)| The parameters for the report |
+ **report_parameters** | [**ReportParameters**](ReportParameters.md)| The parameters for the report | 
 
 ### Return type
 
@@ -83,7 +81,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -104,10 +101,10 @@ Delete a report
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import report_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -121,29 +118,30 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = report_api.ReportApi(api_client)
-    id = "id_example" # str | ID of report to delete
+    api_instance = ibutsu_client.ReportApi(api_client)
+    id = 'id_example' # str | ID of report to delete
 
-    # example passing only required values which don't have defaults set
     try:
         # Delete a report
         api_instance.delete_report(id)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportApi->delete_report: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of report to delete |
+ **id** | **str**| ID of report to delete | 
 
 ### Return type
 
@@ -158,7 +156,6 @@ void (empty response body)
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -169,7 +166,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **download_report**
-> file_type download_report(id, filename)
+> bytearray download_report(id, filename)
 
 Download a report
 
@@ -178,10 +175,10 @@ Download a report
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import report_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -195,36 +192,38 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = report_api.ReportApi(api_client)
-    id = "id_example" # str | The ID of the report
-    filename = "filename_example" # str | The file name of the downloadable report
+    api_instance = ibutsu_client.ReportApi(api_client)
+    id = 'id_example' # str | The ID of the report
+    filename = 'filename_example' # str | The file name of the downloadable report
 
-    # example passing only required values which don't have defaults set
     try:
         # Download a report
         api_response = api_instance.download_report(id, filename)
+        print("The response of ReportApi->download_report:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportApi->download_report: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The ID of the report |
- **filename** | **str**| The file name of the downloadable report |
+ **id** | **str**| The ID of the report | 
+ **filename** | **str**| The file name of the downloadable report | 
 
 ### Return type
 
-**file_type**
+**bytearray**
 
 ### Authorization
 
@@ -234,7 +233,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/csv, application/json, text/html, application/zip
-
 
 ### HTTP response details
 
@@ -255,11 +253,11 @@ Get a report
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import report_api
-from ibutsu_client.model.report import Report
+from ibutsu_client.models.report import Report
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -273,30 +271,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = report_api.ReportApi(api_client)
-    id = "id_example" # str | The ID of the report
+    api_instance = ibutsu_client.ReportApi(api_client)
+    id = 'id_example' # str | The ID of the report
 
-    # example passing only required values which don't have defaults set
     try:
         # Get a report
         api_response = api_instance.get_report(id)
+        print("The response of ReportApi->get_report:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportApi->get_report: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The ID of the report |
+ **id** | **str**| The ID of the report | 
 
 ### Return type
 
@@ -311,7 +311,6 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -322,7 +321,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_report_list**
-> ReportList get_report_list()
+> ReportList get_report_list(page=page, page_size=page_size, project=project)
 
 Get a list of reports
 
@@ -331,11 +330,11 @@ Get a list of reports
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import report_api
-from ibutsu_client.model.report_list import ReportList
+from ibutsu_client.models.report_list import ReportList
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -349,35 +348,36 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = report_api.ReportApi(api_client)
-    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
-    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
-    project = "project_example" # str | Filter reports by project ID (optional)
+    api_instance = ibutsu_client.ReportApi(api_client)
+    page = 56 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
+    project = 'project_example' # str | Filter reports by project ID (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get a list of reports
         api_response = api_instance.get_report_list(page=page, page_size=page_size, project=project)
+        print("The response of ReportApi->get_report_list:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportApi->get_report_list: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
- **project** | **str**| Filter reports by project ID | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
+ **project** | **str**| Filter reports by project ID | [optional] 
 
 ### Return type
 
@@ -392,7 +392,6 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -402,7 +401,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_report_types**
-> [GetReportTypes200ResponseInner] get_report_types()
+> List[GetReportTypes200ResponseInner] get_report_types()
 
 Get a list of report types
 
@@ -411,11 +410,11 @@ Get a list of report types
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import report_api
-from ibutsu_client.model.get_report_types200_response_inner import GetReportTypes200ResponseInner
+from ibutsu_client.models.get_report_types200_response_inner import GetReportTypes200ResponseInner
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -429,30 +428,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = report_api.ReportApi(api_client)
+    api_instance = ibutsu_client.ReportApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Get a list of report types
         api_response = api_instance.get_report_types()
+        print("The response of ReportApi->get_report_types:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportApi->get_report_types: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
 
-[**[GetReportTypes200ResponseInner]**](GetReportTypes200ResponseInner.md)
+[**List[GetReportTypes200ResponseInner]**](GetReportTypes200ResponseInner.md)
 
 ### Authorization
 
@@ -463,7 +464,6 @@ This endpoint does not need any parameter.
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -473,7 +473,7 @@ This endpoint does not need any parameter.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **view_report**
-> file_type view_report(id, filename)
+> bytearray view_report(id, filename)
 
 View a report
 
@@ -482,10 +482,10 @@ View a report
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import report_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -499,36 +499,38 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = report_api.ReportApi(api_client)
-    id = "id_example" # str | The ID of the report
-    filename = "filename_example" # str | The file name of the downloadable report
+    api_instance = ibutsu_client.ReportApi(api_client)
+    id = 'id_example' # str | The ID of the report
+    filename = 'filename_example' # str | The file name of the downloadable report
 
-    # example passing only required values which don't have defaults set
     try:
         # View a report
         api_response = api_instance.view_report(id, filename)
+        print("The response of ReportApi->view_report:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ReportApi->view_report: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The ID of the report |
- **filename** | **str**| The file name of the downloadable report |
+ **id** | **str**| The ID of the report | 
+ **filename** | **str**| The file name of the downloadable report | 
 
 ### Return type
 
-**file_type**
+**bytearray**
 
 ### Authorization
 
@@ -538,7 +540,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: text/plain, application/csv, application/json, text/html, application/zip
-
 
 ### HTTP response details
 

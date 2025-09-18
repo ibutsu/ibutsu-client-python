@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **get_widget**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} get_widget(id)
+> object get_widget(id, params=params)
 
 Generate data for a dashboard widget
 
@@ -18,10 +18,10 @@ Generate data for a dashboard widget
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import widget_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -35,45 +35,38 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = widget_api.WidgetApi(api_client)
-    id = "id_example" # str | The widget identifier
-    params = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | The parameters for the widget (optional)
+    api_instance = ibutsu_client.WidgetApi(api_client)
+    id = 'id_example' # str | The widget identifier
+    params = None # object | The parameters for the widget (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Generate data for a dashboard widget
-        api_response = api_instance.get_widget(id)
-        pprint(api_response)
-    except ibutsu_client.ApiException as e:
-        print("Exception when calling WidgetApi->get_widget: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Generate data for a dashboard widget
         api_response = api_instance.get_widget(id, params=params)
+        print("The response of WidgetApi->get_widget:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling WidgetApi->get_widget: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The widget identifier |
- **params** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**| The parameters for the widget | [optional]
+ **id** | **str**| The widget identifier | 
+ **params** | [**object**](.md)| The parameters for the widget | [optional] 
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+**object**
 
 ### Authorization
 
@@ -83,7 +76,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -95,7 +87,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_widget_types**
-> WidgetTypeList get_widget_types()
+> WidgetTypeList get_widget_types(type=type)
 
 Get a list of widget types
 
@@ -106,11 +98,11 @@ A list of widget types
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import widget_api
-from ibutsu_client.model.widget_type_list import WidgetTypeList
+from ibutsu_client.models.widget_type_list import WidgetTypeList
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -124,31 +116,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = widget_api.WidgetApi(api_client)
-    type = "type_example" # str | Filter by type of widget (optional)
+    api_instance = ibutsu_client.WidgetApi(api_client)
+    type = 'type_example' # str | Filter by type of widget (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get a list of widget types
         api_response = api_instance.get_widget_types(type=type)
+        print("The response of WidgetApi->get_widget_types:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling WidgetApi->get_widget_types: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **type** | **str**| Filter by type of widget | [optional]
+ **type** | **str**| Filter by type of widget | [optional] 
 
 ### Return type
 
@@ -162,7 +155,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

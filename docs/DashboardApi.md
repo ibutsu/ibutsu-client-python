@@ -12,7 +12,7 @@ Method | HTTP request | Description
 
 
 # **add_dashboard**
-> Dashboard add_dashboard(dashboard)
+> Dashboard add_dashboard(dashboard=dashboard)
 
 Create a dashboard
 
@@ -21,11 +21,11 @@ Create a dashboard
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import dashboard_api
-from ibutsu_client.model.dashboard import Dashboard
+from ibutsu_client.models.dashboard import Dashboard
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -39,37 +39,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = dashboard_api.DashboardApi(api_client)
-    dashboard = Dashboard(
-        id="62faa4ce-d264-46c2-813e-579949c8ab9b",
-        title="My Dashboard",
-        description="A dashboard for me",
-        filters="",
-        project_id="44941c55-9736-42f6-acce-ca3c4739d0f3",
-        user_id="90be2a4a-1a4d-4779-b40f-f08ccd7101d5",
-    ) # Dashboard | Dashboard
+    api_instance = ibutsu_client.DashboardApi(api_client)
+    dashboard = ibutsu_client.Dashboard() # Dashboard | A dashboard object (optional)
 
-    # example passing only required values which don't have defaults set
     try:
         # Create a dashboard
-        api_response = api_instance.add_dashboard(dashboard)
+        api_response = api_instance.add_dashboard(dashboard=dashboard)
+        print("The response of DashboardApi->add_dashboard:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DashboardApi->add_dashboard: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **dashboard** | [**Dashboard**](Dashboard.md)| Dashboard |
+ **dashboard** | [**Dashboard**](Dashboard.md)| A dashboard object | [optional] 
 
 ### Return type
 
@@ -83,7 +78,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -104,10 +98,10 @@ Delete a dashboard
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import dashboard_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -121,29 +115,30 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = dashboard_api.DashboardApi(api_client)
-    id = "id_example" # str | ID of dashboard to delete
+    api_instance = ibutsu_client.DashboardApi(api_client)
+    id = 'id_example' # str | ID of dashboard to delete
 
-    # example passing only required values which don't have defaults set
     try:
         # Delete a dashboard
         api_instance.delete_dashboard(id)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DashboardApi->delete_dashboard: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of dashboard to delete |
+ **id** | **str**| ID of dashboard to delete | 
 
 ### Return type
 
@@ -157,7 +152,6 @@ void (empty response body)
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -178,11 +172,11 @@ Get a single dashboard by ID
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import dashboard_api
-from ibutsu_client.model.dashboard import Dashboard
+from ibutsu_client.models.dashboard import Dashboard
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -196,30 +190,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = dashboard_api.DashboardApi(api_client)
-    id = "id_example" # str | ID of test dashboard
+    api_instance = ibutsu_client.DashboardApi(api_client)
+    id = 'id_example' # str | ID of test dashboard
 
-    # example passing only required values which don't have defaults set
     try:
         # Get a single dashboard by ID
         api_response = api_instance.get_dashboard(id)
+        print("The response of DashboardApi->get_dashboard:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DashboardApi->get_dashboard: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of test dashboard |
+ **id** | **str**| ID of test dashboard | 
 
 ### Return type
 
@@ -234,7 +230,6 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -245,7 +240,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_dashboard_list**
-> DashboardList get_dashboard_list()
+> DashboardList get_dashboard_list(filter=filter, project_id=project_id, user_id=user_id, page=page, page_size=page_size)
 
 Get a list of dashboards
 
@@ -254,11 +249,11 @@ Get a list of dashboards
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import dashboard_api
-from ibutsu_client.model.dashboard_list import DashboardList
+from ibutsu_client.models.dashboard_list import DashboardList
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -272,41 +267,40 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = dashboard_api.DashboardApi(api_client)
-    filter = [
-        "filter_example",
-    ] # [str] | Fields to filter by (optional)
-    project_id = "project_id_example" # str | Filter dashboards by project ID (optional)
-    user_id = "user_id_example" # str | Filter dashboards by user ID (optional)
-    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
-    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
+    api_instance = ibutsu_client.DashboardApi(api_client)
+    filter = ['filter_example'] # List[str] | Fields to filter by (optional)
+    project_id = 'project_id_example' # str | Filter dashboards by project ID (optional)
+    user_id = 'user_id_example' # str | Filter dashboards by user ID (optional)
+    page = 56 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get a list of dashboards
         api_response = api_instance.get_dashboard_list(filter=filter, project_id=project_id, user_id=user_id, page=page, page_size=page_size)
+        print("The response of DashboardApi->get_dashboard_list:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DashboardApi->get_dashboard_list: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **filter** | **[str]**| Fields to filter by | [optional]
- **project_id** | **str**| Filter dashboards by project ID | [optional]
- **user_id** | **str**| Filter dashboards by user ID | [optional]
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
+ **filter** | [**List[str]**](str.md)| Fields to filter by | [optional] 
+ **project_id** | **str**| Filter dashboards by project ID | [optional] 
+ **user_id** | **str**| Filter dashboards by user ID | [optional] 
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
 
 ### Return type
 
@@ -321,7 +315,6 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -331,7 +324,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_dashboard**
-> Dashboard update_dashboard(id)
+> Dashboard update_dashboard(id, dashboard=dashboard)
 
 Update a dashboard
 
@@ -340,11 +333,11 @@ Update a dashboard
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import dashboard_api
-from ibutsu_client.model.dashboard import Dashboard
+from ibutsu_client.models.dashboard import Dashboard
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -358,48 +351,34 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = dashboard_api.DashboardApi(api_client)
-    id = "id_example" # str | ID of test dashboard
-    dashboard = Dashboard(
-        id="62faa4ce-d264-46c2-813e-579949c8ab9b",
-        title="My Dashboard",
-        description="A dashboard for me",
-        filters="",
-        project_id="44941c55-9736-42f6-acce-ca3c4739d0f3",
-        user_id="90be2a4a-1a4d-4779-b40f-f08ccd7101d5",
-    ) # Dashboard | Dashboard (optional)
+    api_instance = ibutsu_client.DashboardApi(api_client)
+    id = 'id_example' # str | ID of test dashboard
+    dashboard = ibutsu_client.Dashboard() # Dashboard | A dashboard object (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Update a dashboard
-        api_response = api_instance.update_dashboard(id)
-        pprint(api_response)
-    except ibutsu_client.ApiException as e:
-        print("Exception when calling DashboardApi->update_dashboard: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Update a dashboard
         api_response = api_instance.update_dashboard(id, dashboard=dashboard)
+        print("The response of DashboardApi->update_dashboard:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling DashboardApi->update_dashboard: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| ID of test dashboard |
- **dashboard** | [**Dashboard**](Dashboard.md)| Dashboard | [optional]
+ **id** | **str**| ID of test dashboard | 
+ **dashboard** | [**Dashboard**](Dashboard.md)| A dashboard object | [optional] 
 
 ### Return type
 
@@ -413,7 +392,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 

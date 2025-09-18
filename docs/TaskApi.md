@@ -8,7 +8,7 @@ Method | HTTP request | Description
 
 
 # **get_task**
-> {str: (bool, date, datetime, dict, float, int, list, str, none_type)} get_task(id)
+> object get_task(id)
 
 Get the status or result of a task
 
@@ -17,10 +17,10 @@ Get the status or result of a task
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import task_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -34,34 +34,36 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = task_api.TaskApi(api_client)
-    id = "id_example" # str | The ID of the task
+    api_instance = ibutsu_client.TaskApi(api_client)
+    id = 'id_example' # str | The ID of the task
 
-    # example passing only required values which don't have defaults set
     try:
         # Get the status or result of a task
         api_response = api_instance.get_task(id)
+        print("The response of TaskApi->get_task:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling TaskApi->get_task: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The ID of the task |
+ **id** | **str**| The ID of the task | 
 
 ### Return type
 
-**{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**
+**object**
 
 ### Authorization
 
@@ -71,7 +73,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

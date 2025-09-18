@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 
 # **add_import**
-> ModelImport add_import(import_file)
+> ModelImport add_import(import_file, project=project, metadata=metadata, source=source)
 
 Import a file into Ibutsu. This can be either a JUnit XML file, or an Ibutsu archive
 
@@ -18,11 +18,11 @@ Import a file into Ibutsu. This can be either a JUnit XML file, or an Ibutsu arc
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import import_api
-from ibutsu_client.model.model_import import ModelImport
+from ibutsu_client.models.model_import import ModelImport
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -36,45 +36,38 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = import_api.ImportApi(api_client)
-    import_file = open('/path/to/file', 'rb') # file_type | The file to import
-    project = "project_example" # str | The project associated with this import (optional)
-    metadata = {} # {str: (bool, date, datetime, dict, float, int, list, str, none_type)} | Additional metadata about imported run (optional)
-    source = "source_example" # str | The source of this import (optional)
+    api_instance = ibutsu_client.ImportApi(api_client)
+    import_file = None # bytearray | The file to import
+    project = 'project_example' # str | The project associated with this import (optional)
+    metadata = None # object | Additional metadata about imported run (optional)
+    source = 'source_example' # str | The source of this import (optional)
 
-    # example passing only required values which don't have defaults set
-    try:
-        # Import a file into Ibutsu. This can be either a JUnit XML file, or an Ibutsu archive
-        api_response = api_instance.add_import(import_file)
-        pprint(api_response)
-    except ibutsu_client.ApiException as e:
-        print("Exception when calling ImportApi->add_import: %s\n" % e)
-
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Import a file into Ibutsu. This can be either a JUnit XML file, or an Ibutsu archive
         api_response = api_instance.add_import(import_file, project=project, metadata=metadata, source=source)
+        print("The response of ImportApi->add_import:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ImportApi->add_import: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **import_file** | **file_type**| The file to import |
- **project** | **str**| The project associated with this import | [optional]
- **metadata** | **{str: (bool, date, datetime, dict, float, int, list, str, none_type)}**| Additional metadata about imported run | [optional]
- **source** | **str**| The source of this import | [optional]
+ **import_file** | **bytearray**| The file to import | 
+ **project** | **str**| The project associated with this import | [optional] 
+ **metadata** | [**object**](object.md)| Additional metadata about imported run | [optional] 
+ **source** | **str**| The source of this import | [optional] 
 
 ### Return type
 
@@ -88,7 +81,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: multipart/form-data
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -110,11 +102,11 @@ Get the status of an import
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import import_api
-from ibutsu_client.model.model_import import ModelImport
+from ibutsu_client.models.model_import import ModelImport
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -128,30 +120,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = import_api.ImportApi(api_client)
-    id = "id_example" # str | The ID of the import
+    api_instance = ibutsu_client.ImportApi(api_client)
+    id = 'id_example' # str | The ID of the import
 
-    # example passing only required values which don't have defaults set
     try:
         # Get the status of an import
         api_response = api_instance.get_import(id)
+        print("The response of ImportApi->get_import:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling ImportApi->get_import: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The ID of the import |
+ **id** | **str**| The ID of the import | 
 
 ### Return type
 
@@ -165,7 +159,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

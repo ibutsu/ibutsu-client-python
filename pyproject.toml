@@ -5,9 +5,6 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
@@ -17,8 +14,11 @@ classifiers = [
   "Topic :: Software Development :: Testing",
 ]
 dependencies = [
-  "urllib3>=1.25.3",
-  "python-dateutil>=2.5.3",
+  "urllib3>=2.1.0,<3.0.0",
+  "python-dateutil>=2.8.2",
+  "pydantic>=2",
+  "typing-extensions>=4.7.1",
+  "lazy-imports>=1,<2",
 ]
 description = "A system to store and query test results"
 dynamic = ["version"]
@@ -26,7 +26,7 @@ license = "MIT"
 maintainers = [{name = "OpenAPI Generator community"}, {name = "Ibutsu Team"}]
 name = "ibutsu-client"
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.11"
 keywords = ["OpenAPI", "OpenAPI-Generator", "Ibutsu API", "testing", "results"]
 
 [project.urls]
@@ -65,7 +65,7 @@ packages = ["/ibutsu_client"]
 extra-dependencies = ["ibutsu-client[test]"]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+python = ["3.11", "3.12", "3.13"]
 
 [tool.hatch.envs.test]
 dependencies = [
@@ -73,6 +73,17 @@ dependencies = [
   "pytest-cov",
   "coverage[toml]",
 ]
+extra-dependencies = [
+  "pytest-rerunfailures",
+  "pytest-mock",
+  "pytest-xdist",
+]
+
+[tool.hatch.envs.test.scripts]
+test = "pytest {args:test}"
+cov = "pytest --cov=ibutsu_client {args:test}"
+# Alias for the hatch test command that looks for tests/ instead of test/
+run = "pytest {args:test}"
 
 [tool.mypy]
 # Enable strict mode for maximum type safety
@@ -159,7 +170,7 @@ output = "coverage.xml"
 
 [tool.ruff]
 line-length = 99
-target-version = "py38"
+target-version = "py311"
 
 [tool.ruff.lint]
 extend-select = [
@@ -215,6 +226,8 @@ ignore = [
     "RUF002", # Docstring contains ambiguous unicode characters - generated code
     "C409", # Unnecessary list literal passed to tuple() - generated code patterns
     "N818", # Exception name should be named with an Error suffix - generated code
+    "SIM105", # Use contextlib.suppress(Exception) instead of try-except-pass - generated code
+    "TCH003", # Move standard library import into type-checking block - UUID needed at runtime for Pydantic
 ]
 "setup.py" = [
     "ERA001", # Found commented-out code - setup file comments
