@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 
 # **add_group**
-> Group add_group(group)
+> Group add_group(group=group)
 
 Create a new group
 
@@ -20,11 +20,11 @@ Create a new group
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import group_api
-from ibutsu_client.model.group import Group
+from ibutsu_client.models.group import Group
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -38,33 +38,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = group_api.GroupApi(api_client)
-    group = Group(
-        id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
-        name="Group A",
-    ) # Group | The group
+    api_instance = ibutsu_client.GroupApi(api_client)
+    group = ibutsu_client.Group() # Group | A group object (optional)
 
-    # example passing only required values which don't have defaults set
     try:
         # Create a new group
-        api_response = api_instance.add_group(group)
+        api_response = api_instance.add_group(group=group)
+        print("The response of GroupApi->add_group:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling GroupApi->add_group: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **group** | [**Group**](Group.md)| The group |
+ **group** | [**Group**](Group.md)| A group object | [optional] 
 
 ### Return type
 
@@ -78,7 +77,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -99,11 +97,11 @@ Get a group
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import group_api
-from ibutsu_client.model.group import Group
+from ibutsu_client.models.group import Group
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -117,30 +115,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = group_api.GroupApi(api_client)
-    id = "id_example" # str | The ID of the group
+    api_instance = ibutsu_client.GroupApi(api_client)
+    id = 'id_example' # str | The ID of the group
 
-    # example passing only required values which don't have defaults set
     try:
         # Get a group
         api_response = api_instance.get_group(id)
+        print("The response of GroupApi->get_group:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling GroupApi->get_group: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The ID of the group |
+ **id** | **str**| The ID of the group | 
 
 ### Return type
 
@@ -155,7 +155,6 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -166,7 +165,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_group_list**
-> GroupList get_group_list()
+> GroupList get_group_list(page=page, page_size=page_size)
 
 Get a list of groups
 
@@ -175,11 +174,11 @@ Get a list of groups
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import group_api
-from ibutsu_client.model.group_list import GroupList
+from ibutsu_client.models.group_list import GroupList
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -193,33 +192,34 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = group_api.GroupApi(api_client)
-    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
-    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
+    api_instance = ibutsu_client.GroupApi(api_client)
+    page = 56 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Get a list of groups
         api_response = api_instance.get_group_list(page=page, page_size=page_size)
+        print("The response of GroupApi->get_group_list:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling GroupApi->get_group_list: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
 
 ### Return type
 
@@ -234,7 +234,6 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -244,7 +243,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **update_group**
-> Group update_group(id, group)
+> Group update_group(id, group=group)
 
 Update a group
 
@@ -253,11 +252,11 @@ Update a group
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import group_api
-from ibutsu_client.model.group import Group
+from ibutsu_client.models.group import Group
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -271,35 +270,34 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = group_api.GroupApi(api_client)
-    id = "id_example" # str | The ID of the group
-    group = Group(
-        id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
-        name="Group A",
-    ) # Group | The updated group
+    api_instance = ibutsu_client.GroupApi(api_client)
+    id = 'id_example' # str | The ID of the group
+    group = ibutsu_client.Group() # Group | A group object (optional)
 
-    # example passing only required values which don't have defaults set
     try:
         # Update a group
-        api_response = api_instance.update_group(id, group)
+        api_response = api_instance.update_group(id, group=group)
+        print("The response of GroupApi->update_group:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling GroupApi->update_group: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The ID of the group |
- **group** | [**Group**](Group.md)| The updated group |
+ **id** | **str**| The ID of the group | 
+ **group** | [**Group**](Group.md)| A group object | [optional] 
 
 ### Return type
 
@@ -313,7 +311,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 

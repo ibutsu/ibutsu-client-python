@@ -13,7 +13,7 @@ Method | HTTP request | Description
 
 
 # **add_token**
-> Token add_token()
+> Token add_token(create_token=create_token)
 
 Create a token for the current user
 
@@ -22,12 +22,12 @@ Create a token for the current user
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import user_api
-from ibutsu_client.model.token import Token
-from ibutsu_client.model.create_token import CreateToken
+from ibutsu_client.models.create_token import CreateToken
+from ibutsu_client.models.token import Token
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -41,34 +41,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_api.UserApi(api_client)
-    create_token = CreateToken(
-        name="My user token",
-        expires="2038-12-31T23:59:59+0000",
-    ) # CreateToken | Create a token for a user (optional)
+    api_instance = ibutsu_client.UserApi(api_client)
+    create_token = ibutsu_client.CreateToken() # CreateToken | Create a token for a user (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Create a token for the current user
         api_response = api_instance.add_token(create_token=create_token)
+        print("The response of UserApi->add_token:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserApi->add_token: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **create_token** | [**CreateToken**](CreateToken.md)| Create a token for a user | [optional]
+ **create_token** | [**CreateToken**](CreateToken.md)| Create a token for a user | [optional] 
 
 ### Return type
 
@@ -82,7 +80,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: application/json
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -103,10 +100,10 @@ Delete the token
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import user_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -120,29 +117,30 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_api.UserApi(api_client)
-    id = "id_example" # str | The id of a token
+    api_instance = ibutsu_client.UserApi(api_client)
+    id = 'id_example' # str | The id of a token
 
-    # example passing only required values which don't have defaults set
     try:
         # Delete the token
         api_instance.delete_token(id)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserApi->delete_token: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The id of a token |
+ **id** | **str**| The id of a token | 
 
 ### Return type
 
@@ -156,7 +154,6 @@ void (empty response body)
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -177,11 +174,11 @@ Return the user details for the current user
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import user_api
-from ibutsu_client.model.user import User
+from ibutsu_client.models.user import User
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -195,25 +192,27 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_api.UserApi(api_client)
+    api_instance = ibutsu_client.UserApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Return the user details for the current user
         api_response = api_instance.get_current_user()
+        print("The response of UserApi->get_current_user:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserApi->get_current_user: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -228,7 +227,6 @@ This endpoint does not need any parameter.
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -249,11 +247,11 @@ Retrieve a single token for the current user
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import user_api
-from ibutsu_client.model.token import Token
+from ibutsu_client.models.token import Token
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -267,30 +265,32 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_api.UserApi(api_client)
-    id = "id_example" # str | The id of a token
+    api_instance = ibutsu_client.UserApi(api_client)
+    id = 'id_example' # str | The id of a token
 
-    # example passing only required values which don't have defaults set
     try:
         # Retrieve a single token for the current user
         api_response = api_instance.get_token(id)
+        print("The response of UserApi->get_token:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserApi->get_token: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **id** | **str**| The id of a token |
+ **id** | **str**| The id of a token | 
 
 ### Return type
 
@@ -305,7 +305,6 @@ Name | Type | Description  | Notes
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -316,7 +315,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_token_list**
-> TokenList get_token_list()
+> TokenList get_token_list(page=page, page_size=page_size)
 
 Return the tokens for the user
 
@@ -325,11 +324,11 @@ Return the tokens for the user
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import user_api
-from ibutsu_client.model.token_list import TokenList
+from ibutsu_client.models.token_list import TokenList
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -343,33 +342,34 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_api.UserApi(api_client)
-    page = 1 # int | Set the page of items to return, defaults to 1 (optional)
-    page_size = 1 # int | Set the number of items per page, defaults to 25 (optional)
+    api_instance = ibutsu_client.UserApi(api_client)
+    page = 56 # int | Set the page of items to return, defaults to 1 (optional)
+    page_size = 56 # int | Set the number of items per page, defaults to 25 (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         # Return the tokens for the user
         api_response = api_instance.get_token_list(page=page, page_size=page_size)
+        print("The response of UserApi->get_token_list:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserApi->get_token_list: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **page** | **int**| Set the page of items to return, defaults to 1 | [optional]
- **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional]
+ **page** | **int**| Set the page of items to return, defaults to 1 | [optional] 
+ **page_size** | **int**| Set the number of items per page, defaults to 25 | [optional] 
 
 ### Return type
 
@@ -383,7 +383,6 @@ Name | Type | Description  | Notes
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 
@@ -404,11 +403,11 @@ Return the user details for the current user
 * Bearer (JWT) Authentication (jwt):
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import user_api
-from ibutsu_client.model.user import User
+from ibutsu_client.models.user import User
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -422,25 +421,27 @@ configuration = ibutsu_client.Configuration(
 
 # Configure Bearer authorization (JWT): jwt
 configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
+    access_token = os.environ["BEARER_TOKEN"]
 )
 
 # Enter a context with an instance of the API client
 with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = user_api.UserApi(api_client)
+    api_instance = ibutsu_client.UserApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         # Return the user details for the current user
         api_response = api_instance.update_current_user()
+        print("The response of UserApi->update_current_user:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling UserApi->update_current_user: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -455,7 +456,6 @@ This endpoint does not need any parameter.
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

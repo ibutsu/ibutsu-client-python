@@ -17,16 +17,14 @@ Method | HTTP request | Description
 # **activate**
 > activate(activation_code)
 
-
-
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -35,24 +33,25 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
-    activation_code = "activation_code_example" # str | The activation code
+    api_instance = ibutsu_client.LoginApi(api_client)
+    activation_code = 'activation_code_example' # str | The activation code
 
-    # example passing only required values which don't have defaults set
     try:
         api_instance.activate(activation_code)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->activate: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **activation_code** | **str**| The activation code |
+ **activation_code** | **str**| The activation code | 
 
 ### Return type
 
@@ -66,7 +65,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: Not defined
-
 
 ### HTTP response details
 
@@ -80,16 +78,14 @@ No authorization required
 # **auth**
 > auth(provider)
 
-
-
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -98,24 +94,25 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
-    provider = "provider_example" # str | The login provider's configuration
+    api_instance = ibutsu_client.LoginApi(api_client)
+    provider = 'provider_example' # str | The login provider's configuration
 
-    # example passing only required values which don't have defaults set
     try:
         api_instance.auth(provider)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->auth: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **provider** | **str**| The login provider&#39;s configuration |
+ **provider** | **str**| The login provider&#39;s configuration | 
 
 ### Return type
 
@@ -130,7 +127,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -142,17 +138,15 @@ No authorization required
 # **config**
 > LoginConfig config(provider)
 
-
-
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
-from ibutsu_client.model.login_config import LoginConfig
+from ibutsu_client.models.login_config import LoginConfig
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -161,25 +155,27 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
-    provider = "provider_example" # str | The login provider's configuration
+    api_instance = ibutsu_client.LoginApi(api_client)
+    provider = 'provider_example' # str | The login provider's configuration
 
-    # example passing only required values which don't have defaults set
     try:
         api_response = api_instance.config(provider)
+        print("The response of LoginApi->config:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->config: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **provider** | **str**| The login provider&#39;s configuration |
+ **provider** | **str**| The login provider&#39;s configuration | 
 
 ### Return type
 
@@ -194,7 +190,6 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -204,21 +199,18 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **login**
-> LoginToken login()
-
-
+> LoginToken login(credentials=credentials)
 
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
-from ibutsu_client.model.login_token import LoginToken
-from ibutsu_client.model.login_error import LoginError
-from ibutsu_client.model.credentials import Credentials
+from ibutsu_client.models.credentials import Credentials
+from ibutsu_client.models.login_token import LoginToken
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -227,29 +219,27 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
-    credentials = Credentials(
-        email="me@example.com",
-        password="mysupersecretpassword",
-    ) # Credentials | A login object (optional)
+    api_instance = ibutsu_client.LoginApi(api_client)
+    credentials = ibutsu_client.Credentials() # Credentials | A login object (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_response = api_instance.login(credentials=credentials)
+        print("The response of LoginApi->login:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->login: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **credentials** | [**Credentials**](Credentials.md)| A login object | [optional]
+ **credentials** | [**Credentials**](Credentials.md)| A login object | [optional] 
 
 ### Return type
 
@@ -264,7 +254,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -275,19 +264,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **recover**
-> recover()
-
-
+> recover(account_recovery=account_recovery)
 
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
-from ibutsu_client.model.account_recovery import AccountRecovery
+from ibutsu_client.models.account_recovery import AccountRecovery
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -296,27 +283,25 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
-    account_recovery = AccountRecovery(
-        email="user@domain.com",
-    ) # AccountRecovery | A user recovering their password (optional)
+    api_instance = ibutsu_client.LoginApi(api_client)
+    account_recovery = ibutsu_client.AccountRecovery() # AccountRecovery | A user recovering their password (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_instance.recover(account_recovery=account_recovery)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->recover: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **account_recovery** | [**AccountRecovery**](AccountRecovery.md)| A user recovering their password | [optional]
+ **account_recovery** | [**AccountRecovery**](AccountRecovery.md)| A user recovering their password | [optional] 
 
 ### Return type
 
@@ -331,7 +316,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -342,20 +326,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **register**
-> register()
-
-
+> register(account_registration=account_registration)
 
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
-from ibutsu_client.model.login_error import LoginError
-from ibutsu_client.model.account_registration import AccountRegistration
+from ibutsu_client.models.account_registration import AccountRegistration
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -364,28 +345,25 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
-    account_registration = AccountRegistration(
-        email="user@domain.com",
-        password="supersecretpassword",
-    ) # AccountRegistration | A user registering their account (optional)
+    api_instance = ibutsu_client.LoginApi(api_client)
+    account_registration = ibutsu_client.AccountRegistration() # AccountRegistration | A user registering their account (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_instance.register(account_registration=account_registration)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->register: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **account_registration** | [**AccountRegistration**](AccountRegistration.md)| A user registering their account | [optional]
+ **account_registration** | [**AccountRegistration**](AccountRegistration.md)| A user registering their account | [optional] 
 
 ### Return type
 
@@ -400,7 +378,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -411,19 +388,17 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **reset_password**
-> reset_password()
-
-
+> reset_password(account_reset=account_reset)
 
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
-from ibutsu_client.model.account_reset import AccountReset
+from ibutsu_client.models.account_reset import AccountReset
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -432,28 +407,25 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
-    account_reset = AccountReset(
-        activation_code="YjdmYWFkMTItNzkxZC00MjE4LTgwZGItOWFlOWM2Y2RhOTM5",
-        password="supersecretpassword",
-    ) # AccountReset | A user resetting their password (optional)
+    api_instance = ibutsu_client.LoginApi(api_client)
+    account_reset = ibutsu_client.AccountReset() # AccountReset | A user resetting their password (optional)
 
-    # example passing only required values which don't have defaults set
-    # and optional values
     try:
         api_instance.reset_password(account_reset=account_reset)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->reset_password: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **account_reset** | [**AccountReset**](AccountReset.md)| A user resetting their password | [optional]
+ **account_reset** | [**AccountReset**](AccountReset.md)| A user resetting their password | [optional] 
 
 ### Return type
 
@@ -468,7 +440,6 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: Not defined
 
-
 ### HTTP response details
 
 | Status code | Description | Response headers |
@@ -481,17 +452,15 @@ No authorization required
 # **support**
 > LoginSupport support()
 
-
-
 ### Example
 
 
 ```python
-import time
 import ibutsu_client
-from ibutsu_client.api import login_api
-from ibutsu_client.model.login_support import LoginSupport
+from ibutsu_client.models.login_support import LoginSupport
+from ibutsu_client.rest import ApiException
 from pprint import pprint
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
 configuration = ibutsu_client.Configuration(
@@ -500,20 +469,22 @@ configuration = ibutsu_client.Configuration(
 
 
 # Enter a context with an instance of the API client
-with ibutsu_client.ApiClient() as api_client:
+with ibutsu_client.ApiClient(configuration) as api_client:
     # Create an instance of the API class
-    api_instance = login_api.LoginApi(api_client)
+    api_instance = ibutsu_client.LoginApi(api_client)
 
-    # example, this endpoint has no required or optional parameters
     try:
         api_response = api_instance.support()
+        print("The response of LoginApi->support:\n")
         pprint(api_response)
-    except ibutsu_client.ApiException as e:
+    except Exception as e:
         print("Exception when calling LoginApi->support: %s\n" % e)
 ```
 
 
+
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -528,7 +499,6 @@ No authorization required
 
  - **Content-Type**: Not defined
  - **Accept**: application/json
-
 
 ### HTTP response details
 

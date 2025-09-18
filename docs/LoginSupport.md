@@ -2,6 +2,7 @@
 
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **user** | **bool** | Flag to see if email/password login is available | [optional] 
@@ -10,8 +11,24 @@ Name | Type | Description | Notes
 **github** | **bool** | Flag to see if GitHub login is available | [optional] 
 **facebook** | **bool** | Flag to see if Facebook login is available | [optional] 
 **gitlab** | **bool** | Flag to see if GitLab login is available | [optional] 
-**any string name** | **bool, date, datetime, dict, float, int, list, str, none_type** | any string name can be used but the value must be the correct type | [optional]
 
+## Example
+
+```python
+from ibutsu_client.models.login_support import LoginSupport
+
+# TODO update the JSON string below
+json = "{}"
+# create an instance of LoginSupport from a JSON string
+login_support_instance = LoginSupport.from_json(json)
+# print the JSON string representation of the object
+print(LoginSupport.to_json())
+
+# convert the object into a dict
+login_support_dict = login_support_instance.to_dict()
+# create an instance of LoginSupport from a dict
+login_support_from_dict = LoginSupport.from_dict(login_support_dict)
+```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
 

@@ -113,7 +113,7 @@ echo "Generating client with OpenAPI Generator v${OPENAPI_GENERATOR_VERSION}..."
 mkdir -p "$(dirname "${TEMP_DIR}")"
 
 podman run --rm \
-    -v "${CLIENT_DIR}:/local" \
+    -v "${CLIENT_DIR}:/local:Z" \
     "openapitools/openapi-generator-cli:v${OPENAPI_GENERATOR_VERSION}" \
     generate \
     -i "/local/${OPENAPI_FILE}" \
@@ -125,7 +125,7 @@ podman run --rm \
     --global-property skipFormModel=true \
     -p packageVersion="${NEW_VERSION}" \
     -p packageUrl=https://github.com/ibutsu/ibutsu-client-python \
-    -p pythonVersion=3.8 \
+    -p pythonVersion=3.11 \
     -p generateSourceCodeOnly=false \
     -p library=urllib3 \
     > "${CLIENT_DIR}/generate.log" 2>&1
@@ -152,18 +152,28 @@ EOF
 
 # Copy generated files while preserving important directories
 echo "Copying generated files..."
-# Remove old generated content but preserve important directories and files
-find "${CLIENT_DIR}" -mindepth 1 -maxdepth 1 \
-    ! -name '.git' \
-    ! -name '.github' \
-    ! -name '.ibutsu-env' \
-    ! -name 'regenerate-client.sh' \
-    ! -name 'LICENSE' \
-    ! -name 'tmp' \
-    -exec rm -rf {} +
 
-# Copy new generated content
-cp -r "${TEMP_DIR}"/. "${CLIENT_DIR}/"
+# Only remove and update the specific directories that contain generated content
+echo "Removing old generated content..."
+rm -rf "${CLIENT_DIR}/ibutsu_client"
+rm -rf "${CLIENT_DIR}/docs"
+rm -rf "${CLIENT_DIR}/test"
+
+# Copy only the generated content directories we want to update
+echo "Copying new generated content..."
+if [[ -d "${TEMP_DIR}/ibutsu_client" ]]; then
+    cp -r "${TEMP_DIR}/ibutsu_client" "${CLIENT_DIR}/"
+fi
+if [[ -d "${TEMP_DIR}/docs" ]]; then
+    cp -r "${TEMP_DIR}/docs" "${CLIENT_DIR}/"
+fi
+if [[ -d "${TEMP_DIR}/test" ]]; then
+    cp -r "${TEMP_DIR}/test" "${CLIENT_DIR}/"
+fi
+
+# Note: We only copy the specific directories we need (ibutsu_client, docs, test)
+# All packaging files (README.md, pyproject.toml, LICENSE, AGENTS.md) are preserved
+# We do NOT copy any CI/CD files, setup files, or other generated project files
 
 # Clean up temporary directory
 rm -rf "${CLIENT_DIR}/tmp"
