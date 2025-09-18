@@ -8,21 +8,22 @@ OPENAPI_GENERATOR_VERSION="7.15.0"
 CLIENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TEMP_DIR="${CLIENT_DIR}/tmp/client"
 OPENAPI_FILE=""
-CAN_COMMIT=false
-CAN_PUSH=false
-CAN_DELETE=false
 
 # Version extraction function
 get_versions() {
-    CURRENT_VERSION=$(hatch version 2>/dev/null || python3 -c "
-try:
-    import tomllib
-    with open('pyproject.toml', 'rb') as f:
-        data = tomllib.load(f)
-    print(data.get('project', {}).get('version', '0.0.1'))
-except:
-    print('0.0.1')
-" 2>/dev/null || echo "0.0.1")
+    # Use hatch to get the current version - fail if hatch is not available or can't read version
+    if ! command -v hatch >/dev/null 2>&1; then
+        echo "Error: hatch is required to read the project version"
+        echo "Please install hatch: pip install hatch"
+        exit 1
+    fi
+
+    CURRENT_VERSION=$(hatch version 2>/dev/null)
+    if [[ $? -ne 0 ]] || [[ -z "$CURRENT_VERSION" ]]; then
+        echo "Error: Failed to read version using 'hatch version'"
+        echo "Make sure you're in the project root and hatch is properly configured"
+        exit 1
+    fi
 
     if [[ "${NEW_VERSION:-}" == "" ]]; then
         # If there's no new version defined externally, generate a new version
@@ -33,35 +34,9 @@ except:
             NEW_PATCH=$((PATCH_VERSION + 1))
             NEW_VERSION="${BASE_VERSION%.*}.$NEW_PATCH"
         else
-            # Fallback for unexpected version formats
-            NEW_VERSION="2.3.1"
+            echo "Error: Unexpected version format: $CURRENT_VERSION"
+            exit 1
         fi
-    fi
-}
-
-# Clean up .openapi-generator folder if version upgrade detected
-function cleanup_openapi_generator_folder() {
-    local old_version_file="${CLIENT_DIR}/.openapi-generator/VERSION"
-
-    if [[ -f "$old_version_file" ]]; then
-        local old_version=$(cat "$old_version_file" 2>/dev/null || echo "unknown")
-        echo "Previous OpenAPI Generator version: $old_version"
-        echo "New OpenAPI Generator version: $OPENAPI_GENERATOR_VERSION"
-
-        # Extract major versions for comparison
-        local old_major=$(echo "$old_version" | cut -d. -f1)
-        local new_major=$(echo "$OPENAPI_GENERATOR_VERSION" | cut -d. -f1)
-
-        if [[ "$old_major" != "$new_major" ]] || [[ "$old_version" == "unknown" ]]; then
-            echo "Major version change detected ($old_version -> $OPENAPI_GENERATOR_VERSION)"
-            echo "Cleaning up .openapi-generator folder for fresh generation..."
-            rm -rf "${CLIENT_DIR}/.openapi-generator"
-            echo "✓ .openapi-generator folder cleaned"
-        else
-            echo "Minor version update, keeping .openapi-generator folder for incremental updates"
-        fi
-    else
-        echo "No previous .openapi-generator/VERSION found, will generate fresh"
     fi
 }
 
@@ -72,24 +47,22 @@ function check_dependencies() {
         echo "Please install Podman from https://podman.io/getting-started/installation"
         exit 1
     fi
-    if ! command -v hatch >/dev/null 2>&1; then
-        echo "Warning: hatch not found, using fallback version detection"
-    fi
+    # Note: hatch requirement is checked in get_versions() function
 }
 
 function print_usage() {
-    echo "Usage: regenerate-client.sh [-h|--help] [-c|--commit] [-p|--push] [-d|--delete] OPENAPI_FILE"
+    echo "Usage: regenerate-client.sh [-h|--help] [-v|--version] OPENAPI_FILE"
     echo ""
     echo "optional arguments:"
     echo "  -h, --help       show this help message"
     echo "  -v, --version    show the prospective new version number"
-    echo "  -c, --commit     create a new branch and commit all the changes"
-    echo "  -p, --push       push the branch up to origin after commit"
-    echo "  -d, --delete     delete the branch after pushing"
+    echo ""
+    echo "This script regenerates the client on the current branch and leaves"
+    echo "uncommitted changes in the working tree after running pre-commit."
     echo ""
     echo "Requirements:"
     echo "  - Podman (for consistent OpenAPI generation)"
-    echo "  - hatch (recommended for version management)"
+    echo "  - hatch (required for version management)"
 }
 
 # Check if there were no arguments
@@ -111,18 +84,6 @@ while (( "$#" )); do
             echo "Current version: $CURRENT_VERSION"
             echo "Prospective version number: $NEW_VERSION"
             exit 0
-            ;;
-        -c|--commit)
-            CAN_COMMIT=true
-            shift
-            ;;
-        -p|--push)
-            CAN_PUSH=true
-            shift
-            ;;
-        -d|--delete)
-            CAN_DELETE=true
-            shift
             ;;
         -*|--*)
             echo "Error: unsupported option $1" >&2
@@ -146,9 +107,6 @@ if [[ ! $OPENAPI_FILE == http* ]] && [[ ! -f "$OPENAPI_FILE" ]]; then
     echo "Error: No OpenAPI file or incorrect path to file"
     exit 1
 fi
-
-# Clean up .openapi-generator folder if major version upgrade
-cleanup_openapi_generator_folder
 
 # Generate the client using Podman
 echo "Generating client with OpenAPI Generator v${OPENAPI_GENERATOR_VERSION}..."
@@ -221,43 +179,8 @@ else
     echo "Hatch not available, skipping code formatting"
 fi
 
-# Commit everything
-if [[ "$CAN_COMMIT" = true ]]; then
-    echo "Committing changes..."
-    BRANCH_NAME="regenerate-$NEW_VERSION"
-
-    # Create and switch to new branch
-    git checkout -b "$BRANCH_NAME" > /dev/null 2>&1
-    git add . > /dev/null 2>&1
-    git commit -q -m "Regenerate client with OpenAPI Generator v${OPENAPI_GENERATOR_VERSION}
-
-- Updated to OpenAPI Generator v${OPENAPI_GENERATOR_VERSION}
-- Generated client for API version ${NEW_VERSION}
-- Removed Travis CI references
-- Improved Podman-based generation
-- Clean .openapi-generator folder on major version upgrades"
-
-    echo "✓ New branch created and committed: $BRANCH_NAME"
-
-    if [[ "$CAN_PUSH" = true ]]; then
-        echo "Pushing to origin/$BRANCH_NAME..."
-        git push -q origin "$BRANCH_NAME"
-        echo "✓ Branch pushed to origin"
-
-        # Switch back to main/master
-        git checkout main 2>/dev/null || git checkout master 2>/dev/null
-
-        if [[ "$CAN_DELETE" = true ]]; then
-            git branch -D "$BRANCH_NAME"
-            echo "✓ Local branch $BRANCH_NAME deleted"
-        fi
-    fi
-fi
-
 echo ""
 echo "🎉 Client regeneration completed successfully!"
 echo "   Version: $NEW_VERSION"
 echo "   OpenAPI Generator: v$OPENAPI_GENERATOR_VERSION"
-if [[ "$CAN_COMMIT" = true ]]; then
-    echo "   Branch: $BRANCH_NAME"
-fi
+echo "   Working tree contains uncommitted changes for review"
