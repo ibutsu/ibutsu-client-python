@@ -1,5 +1,3 @@
-# flake8: noqa
-
 # import all models into this package
 # if you have many models here with many references from one model to another this may
 # raise a RecursionError
@@ -8,6 +6,48 @@
 # or import this package, but before doing it, use:
 # import sys
 # sys.setrecursionlimit(n)
+
+__all__ = [
+    "AccountRecovery",
+    "AccountRegistration",
+    "AccountReset",
+    "Artifact",
+    "ArtifactList",
+    "CreateToken",
+    "Credentials",
+    "Dashboard",
+    "DashboardList",
+    "GetReportTypes200ResponseInner",
+    "Group",
+    "GroupList",
+    "Health",
+    "HealthInfo",
+    "LoginConfig",
+    "LoginError",
+    "LoginSupport",
+    "LoginToken",
+    "ModelImport",
+    "Pagination",
+    "Project",
+    "ProjectList",
+    "Report",
+    "ReportList",
+    "ReportParameters",
+    "Result",
+    "ResultList",
+    "Run",
+    "RunList",
+    "Token",
+    "TokenList",
+    "UpdateRun",
+    "User",
+    "UserList",
+    "WidgetConfig",
+    "WidgetConfigList",
+    "WidgetParam",
+    "WidgetType",
+    "WidgetTypeList",
+]
 
 from ibutsu_client.model.account_recovery import AccountRecovery
 from ibutsu_client.model.account_registration import AccountRegistration

@@ -1,0 +1,224 @@
+[project]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = [
+  "urllib3>=1.25.3",
+  "python-dateutil>=2.5.3",
+]
+description = "A system to store and query test results"
+dynamic = ["version"]
+license = "MIT"
+maintainers = [{name = "OpenAPI Generator community"}, {name = "Ibutsu Team"}]
+name = "ibutsu-client"
+readme = "README.md"
+requires-python = ">=3.8"
+keywords = ["OpenAPI", "OpenAPI-Generator", "Ibutsu API", "testing", "results"]
+
+[project.urls]
+Source = "https://github.com/ibutsu/ibutsu-client-python"
+Tracker = "https://github.com/ibutsu/ibutsu-client-python/issues"
+
+[dependency-groups]
+test = [
+  "pytest",
+  "pytest-cov",
+  "coverage[toml]",
+]
+dev = [
+  "pre-commit",
+  "mypy",
+  "types-python-dateutil",
+]
+
+[build-system]
+build-backend = "hatchling.build"
+requires = [
+  "hatchling>=1.3.1",
+  "hatch-vcs",
+]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.sdist]
+include = ["/ibutsu_client", "/test", "/docs", "/requirements.txt", "/test-requirements.txt"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["/ibutsu_client"]
+
+[tool.hatch.envs.hatch-test]
+extra-dependencies = ["ibutsu-client[test]"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+
+[tool.hatch.envs.test]
+dependencies = [
+  "pytest",
+  "pytest-cov",
+  "coverage[toml]",
+]
+
+[tool.mypy]
+# Enable strict mode for maximum type safety
+strict = true
+
+# Additional strict settings
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+warn_unreachable = true
+strict_equality = true
+no_implicit_reexport = true
+
+# Override for generated client code - be more lenient
+[[tool.mypy.overrides]]
+module = ["ibutsu_client.*"]
+ignore_missing_imports = true
+follow_imports = "skip"
+# Generated code may not follow strict typing
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = false
+disallow_untyped_calls = false
+disallow_untyped_decorators = false
+warn_return_any = false
+warn_unused_ignores = false
+no_implicit_reexport = false
+
+# Override for tests directory - be more lenient with pytest functions
+[[tool.mypy.overrides]]
+module = ["test.*"]
+# Allow untyped function definitions for pytest functions
+disallow_untyped_defs = false
+# Allow incomplete type definitions in tests
+disallow_incomplete_defs = false
+# Don't require return type annotations for test functions
+check_untyped_defs = false
+# Allow untyped calls in tests for simplicity
+disallow_untyped_calls = false
+# Allow untyped decorators (common in pytest)
+disallow_untyped_decorators = false
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+# Only collect test classes from actual test files, not from imported modules
+python_classes = ["Test*"]
+python_files = ["test_*.py", "*_test.py"]
+
+[tool.coverage.run]
+source = ["ibutsu_client"]
+branch = true
+omit = [
+    "*/test/*",
+    "*/test_*",
+    "*/conftest.py",
+    "*/__pycache__/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+    "TYPE_CHECKING",
+]
+show_missing = true
+precision = 2
+skip_covered = false
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.ruff]
+line-length = 99
+target-version = "py38"
+
+[tool.ruff.lint]
+extend-select = [
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "ERA", # eradicate
+    "I",   # isort
+    "N",   # pep8-naming
+    "PIE", # flake8-pie
+    "PGH", # pygrep-hooks
+    "RUF", # Ruff-specific
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    "UP",  # pyupgrade
+]
+ignore = [
+    "B905", # `zip()` without an explicit `strict=` parameter
+    "N806", # Variable in function should be lowercase - conflicts with generated API code
+    "N815", # Variable in class scope should not be mixedCase - conflicts with generated API code
+]
+
+[tool.ruff.lint.per-file-ignores]
+"test/**" = [
+    "S101", # Use of assert detected
+    "N802", # Function name should be lowercase - test methods
+    "ERA001", # Found commented-out code - test comments
+]
+"ibutsu_client/**" = [
+    "N802", # Function name should be lowercase - generated code
+    "N803", # Argument name should be lowercase - generated code
+    "N806", # Variable should be lowercase - generated code
+    "N815", # Variable should not be mixedCase - generated code
+    "N816", # Variable should not be mixedCase - generated code
+    "PGH004", # Use specific rule codes when using `ruff: noqa` - generated code
+    "SIM102", # Use a single `if` statement - generated code patterns
+    "SIM103", # Return the condition directly - generated code patterns
+    "SIM108", # Use ternary operator - generated code patterns
+    "SIM101", # Multiple isinstance calls - generated code patterns
+    "RUF015", # Prefer next(iter()) over single element slice - generated code
+    "RUF005", # Consider iterable unpacking - generated code patterns
+    "UP030", # Use implicit references for positional format fields - generated code
+    "UP031", # Use format specifiers instead of percent format - generated code
+    "E721", # Use `is` and `is not` for type comparisons - generated code
+    "B904", # Within except clause, raise exceptions with from - generated code
+    "F841", # Local variable assigned but never used - generated code
+    "RUF012", # Mutable class attributes should be annotated with ClassVar - generated code
+    "F821", # Undefined name - circular imports in generated code
+    "C408", # Unnecessary dict() call - generated code patterns
+    "SIM115", # Use context manager for opening files - generated code patterns
+    "ERA001", # Found commented-out code - generated code comments
+    "N801", # Class name should use CapWords - generated code utilities
+    "RUF002", # Docstring contains ambiguous unicode characters - generated code
+    "C409", # Unnecessary list literal passed to tuple() - generated code patterns
+    "N818", # Exception name should be named with an Error suffix - generated code
+]
+"setup.py" = [
+    "ERA001", # Found commented-out code - setup file comments
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["ibutsu_client"]
