@@ -73,9 +73,17 @@ dependencies = [
   "pytest-cov",
   "coverage[toml]",
 ]
+extra-dependencies = [
+  "pytest-rerunfailures",
+  "pytest-mock",
+  "pytest-xdist",
+]
 
 [tool.hatch.envs.test.scripts]
 test = "pytest {args:test}"
+cov = "pytest --cov=ibutsu_client {args:test}"
+# Alias for the hatch test command that looks for tests/ instead of test/
+run = "pytest {args:test}"
 
 [tool.mypy]
 # Enable strict mode for maximum type safety
