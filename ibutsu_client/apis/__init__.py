@@ -1,5 +1,3 @@
-# flake8: noqa
-
 # Import all APIs into this package.
 # If you have many APIs here with many many models used in each API this may
 # raise a `RecursionError`.
@@ -11,6 +9,25 @@
 #
 #   import sys
 #   sys.setrecursionlimit(n)
+
+__all__ = [
+    "AdminProjectManagementApi",
+    "AdminUserManagementApi",
+    "ArtifactApi",
+    "DashboardApi",
+    "GroupApi",
+    "HealthApi",
+    "ImportApi",
+    "LoginApi",
+    "ProjectApi",
+    "ReportApi",
+    "ResultApi",
+    "RunApi",
+    "TaskApi",
+    "UserApi",
+    "WidgetApi",
+    "WidgetConfigApi",
+]
 
 # Import APIs into API package:
 from ibutsu_client.api.admin_project_management_api import AdminProjectManagementApi
