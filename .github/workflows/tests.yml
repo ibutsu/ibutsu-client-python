@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -27,7 +27,7 @@ jobs:
       - name: Install project with test dependencies
         run: hatch env create
       - name: Test with pytest and coverage
-        run: hatch run test:pytest test/ --cov=ibutsu_client --cov-report=term-missing --cov-report=xml --cov-report=html --cov-branch
+        run: hatch test --cover --cover-quiet
       - name: Upload coverage to Codecov
         if: matrix.python-version == '3.12'
         uses: codecov/codecov-action@v5

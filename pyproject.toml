@@ -23,7 +23,8 @@ dependencies = [
 description = "A system to store and query test results"
 dynamic = ["version"]
 license = "MIT"
-maintainers = [{name = "OpenAPI Generator community"}, {name = "Ibutsu Team"}]
+authors = [{name = "Raoul Snyman"}]
+maintainers = [{name = "Mike Shriver", email = "mshriver@redhat.com"}]
 name = "ibutsu-client"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -78,12 +79,6 @@ extra-dependencies = [
   "pytest-mock",
   "pytest-xdist",
 ]
-
-[tool.hatch.envs.test.scripts]
-test = "pytest {args:test}"
-cov = "pytest --cov=ibutsu_client {args:test}"
-# Alias for the hatch test command that looks for tests/ instead of test/
-run = "pytest {args:test}"
 
 [tool.mypy]
 # Enable strict mode for maximum type safety
