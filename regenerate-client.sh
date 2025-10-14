@@ -4,7 +4,7 @@ set -euo pipefail
 # Re-generate the client based on the spec
 
 # Configuration
-OPENAPI_GENERATOR_VERSION="7.15.0"
+OPENAPI_GENERATOR_VERSION="7.16.0"
 CLIENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 TEMP_DIR="${CLIENT_DIR}/tmp/client"
 OPENAPI_FILE=""
