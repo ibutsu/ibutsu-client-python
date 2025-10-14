@@ -197,6 +197,7 @@ ignore = [
 "ibutsu_client/**" = [
     "N802", # Function name should be lowercase - generated code
     "N803", # Argument name should be lowercase - generated code
+    "N805", # First argument of a method should be named `self` - Pydantic validators use `cls`
     "N806", # Variable should be lowercase - generated code
     "N815", # Variable should not be mixedCase - generated code
     "N816", # Variable should not be mixedCase - generated code
