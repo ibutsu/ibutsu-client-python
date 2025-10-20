@@ -356,7 +356,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | successful operation |  -  |
-**400** | Bad reqest, JSON required or not enough parameters |  -  |
+**400** | Bad request, JSON required or not enough parameters |  -  |
 **404** | Result not found |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)

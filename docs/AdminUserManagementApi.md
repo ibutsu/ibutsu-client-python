@@ -402,7 +402,7 @@ Name | Type | Description  | Notes
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | successful operation |  -  |
-**400** | Bad reqest, JSON required or not enough parameters |  -  |
+**400** | Bad request, JSON required or not enough parameters |  -  |
 **401** | The user needs to be logged in |  -  |
 **403** | The user needs to be a superadmin |  -  |
 **404** | User not found |  -  |
