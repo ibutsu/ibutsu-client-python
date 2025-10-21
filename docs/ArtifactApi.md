@@ -358,8 +358,8 @@ with ibutsu_client.ApiClient(configuration) as api_client:
     api_instance = ibutsu_client.ArtifactApi(api_client)
     filename = 'filename_example' # str | name of the file
     file = None # bytearray | file to upload
-    result_id = 'result_id_example' # str | ID of result to attach artifact to (optional)
-    run_id = 'run_id_example' # str | ID of run to attach artifact to (optional)
+    result_id = 'result_id_example' # str | ID of result to attach artifact to (mutually exclusive with runId) (optional)
+    run_id = 'run_id_example' # str | ID of run to attach artifact to (mutually exclusive with resultId) (optional)
     additional_metadata = None # object | Additional data to pass to server (optional)
 
     try:
@@ -380,8 +380,8 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **filename** | **str**| name of the file | 
  **file** | **bytearray**| file to upload | 
- **result_id** | **str**| ID of result to attach artifact to | [optional] 
- **run_id** | **str**| ID of run to attach artifact to | [optional] 
+ **result_id** | **str**| ID of result to attach artifact to (mutually exclusive with runId) | [optional] 
+ **run_id** | **str**| ID of run to attach artifact to (mutually exclusive with resultId) | [optional] 
  **additional_metadata** | [**object**](object.md)| Additional data to pass to server | [optional] 
 
 ### Return type
