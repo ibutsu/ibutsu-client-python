@@ -62,23 +62,31 @@ include = ["/ibutsu_client", "/test", "/docs", "/requirements.txt", "/test-requi
 [tool.hatch.build.targets.wheel]
 packages = ["/ibutsu_client"]
 
-[tool.hatch.envs.hatch-test]
-extra-dependencies = ["ibutsu-client[test]"]
-
-[[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.11", "3.12", "3.13"]
-
-[tool.hatch.envs.test]
+[tool.hatch.envs.default]
 dependencies = [
   "pytest",
   "pytest-cov",
-  "coverage[toml]",
-]
-extra-dependencies = [
-  "pytest-rerunfailures",
   "pytest-mock",
   "pytest-xdist",
+  "pytest-rerunfailures",
+  "coverage[toml]",
+  "pre-commit",
 ]
+
+[tool.hatch.envs.default.scripts]
+test = "pytest {args}"
+test-cov = "pytest --cov=ibutsu_client --cov-report=xml --cov-report=term-missing --cov-report=html {args}"
+cov-report = "coverage report"
+cov-xml = "coverage xml"
+cov-html = "coverage html"
+lint = "pre-commit run --all-files"
+
+# CI environment for testing multiple Python versions
+[tool.hatch.envs.test-matrix]
+template = "default"
+
+[[tool.hatch.envs.test-matrix.matrix]]
+python = ["3.11", "3.12", "3.13"]
 
 [tool.mypy]
 # Enable strict mode for maximum type safety
@@ -132,6 +140,7 @@ source = ["ibutsu_client"]
 branch = true
 omit = [
     "*/test/*",
+    "*/tests/*",
     "*/test_*",
     "*/conftest.py",
     "*/__pycache__/*",
@@ -140,22 +149,35 @@ omit = [
 ]
 
 [tool.coverage.report]
+precision = 2
+skip_empty = true
 exclude_lines = [
+    # Pragmas and docstrings
     "pragma: no cover",
     "def __repr__",
-    "if self.debug:",
-    "if settings.DEBUG",
+    # Defensive programming patterns
     "raise AssertionError",
     "raise NotImplementedError",
-    "if 0:",
+    "assert False",
+    # Type checking blocks
+    "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+    # Abstract methods
+    "@abstractmethod",
+    "@abc.abstractmethod",
+    # Main guard
     "if __name__ == .__main__.:",
+    # Debug-only code
+    "if self.debug:",
+    "if settings.DEBUG",
+    "if.*__debug__:",
+    "if 0:",
+    # Protocol definitions
     "class .*\\bProtocol\\):",
-    "@(abc\\.)?abstractmethod",
-    "TYPE_CHECKING",
+    "@overload",
+    "@typing.overload",
 ]
 show_missing = true
-precision = 2
-skip_covered = false
 
 [tool.coverage.html]
 directory = "htmlcov"
