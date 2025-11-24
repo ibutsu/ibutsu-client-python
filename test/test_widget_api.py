@@ -14,100 +14,97 @@ import pytest
 from ibutsu_client.api.widget_api import WidgetApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.widget_type_list import WidgetTypeList
-from test.conftest import create_mock_response
 
 
 class TestWidgetApi:
     """WidgetApi comprehensive tests"""
 
-    def test_get_widget_success(self, mocker):
-        """Test case for get_widget - successfully generate widget data"""
+    # Parametrized tests for get_widget with various scenarios
+    @pytest.mark.parametrize(
+        "create_mock_response,widget_params,expected_type,expected_exception",
+        [
+            pytest.param(
+                {
+                    "data": {
+                        "type": "result-summary",
+                        "data": {"passed": 100, "failed": 5, "skipped": 2, "error": 0},
+                    },
+                    "status": 200,
+                },
+                {},
+                "result-summary",
+                None,
+                id="success_basic",
+            ),
+            pytest.param(
+                {
+                    "data": {"type": "jenkins-heatmap", "data": {"rows": [], "columns": []}},
+                    "status": 200,
+                },
+                {"params": {"project": "test-project", "env": "production"}},
+                "jenkins-heatmap",
+                None,
+                id="success_with_filters",
+            ),
+            pytest.param(
+                {
+                    "data": {"type": "result-aggregation", "data": {"aggregations": []}},
+                    "status": 200,
+                },
+                {"params": {"group_by": "component", "limit": 10}},
+                "result-aggregation",
+                None,
+                id="success_with_params",
+            ),
+            pytest.param(
+                {"data": {"error": "widget not found"}, "status": 404},
+                {},
+                None,
+                NotFoundException,
+                id="not_found",
+            ),
+            pytest.param(
+                {"data": {"error": "internal error"}, "status": 500},
+                {},
+                None,
+                ServiceException,
+                id="server_error",
+            ),
+        ],
+        indirect=["create_mock_response"],
+    )
+    def test_get_widget(
+        self, mocker, create_mock_response, widget_params, expected_type, expected_exception
+    ):
+        """Test get_widget with various response scenarios."""
         api = WidgetApi()
-        widget_data = {
-            "type": "result-summary",
-            "data": {
-                "passed": 100,
-                "failed": 5,
-                "skipped": 2,
-                "error": 0,
-            },
-        }
-        mock_response = create_mock_response(widget_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        result = api.get_widget(id=widget_id)
 
-        assert result is not None
-        assert result["type"] == "result-summary"
-        assert result["data"]["passed"] == 100
-        api.api_client.call_api.assert_called_once()
+        if expected_exception:
+            with pytest.raises(expected_exception):
+                api.get_widget(id=widget_id, **widget_params)
+        else:
+            result = api.get_widget(id=widget_id, **widget_params)
+            assert result is not None
+            assert result["type"] == expected_type
+            api.api_client.call_api.assert_called_once()
 
-    def test_get_widget_with_filters(self, mocker):
-        """Test case for get_widget with filter parameters"""
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            pytest.param(
+                {"data": {"type": "test-widget", "data": {}}, "status": 200},
+                id="http_info_success",
+            ),
+        ],
+        indirect=True,
+    )
+    def test_get_widget_with_http_info(self, mocker, create_mock_response):
+        """Test get_widget_with_http_info."""
         api = WidgetApi()
-        widget_data = {
-            "type": "jenkins-heatmap",
-            "data": {"rows": [], "columns": []},
-        }
-        mock_response = create_mock_response(widget_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
-
-        widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        result = api.get_widget(
-            id=widget_id,
-            params={"project": "test-project", "env": "production"},
-        )
-
-        assert result is not None
-        assert result["type"] == "jenkins-heatmap"
-        api.api_client.call_api.assert_called_once()
-
-    def test_get_widget_with_additional_params(self, mocker):
-        """Test case for get_widget with additional parameters"""
-        api = WidgetApi()
-        widget_data = {
-            "type": "result-aggregation",
-            "data": {"aggregations": []},
-        }
-        mock_response = create_mock_response(widget_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
-
-        widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        result = api.get_widget(
-            id=widget_id,
-            params={"group_by": "component", "limit": 10},
-        )
-
-        assert result is not None
-        api.api_client.call_api.assert_called_once()
-
-    def test_get_widget_not_found(self, mocker):
-        """Test case for get_widget with invalid widget name"""
-        api = WidgetApi()
-        mock_response = create_mock_response({"error": "widget not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
-
-        widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        with pytest.raises(NotFoundException):
-            api.get_widget(id=widget_id)
-
-    def test_get_widget_server_error(self, mocker):
-        """Test case for get_widget with server error"""
-        api = WidgetApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
-
-        widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        with pytest.raises(ServiceException):
-            api.get_widget(id=widget_id)
-
-    def test_get_widget_with_http_info(self, mocker):
-        """Test case for get_widget_with_http_info"""
-        api = WidgetApi()
-        widget_data = {"type": "test-widget", "data": {}}
-        mock_response = create_mock_response(widget_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_widget_with_http_info(id=widget_id)
@@ -115,74 +112,95 @@ class TestWidgetApi:
         assert result.status_code == 200
         assert result.data is not None
 
-    def test_get_widget_types_success(self, mocker):
-        """Test case for get_widget_types - retrieve list of available widget types"""
-        api = WidgetApi()
-        widget_types_data = {
-            "types": [
+    # Parametrized tests for get_widget_types
+    @pytest.mark.parametrize(
+        "create_mock_response,expected_count,expected_exception",
+        [
+            pytest.param(
                 {
-                    "name": "result-summary",
-                    "description": "Summary of test results",
-                    "params": [],
+                    "data": {
+                        "types": [
+                            {
+                                "name": "result-summary",
+                                "description": "Summary of test results",
+                                "params": [],
+                            },
+                            {
+                                "name": "jenkins-heatmap",
+                                "description": "Jenkins build heatmap",
+                                "params": [],
+                            },
+                            {
+                                "name": "result-aggregation",
+                                "description": "Aggregated test results",
+                                "params": [],
+                            },
+                        ]
+                    },
+                    "status": 200,
                 },
-                {
-                    "name": "jenkins-heatmap",
-                    "description": "Jenkins build heatmap",
-                    "params": [],
-                },
-                {
-                    "name": "result-aggregation",
-                    "description": "Aggregated test results",
-                    "params": [],
-                },
-            ]
-        }
-        mock_response = create_mock_response(widget_types_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
-
-        result = api.get_widget_types()
-
-        assert isinstance(result, WidgetTypeList)
-        assert len(result.types) == 3
-        api.api_client.call_api.assert_called_once()
-
-    def test_get_widget_types_empty(self, mocker):
-        """Test case for get_widget_types with no types available"""
+                3,
+                None,
+                id="success_multiple_types",
+            ),
+            pytest.param(
+                {"data": {"types": []}, "status": 200},
+                0,
+                None,
+                id="success_empty",
+            ),
+            pytest.param(
+                {"data": {"error": "internal error"}, "status": 500},
+                None,
+                ServiceException,
+                id="server_error",
+            ),
+        ],
+        indirect=["create_mock_response"],
+    )
+    def test_get_widget_types(
+        self, mocker, create_mock_response, expected_count, expected_exception
+    ):
+        """Test get_widget_types with various response scenarios."""
         api = WidgetApi()
-        widget_types_data = {"types": []}
-        mock_response = create_mock_response(widget_types_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
-        result = api.get_widget_types()
+        if expected_exception:
+            with pytest.raises(expected_exception):
+                api.get_widget_types()
+        else:
+            result = api.get_widget_types()
+            assert isinstance(result, WidgetTypeList)
+            assert len(result.types) == expected_count
+            api.api_client.call_api.assert_called_once()
 
-        assert isinstance(result, WidgetTypeList)
-        assert len(result.types) == 0
-
-    def test_get_widget_types_with_http_info(self, mocker):
-        """Test case for get_widget_types_with_http_info"""
-        api = WidgetApi()
-        widget_types_data = {
-            "types": [
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            pytest.param(
                 {
-                    "name": "result-summary",
-                    "description": "Summary",
-                    "params": [],
-                }
-            ]
-        }
-        mock_response = create_mock_response(widget_types_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+                    "data": {
+                        "types": [
+                            {
+                                "name": "result-summary",
+                                "description": "Summary",
+                                "params": [],
+                            }
+                        ]
+                    },
+                    "status": 200,
+                },
+                id="http_info_success",
+            ),
+        ],
+        indirect=True,
+    )
+    def test_get_widget_types_with_http_info(self, mocker, create_mock_response):
+        """Test get_widget_types_with_http_info."""
+        api = WidgetApi()
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_widget_types_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, WidgetTypeList)
-
-    def test_get_widget_types_server_error(self, mocker):
-        """Test case for get_widget_types with server error"""
-        api = WidgetApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
-
-        with pytest.raises(ServiceException):
-            api.get_widget_types()

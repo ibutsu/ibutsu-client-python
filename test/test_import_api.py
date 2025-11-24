@@ -14,7 +14,7 @@ import pytest
 from ibutsu_client.api.import_api import ImportApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.model_import import ModelImport
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestImportApi:

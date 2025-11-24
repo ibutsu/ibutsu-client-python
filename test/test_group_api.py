@@ -15,7 +15,7 @@ from ibutsu_client.api.group_api import GroupApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.group import Group
 from ibutsu_client.models.group_list import GroupList
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestGroupApi:

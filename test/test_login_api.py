@@ -16,7 +16,7 @@ from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.login_config import LoginConfig
 from ibutsu_client.models.login_support import LoginSupport
 from ibutsu_client.models.login_token import LoginToken
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestLoginApi:

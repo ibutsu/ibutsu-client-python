@@ -13,7 +13,7 @@ import pytest
 
 from ibutsu_client.api.task_api import TaskApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestTaskApi:

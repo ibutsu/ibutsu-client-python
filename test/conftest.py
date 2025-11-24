@@ -10,22 +10,12 @@ import pytest
 from ibutsu_client.rest import RESTResponse
 
 
-@pytest.fixture
-def mock_api_client(mocker):
-    """Create a mock ApiClient for testing API methods."""
-    from ibutsu_client.api_client import ApiClient
-
-    client = ApiClient()
-    mocker.patch.object(client, "call_api")
-    return client
-
-
-def create_mock_response(
+def _make_mock_response(
     data: dict[str, Any] | list[Any] | None = None,
     status: int = 200,
     headers: dict[str, str] | None = None,
 ) -> RESTResponse:
-    """Create a mock REST response for testing.
+    """Internal helper to create a mock REST response.
 
     Args:
         data: The response data (will be JSON-encoded)
@@ -66,9 +56,59 @@ def create_mock_response(
 
 
 @pytest.fixture
-def mock_rest_response():
-    """Fixture that provides the create_mock_response function."""
-    return create_mock_response
+def mock_api_client(mocker):
+    """Create a mock ApiClient for testing API methods."""
+    from ibutsu_client.api_client import ApiClient
+
+    client = ApiClient()
+    mocker.patch.object(client, "call_api")
+    return client
+
+
+@pytest.fixture
+def create_mock_response(request):
+    """Parametrized fixture for creating mock API responses.
+
+    Use with indirect parametrization:
+
+    Example:
+        @pytest.mark.parametrize('create_mock_response', [
+            {'data': {'id': 'test'}, 'status': 200},
+            {'data': {'error': 'not found'}, 'status': 404},
+        ], indirect=True)
+        def test_api_method(self, mocker, create_mock_response):
+            api = SomeApi()
+            mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
+            result = api.method()
+            ...
+
+    Args:
+        request.param: Dict with keys:
+            - data: Response data dict/list (required)
+            - status: HTTP status code (default: 200)
+            - headers: Response headers dict (optional)
+
+    Returns:
+        Mock RESTResponse object ready to use
+    """
+    params = request.param
+    data = params.get("data", {})
+    status = params.get("status", 200)
+    headers = params.get("headers", None)
+
+    return _make_mock_response(data=data, status=status, headers=headers)
+
+
+# Common error response templates for parametrization
+COMMON_ERROR_RESPONSES = {
+    "not_found": {"data": {"error": "not found"}, "status": 404},
+    "unauthorized": {"data": {"error": "unauthorized"}, "status": 401},
+    "forbidden": {"data": {"error": "forbidden"}, "status": 403},
+    "bad_request": {"data": {"error": "bad request"}, "status": 400},
+    "conflict": {"data": {"error": "conflict"}, "status": 409},
+    "server_error": {"data": {"error": "internal error"}, "status": 500},
+    "no_content": {"data": {}, "status": 204},
+}
 
 
 # ==================== Test Data Factories ====================

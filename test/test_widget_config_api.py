@@ -15,7 +15,7 @@ from ibutsu_client.api.widget_config_api import WidgetConfigApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.widget_config import WidgetConfig
 from ibutsu_client.models.widget_config_list import WidgetConfigList
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestWidgetConfigApi:
@@ -24,15 +24,15 @@ class TestWidgetConfigApi:
     def test_add_widget_config_success(self, mocker, sample_widget_config_data):
         """Test case for add_widget_config - successfully create a widget config"""
         api = WidgetConfigApi()
-        widget_data = sample_widget_config_data(widget_type="result-summary", weight=0)
+        widget_data = sample_widget_config_data(widget="result-summary", weight=0)
         mock_response = create_mock_response(widget_data, status=201)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        widget_config = WidgetConfig(widget_type="result-summary", weight=0, params={})
+        widget_config = WidgetConfig(type="widget", widget="result-summary", weight=0, params={})
         result = api.add_widget_config(widget_config=widget_config)
 
         assert isinstance(result, WidgetConfig)
-        assert result.widget_type == "result-summary"
+        assert result.widget == "result-summary"
         assert result.weight == 0
         api.api_client.call_api.assert_called_once()
 
@@ -41,12 +41,14 @@ class TestWidgetConfigApi:
         api = WidgetConfigApi()
         params = {"filter": "result:passed", "chart_type": "bar"}
         widget_data = sample_widget_config_data(
-            widget_type="result-aggregation", weight=5, params=params
+            widget="result-aggregation", weight=5, params=params
         )
         mock_response = create_mock_response(widget_data, status=201)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        widget_config = WidgetConfig(widget_type="result-aggregation", weight=5, params=params)
+        widget_config = WidgetConfig(
+            type="widget", widget="result-aggregation", weight=5, params=params
+        )
         result = api.add_widget_config(widget_config=widget_config)
 
         assert isinstance(result, WidgetConfig)
@@ -58,7 +60,7 @@ class TestWidgetConfigApi:
         mock_response = create_mock_response({"error": "unauthorized"}, status=401)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        widget_config = WidgetConfig(widget_type="test", weight=0)
+        widget_config = WidgetConfig(type="widget", widget="test", weight=0)
         with pytest.raises((ServiceException, Exception)):
             api.add_widget_config(widget_config=widget_config)
 
@@ -69,7 +71,7 @@ class TestWidgetConfigApi:
         mock_response = create_mock_response(widget_data, status=201)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        widget_config = WidgetConfig(widget_type="test", weight=0)
+        widget_config = WidgetConfig(type="widget", widget="test", weight=0)
         result = api.add_widget_config_with_http_info(widget_config=widget_config)
 
         assert result.status_code == 201
@@ -111,7 +113,7 @@ class TestWidgetConfigApi:
     def test_get_widget_config_success(self, mocker, sample_widget_config_data):
         """Test case for get_widget_config - retrieve a single widget config"""
         api = WidgetConfigApi()
-        widget_data = sample_widget_config_data(widget_type="jenkins-heatmap")
+        widget_data = sample_widget_config_data(widget="jenkins-heatmap")
         mock_response = create_mock_response(widget_data, status=200)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
@@ -119,7 +121,7 @@ class TestWidgetConfigApi:
         result = api.get_widget_config(id=widget_id)
 
         assert isinstance(result, WidgetConfig)
-        assert result.widget_type == "jenkins-heatmap"
+        assert result.widget == "jenkins-heatmap"
 
     def test_get_widget_config_not_found(self, mocker):
         """Test case for get_widget_config with non-existent widget"""
@@ -149,8 +151,8 @@ class TestWidgetConfigApi:
     ):
         """Test case for get_widget_config_list - retrieve list of widget configs"""
         api = WidgetConfigApi()
-        widget1 = sample_widget_config_data(widget_type="result-summary", weight=0)
-        widget2 = sample_widget_config_data(widget_type="jenkins-heatmap", weight=1)
+        widget1 = sample_widget_config_data(widget="result-summary", weight=0)
+        widget2 = sample_widget_config_data(widget="jenkins-heatmap", weight=1)
         pagination = sample_pagination_data(total_items=2)
 
         response_data = {
@@ -160,8 +162,7 @@ class TestWidgetConfigApi:
         mock_response = create_mock_response(response_data, status=200)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        dashboard_id = "550e8400-e29b-41d4-a716-446655440000"
-        result = api.get_widget_config_list(dashboard_id=dashboard_id)
+        result = api.get_widget_config_list()
 
         assert isinstance(result, WidgetConfigList)
         assert len(result.widgets) == 2
@@ -178,10 +179,7 @@ class TestWidgetConfigApi:
         mock_response = create_mock_response(response_data, status=200)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        dashboard_id = "550e8400-e29b-41d4-a716-446655440000"
-        result = api.get_widget_config_list(
-            dashboard_id=dashboard_id, filter=["widget_type=result-summary"]
-        )
+        result = api.get_widget_config_list(filter=["widget_type=result-summary"])
 
         assert isinstance(result, WidgetConfigList)
         api.api_client.call_api.assert_called_once()
@@ -194,8 +192,7 @@ class TestWidgetConfigApi:
         mock_response = create_mock_response(response_data, status=200)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        dashboard_id = "550e8400-e29b-41d4-a716-446655440000"
-        result = api.get_widget_config_list(dashboard_id=dashboard_id)
+        result = api.get_widget_config_list()
 
         assert isinstance(result, WidgetConfigList)
         assert len(result.widgets) == 0
@@ -208,8 +205,7 @@ class TestWidgetConfigApi:
         mock_response = create_mock_response(response_data, status=200)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
-        dashboard_id = "550e8400-e29b-41d4-a716-446655440000"
-        result = api.get_widget_config_list_with_http_info(dashboard_id=dashboard_id)
+        result = api.get_widget_config_list_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, WidgetConfigList)
@@ -217,12 +213,12 @@ class TestWidgetConfigApi:
     def test_update_widget_config_success(self, mocker, sample_widget_config_data):
         """Test case for update_widget_config - successfully update a widget config"""
         api = WidgetConfigApi()
-        updated_data = sample_widget_config_data(widget_type="result-summary", weight=10)
+        updated_data = sample_widget_config_data(widget="result-summary", weight=10)
         mock_response = create_mock_response(updated_data, status=200)
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        widget_config = WidgetConfig(widget_type="result-summary", weight=10)
+        widget_config = WidgetConfig(type="widget", widget="result-summary", weight=10)
         result = api.update_widget_config(id=widget_id, widget_config=widget_config)
 
         assert isinstance(result, WidgetConfig)
@@ -235,7 +231,7 @@ class TestWidgetConfigApi:
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        widget_config = WidgetConfig(widget_type="test", weight=0)
+        widget_config = WidgetConfig(type="widget", widget="test", weight=0)
         with pytest.raises(NotFoundException):
             api.update_widget_config(id=widget_id, widget_config=widget_config)
 
@@ -247,7 +243,7 @@ class TestWidgetConfigApi:
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        widget_config = WidgetConfig(widget_type="test", weight=5)
+        widget_config = WidgetConfig(type="widget", widget="test", weight=5)
         result = api.update_widget_config_with_http_info(id=widget_id, widget_config=widget_config)
 
         assert result.status_code == 200
@@ -260,6 +256,6 @@ class TestWidgetConfigApi:
         mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
-        widget_config = WidgetConfig(widget_type="test", weight=0)
+        widget_config = WidgetConfig(type="widget", widget="test", weight=0)
         with pytest.raises(ServiceException):
             api.update_widget_config(id=widget_id, widget_config=widget_config)
