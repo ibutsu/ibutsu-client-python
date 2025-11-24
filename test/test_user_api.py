@@ -17,7 +17,7 @@ from ibutsu_client.models.create_token import CreateToken
 from ibutsu_client.models.token import Token
 from ibutsu_client.models.token_list import TokenList
 from ibutsu_client.models.user import User
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestUserApi:

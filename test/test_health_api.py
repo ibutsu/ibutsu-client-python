@@ -15,7 +15,7 @@ from ibutsu_client.api.health_api import HealthApi
 from ibutsu_client.exceptions import ServiceException
 from ibutsu_client.models.health import Health
 from ibutsu_client.models.health_info import HealthInfo
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestHealthApi:

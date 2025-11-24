@@ -15,7 +15,7 @@ from ibutsu_client.api.admin_user_management_api import AdminUserManagementApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.user import User
 from ibutsu_client.models.user_list import UserList
-from test.conftest import create_mock_response
+from test import create_mock_response
 
 
 class TestAdminUserManagementApi:
