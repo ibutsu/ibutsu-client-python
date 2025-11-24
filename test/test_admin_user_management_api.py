@@ -15,18 +15,21 @@ from ibutsu_client.api.admin_user_management_api import AdminUserManagementApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.user import User
 from ibutsu_client.models.user_list import UserList
-from test import create_mock_response
+from test.utils import sample_pagination_data, sample_user_data
 
 
 class TestAdminUserManagementApi:
     """AdminUserManagementApi comprehensive tests"""
 
-    def test_admin_add_user_success(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_user_data(email="newuser@example.com", name="New User"), "status": 201}],
+        indirect=True,
+    )
+    def test_admin_add_user_success(self, mocker, create_mock_response):
         """Test case for admin_add_user - successfully add a user"""
         api = AdminUserManagementApi()
-        user_data = sample_user_data(email="newuser@example.com", name="New User")
-        mock_response = create_mock_response(user_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user = User(email="newuser@example.com", name="New User")
         result = api.admin_add_user(user=user)
@@ -36,32 +39,43 @@ class TestAdminUserManagementApi:
         assert result.name == "New User"
         api.api_client.call_api.assert_called_once()
 
-    def test_admin_add_user_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 403}],
+        indirect=True,
+    )
+    def test_admin_add_user_unauthorized(self, mocker, create_mock_response):
         """Test case for admin_add_user without superadmin privileges"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=403)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user = User(email="test@example.com", name="Test")
         with pytest.raises((ServiceException, Exception)):
             api.admin_add_user(user=user)
 
-    def test_admin_add_user_conflict(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "user already exists"}, "status": 409}],
+        indirect=True,
+    )
+    def test_admin_add_user_conflict(self, mocker, create_mock_response):
         """Test case for admin_add_user with existing email"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({"error": "user already exists"}, status=409)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user = User(email="existing@example.com", name="Existing User")
         with pytest.raises((ServiceException, Exception)):
             api.admin_add_user(user=user)
 
-    def test_admin_add_user_with_http_info(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_user_data(), "status": 201}],
+        indirect=True,
+    )
+    def test_admin_add_user_with_http_info(self, mocker, create_mock_response):
         """Test case for admin_add_user_with_http_info"""
         api = AdminUserManagementApi()
-        user_data = sample_user_data()
-        mock_response = create_mock_response(user_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user = User(email="test@example.com", name="Test User")
         result = api.admin_add_user_with_http_info(user=user)
@@ -69,11 +83,15 @@ class TestAdminUserManagementApi:
         assert result.status_code == 201
         assert isinstance(result.data, User)
 
-    def test_admin_delete_user_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 204}],
+        indirect=True,
+    )
+    def test_admin_delete_user_success(self, mocker, create_mock_response):
         """Test case for admin_delete_user - successfully delete a user"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({}, status=204)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         api.admin_delete_user(id=user_id)
@@ -81,43 +99,63 @@ class TestAdminUserManagementApi:
         # 204 No Content typically returns None
         api.api_client.call_api.assert_called_once()
 
-    def test_admin_delete_user_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_admin_delete_user_not_found(self, mocker, create_mock_response):
         """Test case for admin_delete_user with non-existent user"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.admin_delete_user(id=user_id)
 
-    def test_admin_delete_user_forbidden(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "forbidden"}, "status": 403}],
+        indirect=True,
+    )
+    def test_admin_delete_user_forbidden(self, mocker, create_mock_response):
         """Test case for admin_delete_user without superadmin privileges"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({"error": "forbidden"}, status=403)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises((ServiceException, Exception)):
             api.admin_delete_user(id=user_id)
 
-    def test_admin_delete_user_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 204}],
+        indirect=True,
+    )
+    def test_admin_delete_user_with_http_info(self, mocker, create_mock_response):
         """Test case for admin_delete_user_with_http_info"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({}, status=204)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.admin_delete_user_with_http_info(id=user_id)
 
         assert result.status_code == 204
 
-    def test_admin_get_user_success(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_user_data(email="admin@example.com", is_superadmin=True),
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_admin_get_user_success(self, mocker, create_mock_response):
         """Test case for admin_get_user - retrieve a single user"""
         api = AdminUserManagementApi()
-        user_data = sample_user_data(email="admin@example.com", is_superadmin=True)
-        mock_response = create_mock_response(user_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.admin_get_user(id=user_id)
@@ -126,22 +164,29 @@ class TestAdminUserManagementApi:
         assert result.email == "admin@example.com"
         assert result.is_superadmin is True
 
-    def test_admin_get_user_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_admin_get_user_not_found(self, mocker, create_mock_response):
         """Test case for admin_get_user with non-existent user"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.admin_get_user(id=user_id)
 
-    def test_admin_get_user_with_http_info(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_user_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_admin_get_user_with_http_info(self, mocker, create_mock_response):
         """Test case for admin_get_user_with_http_info"""
         api = AdminUserManagementApi()
-        user_data = sample_user_data()
-        mock_response = create_mock_response(user_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.admin_get_user_with_http_info(id=user_id)
@@ -149,74 +194,114 @@ class TestAdminUserManagementApi:
         assert result.status_code == 200
         assert isinstance(result.data, User)
 
-    def test_admin_get_user_list_success(self, mocker, sample_user_data, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "users": [
+                        sample_user_data(email="user1@example.com", name="User One"),
+                        sample_user_data(email="user2@example.com", name="User Two"),
+                    ],
+                    "pagination": sample_pagination_data(total_items=2),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_admin_get_user_list_success(self, mocker, create_mock_response):
         """Test case for admin_get_user_list - retrieve list of users"""
         api = AdminUserManagementApi()
-        user1 = sample_user_data(email="user1@example.com", name="User One")
-        user2 = sample_user_data(email="user2@example.com", name="User Two")
-        pagination = sample_pagination_data(total_items=2)
-
-        response_data = {"users": [user1, user2], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.admin_get_user_list()
 
         assert isinstance(result, UserList)
         assert len(result.users) == 2
 
-    def test_admin_get_user_list_with_pagination(
-        self, mocker, sample_user_data, sample_pagination_data
-    ):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "users": [sample_user_data()],
+                    "pagination": sample_pagination_data(page=2, page_size=10, total_items=15),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_admin_get_user_list_with_pagination(self, mocker, create_mock_response):
         """Test case for admin_get_user_list with pagination parameters"""
         api = AdminUserManagementApi()
-        user1 = sample_user_data()
-        pagination = sample_pagination_data(page=2, page_size=10, total_items=15)
-
-        response_data = {"users": [user1], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.admin_get_user_list(page=2, page_size=10)
 
         assert isinstance(result, UserList)
         api.api_client.call_api.assert_called_once()
 
-    def test_admin_get_user_list_with_filters(
-        self, mocker, sample_user_data, sample_pagination_data
-    ):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "users": [sample_user_data(is_superadmin=True)],
+                    "pagination": sample_pagination_data(total_items=1),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_admin_get_user_list_with_filters(self, mocker, create_mock_response):
         """Test case for admin_get_user_list with filter parameters"""
         api = AdminUserManagementApi()
-        user1 = sample_user_data(is_superadmin=True)
-        pagination = sample_pagination_data(total_items=1)
-
-        response_data = {"users": [user1], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.admin_get_user_list(filter=["is_superadmin=true"])
 
         assert isinstance(result, UserList)
 
-    def test_admin_get_user_list_with_http_info(self, mocker, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "users": [],
+                    "pagination": sample_pagination_data(),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_admin_get_user_list_with_http_info(self, mocker, create_mock_response):
         """Test case for admin_get_user_list_with_http_info"""
         api = AdminUserManagementApi()
-        pagination = sample_pagination_data()
-        response_data = {"users": [], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.admin_get_user_list_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, UserList)
 
-    def test_admin_update_user_success(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_user_data(email="updated@example.com", is_superadmin=True),
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_admin_update_user_success(self, mocker, create_mock_response):
         """Test case for admin_update_user - successfully update a user"""
         api = AdminUserManagementApi()
-        updated_data = sample_user_data(email="updated@example.com", is_superadmin=True)
-        mock_response = create_mock_response(updated_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         user = User(email="updated@example.com", is_superadmin=True)
@@ -225,23 +310,30 @@ class TestAdminUserManagementApi:
         assert isinstance(result, User)
         assert result.is_superadmin is True
 
-    def test_admin_update_user_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_admin_update_user_not_found(self, mocker, create_mock_response):
         """Test case for admin_update_user with non-existent user"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         user = User(email="test@example.com", name="Test")
         with pytest.raises(NotFoundException):
             api.admin_update_user(id=user_id, user=user)
 
-    def test_admin_update_user_with_http_info(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_user_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_admin_update_user_with_http_info(self, mocker, create_mock_response):
         """Test case for admin_update_user_with_http_info"""
         api = AdminUserManagementApi()
-        user_data = sample_user_data()
-        mock_response = create_mock_response(user_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         user = User(email="test@example.com", name="Test")
@@ -250,11 +342,15 @@ class TestAdminUserManagementApi:
         assert result.status_code == 200
         assert isinstance(result.data, User)
 
-    def test_admin_update_user_server_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "internal error"}, "status": 500}],
+        indirect=True,
+    )
+    def test_admin_update_user_server_error(self, mocker, create_mock_response):
         """Test case for admin_update_user with server error"""
         api = AdminUserManagementApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         user = User(email="test@example.com", name="Test")

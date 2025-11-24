@@ -15,18 +15,26 @@ from ibutsu_client.api.widget_config_api import WidgetConfigApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.widget_config import WidgetConfig
 from ibutsu_client.models.widget_config_list import WidgetConfigList
-from test import create_mock_response
+from test.utils import sample_pagination_data, sample_widget_config_data
 
 
 class TestWidgetConfigApi:
     """WidgetConfigApi comprehensive tests"""
 
-    def test_add_widget_config_success(self, mocker, sample_widget_config_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_widget_config_data(widget="result-summary", weight=0),
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_add_widget_config_success(self, mocker, create_mock_response):
         """Test case for add_widget_config - successfully create a widget config"""
         api = WidgetConfigApi()
-        widget_data = sample_widget_config_data(widget="result-summary", weight=0)
-        mock_response = create_mock_response(widget_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_config = WidgetConfig(type="widget", widget="result-summary", weight=0, params={})
         result = api.add_widget_config(widget_config=widget_config)
@@ -36,16 +44,26 @@ class TestWidgetConfigApi:
         assert result.weight == 0
         api.api_client.call_api.assert_called_once()
 
-    def test_add_widget_config_with_params(self, mocker, sample_widget_config_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_widget_config_data(
+                    widget="result-aggregation",
+                    weight=5,
+                    params={"filter": "result:passed", "chart_type": "bar"},
+                ),
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_add_widget_config_with_params(self, mocker, create_mock_response):
         """Test case for add_widget_config with widget parameters"""
         api = WidgetConfigApi()
-        params = {"filter": "result:passed", "chart_type": "bar"}
-        widget_data = sample_widget_config_data(
-            widget="result-aggregation", weight=5, params=params
-        )
-        mock_response = create_mock_response(widget_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
+        params = {"filter": "result:passed", "chart_type": "bar"}
         widget_config = WidgetConfig(
             type="widget", widget="result-aggregation", weight=5, params=params
         )
@@ -54,22 +72,29 @@ class TestWidgetConfigApi:
         assert isinstance(result, WidgetConfig)
         assert result.params == params
 
-    def test_add_widget_config_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 401}],
+        indirect=True,
+    )
+    def test_add_widget_config_unauthorized(self, mocker, create_mock_response):
         """Test case for add_widget_config without authentication"""
         api = WidgetConfigApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_config = WidgetConfig(type="widget", widget="test", weight=0)
         with pytest.raises((ServiceException, Exception)):
             api.add_widget_config(widget_config=widget_config)
 
-    def test_add_widget_config_with_http_info(self, mocker, sample_widget_config_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_widget_config_data(), "status": 201}],
+        indirect=True,
+    )
+    def test_add_widget_config_with_http_info(self, mocker, create_mock_response):
         """Test case for add_widget_config_with_http_info"""
         api = WidgetConfigApi()
-        widget_data = sample_widget_config_data()
-        mock_response = create_mock_response(widget_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_config = WidgetConfig(type="widget", widget="test", weight=0)
         result = api.add_widget_config_with_http_info(widget_config=widget_config)
@@ -77,11 +102,15 @@ class TestWidgetConfigApi:
         assert result.status_code == 201
         assert isinstance(result.data, WidgetConfig)
 
-    def test_delete_widget_config_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 204}],
+        indirect=True,
+    )
+    def test_delete_widget_config_success(self, mocker, create_mock_response):
         """Test case for delete_widget_config - successfully delete a widget"""
         api = WidgetConfigApi()
-        mock_response = create_mock_response({}, status=204)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         api.delete_widget_config(id=widget_id)
@@ -89,33 +118,49 @@ class TestWidgetConfigApi:
         # 204 No Content typically returns None
         api.api_client.call_api.assert_called_once()
 
-    def test_delete_widget_config_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_delete_widget_config_not_found(self, mocker, create_mock_response):
         """Test case for delete_widget_config with non-existent widget"""
         api = WidgetConfigApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.delete_widget_config(id=widget_id)
 
-    def test_delete_widget_config_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 204}],
+        indirect=True,
+    )
+    def test_delete_widget_config_with_http_info(self, mocker, create_mock_response):
         """Test case for delete_widget_config_with_http_info"""
         api = WidgetConfigApi()
-        mock_response = create_mock_response({}, status=204)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.delete_widget_config_with_http_info(id=widget_id)
 
         assert result.status_code == 204
 
-    def test_get_widget_config_success(self, mocker, sample_widget_config_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_widget_config_data(widget="jenkins-heatmap"),
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_widget_config_success(self, mocker, create_mock_response):
         """Test case for get_widget_config - retrieve a single widget config"""
         api = WidgetConfigApi()
-        widget_data = sample_widget_config_data(widget="jenkins-heatmap")
-        mock_response = create_mock_response(widget_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_widget_config(id=widget_id)
@@ -123,22 +168,29 @@ class TestWidgetConfigApi:
         assert isinstance(result, WidgetConfig)
         assert result.widget == "jenkins-heatmap"
 
-    def test_get_widget_config_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_get_widget_config_not_found(self, mocker, create_mock_response):
         """Test case for get_widget_config with non-existent widget"""
         api = WidgetConfigApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.get_widget_config(id=widget_id)
 
-    def test_get_widget_config_with_http_info(self, mocker, sample_widget_config_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_widget_config_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_get_widget_config_with_http_info(self, mocker, create_mock_response):
         """Test case for get_widget_config_with_http_info"""
         api = WidgetConfigApi()
-        widget_data = sample_widget_config_data()
-        mock_response = create_mock_response(widget_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_widget_config_with_http_info(id=widget_id)
@@ -146,76 +198,115 @@ class TestWidgetConfigApi:
         assert result.status_code == 200
         assert isinstance(result.data, WidgetConfig)
 
-    def test_get_widget_config_list_success(
-        self, mocker, sample_widget_config_data, sample_pagination_data
-    ):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "widgets": [
+                        sample_widget_config_data(widget="result-summary", weight=0),
+                        sample_widget_config_data(widget="jenkins-heatmap", weight=1),
+                    ],
+                    "pagination": sample_pagination_data(total_items=2),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_widget_config_list_success(self, mocker, create_mock_response):
         """Test case for get_widget_config_list - retrieve list of widget configs"""
         api = WidgetConfigApi()
-        widget1 = sample_widget_config_data(widget="result-summary", weight=0)
-        widget2 = sample_widget_config_data(widget="jenkins-heatmap", weight=1)
-        pagination = sample_pagination_data(total_items=2)
-
-        response_data = {
-            "widgets": [widget1, widget2],
-            "pagination": pagination,
-        }
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_widget_config_list()
 
         assert isinstance(result, WidgetConfigList)
         assert len(result.widgets) == 2
 
-    def test_get_widget_config_list_with_filters(
-        self, mocker, sample_widget_config_data, sample_pagination_data
-    ):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "widgets": [sample_widget_config_data()],
+                    "pagination": sample_pagination_data(total_items=1),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_widget_config_list_with_filters(self, mocker, create_mock_response):
         """Test case for get_widget_config_list with filter parameters"""
         api = WidgetConfigApi()
-        widget1 = sample_widget_config_data()
-        pagination = sample_pagination_data(total_items=1)
-
-        response_data = {"widgets": [widget1], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_widget_config_list(filter=["widget_type=result-summary"])
 
         assert isinstance(result, WidgetConfigList)
         api.api_client.call_api.assert_called_once()
 
-    def test_get_widget_config_list_empty(self, mocker, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "widgets": [],
+                    "pagination": sample_pagination_data(total_items=0),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_widget_config_list_empty(self, mocker, create_mock_response):
         """Test case for get_widget_config_list with no widgets"""
         api = WidgetConfigApi()
-        pagination = sample_pagination_data(total_items=0)
-        response_data = {"widgets": [], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_widget_config_list()
 
         assert isinstance(result, WidgetConfigList)
         assert len(result.widgets) == 0
 
-    def test_get_widget_config_list_with_http_info(self, mocker, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "widgets": [],
+                    "pagination": sample_pagination_data(),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_widget_config_list_with_http_info(self, mocker, create_mock_response):
         """Test case for get_widget_config_list_with_http_info"""
         api = WidgetConfigApi()
-        pagination = sample_pagination_data()
-        response_data = {"widgets": [], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_widget_config_list_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, WidgetConfigList)
 
-    def test_update_widget_config_success(self, mocker, sample_widget_config_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_widget_config_data(widget="result-summary", weight=10),
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_update_widget_config_success(self, mocker, create_mock_response):
         """Test case for update_widget_config - successfully update a widget config"""
         api = WidgetConfigApi()
-        updated_data = sample_widget_config_data(widget="result-summary", weight=10)
-        mock_response = create_mock_response(updated_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         widget_config = WidgetConfig(type="widget", widget="result-summary", weight=10)
@@ -224,23 +315,30 @@ class TestWidgetConfigApi:
         assert isinstance(result, WidgetConfig)
         assert result.weight == 10
 
-    def test_update_widget_config_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_update_widget_config_not_found(self, mocker, create_mock_response):
         """Test case for update_widget_config with non-existent widget"""
         api = WidgetConfigApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         widget_config = WidgetConfig(type="widget", widget="test", weight=0)
         with pytest.raises(NotFoundException):
             api.update_widget_config(id=widget_id, widget_config=widget_config)
 
-    def test_update_widget_config_with_http_info(self, mocker, sample_widget_config_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_widget_config_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_update_widget_config_with_http_info(self, mocker, create_mock_response):
         """Test case for update_widget_config_with_http_info"""
         api = WidgetConfigApi()
-        widget_data = sample_widget_config_data()
-        mock_response = create_mock_response(widget_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         widget_config = WidgetConfig(type="widget", widget="test", weight=5)
@@ -249,11 +347,15 @@ class TestWidgetConfigApi:
         assert result.status_code == 200
         assert isinstance(result.data, WidgetConfig)
 
-    def test_update_widget_config_server_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "internal error"}, "status": 500}],
+        indirect=True,
+    )
+    def test_update_widget_config_server_error(self, mocker, create_mock_response):
         """Test case for update_widget_config with server error"""
         api = WidgetConfigApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         widget_id = "550e8400-e29b-41d4-a716-446655440000"
         widget_config = WidgetConfig(type="widget", widget="test", weight=0)

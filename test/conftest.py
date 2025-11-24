@@ -1,7 +1,6 @@
 """Test configuration and fixtures for ibutsu_client tests."""
 
 import json
-import uuid
 from typing import Any
 from unittest.mock import Mock
 
@@ -11,14 +10,14 @@ from ibutsu_client.rest import RESTResponse
 
 
 def _make_mock_response(
-    data: dict[str, Any] | list[Any] | None = None,
+    data: dict[str, Any] | list[Any] | bytes | None = None,
     status: int = 200,
     headers: dict[str, str] | None = None,
 ) -> RESTResponse:
     """Internal helper to create a mock REST response.
 
     Args:
-        data: The response data (will be JSON-encoded)
+        data: The response data (will be JSON-encoded unless bytes)
         status: HTTP status code
         headers: Response headers
 
@@ -34,7 +33,11 @@ def _make_mock_response(
     response = Mock(spec=RESTResponse)
     response.status = status
     response.headers = headers
-    response.data = json.dumps(data).encode("utf-8")
+    # Handle bytes data directly without JSON encoding
+    if isinstance(data, bytes):
+        response.data = data
+    else:
+        response.data = json.dumps(data).encode("utf-8")
     response.reason = "OK" if status < 400 else "Error"
 
     def mock_read():
@@ -56,12 +59,12 @@ def _make_mock_response(
 
 
 @pytest.fixture
-def mock_api_client(mocker):
+def mock_api_client():
     """Create a mock ApiClient for testing API methods."""
     from ibutsu_client.api_client import ApiClient
 
     client = ApiClient()
-    mocker.patch.object(client, "call_api")
+    client.call_api = Mock()
     return client
 
 
@@ -69,11 +72,13 @@ def mock_api_client(mocker):
 def create_mock_response(request):
     """Parametrized fixture for creating mock API responses.
 
-    Use with indirect parametrization:
+    Use with indirect parametrization. Call factory functions directly in the parametrize decorator:
 
     Example:
+        from test.utils import sample_project_data
+
         @pytest.mark.parametrize('create_mock_response', [
-            {'data': {'id': 'test'}, 'status': 200},
+            {'data': sample_project_data(name='test', title='Test'), 'status': 201},
             {'data': {'error': 'not found'}, 'status': 404},
         ], indirect=True)
         def test_api_method(self, mocker, create_mock_response):
@@ -84,7 +89,7 @@ def create_mock_response(request):
 
     Args:
         request.param: Dict with keys:
-            - data: Response data dict/list (required)
+            - data: Response data dict/list/bytes
             - status: HTTP status code (default: 200)
             - headers: Response headers dict (optional)
 
@@ -97,481 +102,3 @@ def create_mock_response(request):
     headers = params.get("headers", None)
 
     return _make_mock_response(data=data, status=status, headers=headers)
-
-
-# Common error response templates for parametrization
-COMMON_ERROR_RESPONSES = {
-    "not_found": {"data": {"error": "not found"}, "status": 404},
-    "unauthorized": {"data": {"error": "unauthorized"}, "status": 401},
-    "forbidden": {"data": {"error": "forbidden"}, "status": 403},
-    "bad_request": {"data": {"error": "bad request"}, "status": 400},
-    "conflict": {"data": {"error": "conflict"}, "status": 409},
-    "server_error": {"data": {"error": "internal error"}, "status": 500},
-    "no_content": {"data": {}, "status": 204},
-}
-
-
-# ==================== Test Data Factories ====================
-
-
-@pytest.fixture
-def sample_project_data():
-    """Factory function to create sample project data.
-
-    Returns:
-        A function that creates project data dictionaries with realistic values.
-    """
-
-    def _create_project(
-        project_id: str | None = None,
-        name: str = "test-project",
-        title: str = "Test Project",
-        owner_id: str | None = None,
-        group_id: str | None = None,
-    ) -> dict[str, Any]:
-        """Create a sample project data dictionary.
-
-        Args:
-            project_id: Project UUID (generated if not provided)
-            name: Machine name of the project
-            title: Human-readable title
-            owner_id: Owner UUID
-            group_id: Group UUID
-
-        Returns:
-            Dictionary with project data
-        """
-        if project_id is None:
-            project_id = str(uuid.uuid4())
-        if owner_id is None:
-            owner_id = str(uuid.uuid4())
-        if group_id is None:
-            group_id = str(uuid.uuid4())
-
-        return {
-            "id": project_id,
-            "name": name,
-            "title": title,
-            "owner_id": owner_id,
-            "group_id": group_id,
-        }
-
-    return _create_project
-
-
-@pytest.fixture
-def sample_run_data():
-    """Factory function to create sample test run data.
-
-    Returns:
-        A function that creates run data dictionaries with realistic values.
-    """
-
-    def _create_run(
-        run_id: str | None = None,
-        project_id: str | None = None,
-        created: str = "2024-01-15T10:00:00",
-        start_time: str = "2024-01-15T10:00:00",
-        duration: float = 120.5,
-        source: str = "pytest",
-        component: str = "api",
-        env: str = "test",
-        summary: dict[str, Any] | None = None,
-        metadata: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
-        """Create a sample run data dictionary.
-
-        Args:
-            run_id: Run UUID (generated if not provided)
-            project_id: Project UUID (generated if not provided)
-            created: ISO timestamp of creation
-            start_time: ISO timestamp of run start
-            duration: Duration in seconds
-            source: Source system identifier
-            component: Component under test
-            env: Test environment
-            summary: Summary statistics
-            metadata: Additional metadata
-
-        Returns:
-            Dictionary with run data
-        """
-        if run_id is None:
-            run_id = str(uuid.uuid4())
-        if project_id is None:
-            project_id = str(uuid.uuid4())
-        if summary is None:
-            summary = {"passed": 10, "failed": 2, "skipped": 1, "errors": 0, "xfailed": 0}
-        if metadata is None:
-            metadata = {"jenkins_build": "123", "branch": "main"}
-
-        return {
-            "id": run_id,
-            "project_id": project_id,
-            "created": created,
-            "start_time": start_time,
-            "duration": duration,
-            "source": source,
-            "component": component,
-            "env": env,
-            "summary": summary,
-            "metadata": metadata,
-        }
-
-    return _create_run
-
-
-@pytest.fixture
-def sample_result_data():
-    """Factory function to create sample test result data.
-
-    Returns:
-        A function that creates result data dictionaries with realistic values.
-    """
-
-    def _create_result(
-        result_id: str | None = None,
-        run_id: str | None = None,
-        project_id: str | None = None,
-        test_id: str = "test_example.py::TestClass::test_method",
-        start_time: str = "2024-01-15T10:00:00",
-        duration: float = 1.5,
-        result: str = "passed",
-        component: str = "api",
-        env: str = "test",
-        source: str = "pytest",
-        metadata: dict[str, Any] | None = None,
-        params: dict[str, Any] | None = None,
-    ) -> dict[str, Any]:
-        """Create a sample result data dictionary.
-
-        Args:
-            result_id: Result UUID (generated if not provided)
-            run_id: Associated run UUID (generated if not provided)
-            project_id: Project UUID (generated if not provided)
-            test_id: Test identifier
-            start_time: ISO timestamp
-            duration: Duration in seconds
-            result: Test result status (passed, failed, error, skipped, etc.)
-            component: Component under test
-            env: Test environment
-            source: Source system identifier
-            metadata: Additional metadata
-            params: Test parameters
-
-        Returns:
-            Dictionary with result data
-        """
-        if result_id is None:
-            result_id = str(uuid.uuid4())
-        if run_id is None:
-            run_id = str(uuid.uuid4())
-        if project_id is None:
-            project_id = str(uuid.uuid4())
-        if metadata is None:
-            metadata = {"test_file": "test_example.py", "line_number": 42}
-        if params is None:
-            params = {}
-
-        return {
-            "id": result_id,
-            "run_id": run_id,
-            "project_id": project_id,
-            "test_id": test_id,
-            "start_time": start_time,
-            "duration": duration,
-            "result": result,
-            "component": component,
-            "env": env,
-            "source": source,
-            "metadata": metadata,
-            "params": params,
-        }
-
-    return _create_result
-
-
-@pytest.fixture
-def sample_artifact_data():
-    """Factory function to create sample artifact data.
-
-    Returns:
-        A function that creates artifact data dictionaries with realistic values.
-    """
-
-    def _create_artifact(
-        artifact_id: str | None = None,
-        filename: str = "test_log.txt",
-        result_id: str | None = None,
-        run_id: str | None = None,
-        project_id: str | None = None,
-    ) -> dict[str, Any]:
-        """Create a sample artifact data dictionary.
-
-        Args:
-            artifact_id: Artifact UUID (generated if not provided)
-            filename: Artifact filename
-            result_id: Associated result UUID
-            run_id: Associated run UUID
-            project_id: Project UUID
-
-        Returns:
-            Dictionary with artifact data
-        """
-        if artifact_id is None:
-            artifact_id = str(uuid.uuid4())
-        if result_id is None:
-            result_id = str(uuid.uuid4())
-        if run_id is None:
-            run_id = str(uuid.uuid4())
-        if project_id is None:
-            project_id = str(uuid.uuid4())
-
-        return {
-            "id": artifact_id,
-            "filename": filename,
-            "result_id": result_id,
-            "run_id": run_id,
-            "project_id": project_id,
-        }
-
-    return _create_artifact
-
-
-@pytest.fixture
-def sample_pagination_data():
-    """Factory function to create sample pagination data.
-
-    Returns:
-        A function that creates pagination data for list responses.
-    """
-
-    def _create_pagination(
-        page: int = 1,
-        page_size: int = 25,
-        total_items: int = 100,
-        total_pages: int = 4,
-    ) -> dict[str, Any]:
-        """Create sample pagination data.
-
-        Args:
-            page: Current page number
-            page_size: Number of items per page
-            total_items: Total number of items
-            total_pages: Total number of pages
-
-        Returns:
-            Dictionary with pagination data
-        """
-        return {
-            "page": page,
-            "pageSize": page_size,
-            "totalItems": total_items,
-            "totalPages": total_pages,
-        }
-
-    return _create_pagination
-
-
-@pytest.fixture
-def sample_user_data():
-    """Factory function to create sample user data.
-
-    Returns:
-        A function that creates user data dictionaries with realistic values.
-    """
-
-    def _create_user(
-        user_id: str | None = None,
-        email: str = "test@example.com",
-        name: str = "Test User",
-        is_superadmin: bool = False,
-        is_active: bool = True,
-    ) -> dict[str, Any]:
-        """Create a sample user data dictionary.
-
-        Args:
-            user_id: User UUID (generated if not provided)
-            email: User email address
-            name: User full name
-            is_superadmin: Whether user is a superadmin
-            is_active: Whether user account is active
-
-        Returns:
-            Dictionary with user data
-        """
-        if user_id is None:
-            user_id = str(uuid.uuid4())
-
-        return {
-            "id": user_id,
-            "email": email,
-            "name": name,
-            "is_superadmin": is_superadmin,
-            "is_active": is_active,
-        }
-
-    return _create_user
-
-
-@pytest.fixture
-def sample_dashboard_data():
-    """Factory function to create sample dashboard data.
-
-    Returns:
-        A function that creates dashboard data dictionaries with realistic values.
-    """
-
-    def _create_dashboard(
-        dashboard_id: str | None = None,
-        title: str = "Test Dashboard",
-        project_id: str | None = None,
-        widgets: list[dict[str, Any]] | None = None,
-    ) -> dict[str, Any]:
-        """Create a sample dashboard data dictionary.
-
-        Args:
-            dashboard_id: Dashboard UUID (generated if not provided)
-            title: Dashboard title
-            project_id: Project UUID (generated if not provided)
-            widgets: List of widget configurations
-
-        Returns:
-            Dictionary with dashboard data
-        """
-        if dashboard_id is None:
-            dashboard_id = str(uuid.uuid4())
-        if project_id is None:
-            project_id = str(uuid.uuid4())
-        if widgets is None:
-            widgets = []
-
-        return {
-            "id": dashboard_id,
-            "title": title,
-            "project_id": project_id,
-            "widgets": widgets,
-        }
-
-    return _create_dashboard
-
-
-@pytest.fixture
-def sample_widget_config_data():
-    """Factory function to create sample widget configuration data.
-
-    Returns:
-        A function that creates widget config data dictionaries with realistic values.
-    """
-
-    def _create_widget_config(
-        widget_id: str | None = None,
-        widget: str = "result-summary",
-        config_type: str = "widget",
-        weight: int = 0,
-        params: dict[str, Any] | None = None,
-        title: str | None = None,
-    ) -> dict[str, Any]:
-        """Create a sample widget config data dictionary.
-
-        Args:
-            widget_id: Widget UUID (generated if not provided)
-            widget: Widget name to render
-            config_type: Type of config ("widget" or "view")
-            weight: Widget display weight/order
-            params: Widget parameters
-            title: Widget title
-
-        Returns:
-            Dictionary with widget config data
-        """
-        if widget_id is None:
-            widget_id = str(uuid.uuid4())
-        if params is None:
-            params = {}
-
-        return {
-            "id": widget_id,
-            "type": config_type,
-            "widget": widget,
-            "weight": weight,
-            "params": params,
-            "title": title,
-        }
-
-    return _create_widget_config
-
-
-@pytest.fixture
-def sample_group_data():
-    """Factory function to create sample group data.
-
-    Returns:
-        A function that creates group data dictionaries with realistic values.
-    """
-
-    def _create_group(
-        group_id: str | None = None,
-        name: str = "test-group",
-    ) -> dict[str, Any]:
-        """Create a sample group data dictionary.
-
-        Args:
-            group_id: Group UUID (generated if not provided)
-            name: Group name
-
-        Returns:
-            Dictionary with group data
-        """
-        if group_id is None:
-            group_id = str(uuid.uuid4())
-
-        return {
-            "id": group_id,
-            "name": name,
-        }
-
-    return _create_group
-
-
-@pytest.fixture
-def sample_token_data():
-    """Factory function to create sample token data.
-
-    Returns:
-        A function that creates token data dictionaries with realistic values.
-    """
-
-    def _create_token(
-        token_id: str | None = None,
-        user_id: str | None = None,
-        name: str = "test-token",
-        token: str = "test-token-value",
-        expires: str | None = "2025-12-31",
-    ) -> dict[str, Any]:
-        """Create a sample token data dictionary.
-
-        Args:
-            token_id: Token UUID (generated if not provided)
-            user_id: User UUID (generated if not provided)
-            name: Token name/identifier
-            token: The actual token string
-            expires: Expiration date
-
-        Returns:
-            Dictionary with token data
-        """
-        if token_id is None:
-            token_id = str(uuid.uuid4())
-        if user_id is None:
-            user_id = str(uuid.uuid4())
-
-        return {
-            "id": token_id,
-            "user_id": user_id,
-            "name": name,
-            "token": token,
-            "expires": expires,
-        }
-
-    return _create_token

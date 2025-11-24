@@ -3,6 +3,8 @@
 from urllib.parse import parse_qs, urlparse
 from uuid import uuid4
 
+import pytest
+
 from ibutsu_client.api.dashboard_api import DashboardApi
 from ibutsu_client.models.dashboard import Dashboard
 from ibutsu_client.models.dashboard_list import DashboardList
@@ -11,19 +13,30 @@ from ibutsu_client.models.dashboard_list import DashboardList
 class TestDashboardApi:
     """DashboardApi Tests"""
 
-    def test_add_dashboard(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "DASHBOARD_ID_PLACEHOLDER",
+                    "title": "New Dashboard",
+                    "description": "Description",
+                },
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_add_dashboard(self, mock_api_client, create_mock_response):
         """Test case for add_dashboard"""
         api = DashboardApi(api_client=mock_api_client)
         dashboard_id = uuid4()
-        dashboard_data = {
-            "id": str(dashboard_id),
-            "title": "New Dashboard",
-            "description": "Description",
-        }
 
-        # Mock the API response
-        mock_response = mock_rest_response(data=dashboard_data, status=201)
-        mock_api_client.call_api.return_value = mock_response
+        # Update the mock response with the actual dashboard_id
+        create_mock_response.data = create_mock_response.data.replace(
+            b"DASHBOARD_ID_PLACEHOLDER", str(dashboard_id).encode()
+        )
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         new_dashboard = Dashboard(title="New Dashboard", description="Description")
@@ -40,14 +53,18 @@ class TestDashboardApi:
         assert args[0] == "POST"
         assert args[1].endswith("/dashboard")
 
-    def test_delete_dashboard(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 200}],
+        indirect=True,
+    )
+    def test_delete_dashboard(self, mock_api_client, create_mock_response):
         """Test case for delete_dashboard"""
         api = DashboardApi(api_client=mock_api_client)
         dashboard_id = uuid4()
 
         # Mock the API response
-        mock_response = mock_rest_response(status=200)
-        mock_api_client.call_api.return_value = mock_response
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         api.delete_dashboard(id=dashboard_id)
@@ -58,18 +75,29 @@ class TestDashboardApi:
         assert args[0] == "DELETE"
         assert args[1].endswith(f"/dashboard/{dashboard_id}")
 
-    def test_get_dashboard(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "DASHBOARD_ID_PLACEHOLDER",
+                    "title": "My Dashboard",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_dashboard(self, mock_api_client, create_mock_response):
         """Test case for get_dashboard"""
         api = DashboardApi(api_client=mock_api_client)
         dashboard_id = uuid4()
-        dashboard_data = {
-            "id": str(dashboard_id),
-            "title": "My Dashboard",
-        }
 
-        # Mock the API response
-        mock_response = mock_rest_response(data=dashboard_data, status=200)
-        mock_api_client.call_api.return_value = mock_response
+        # Update the mock response with the actual dashboard_id
+        create_mock_response.data = create_mock_response.data.replace(
+            b"DASHBOARD_ID_PLACEHOLDER", str(dashboard_id).encode()
+        )
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         response = api.get_dashboard(id=dashboard_id)
@@ -85,21 +113,28 @@ class TestDashboardApi:
         assert args[0] == "GET"
         assert args[1].endswith(f"/dashboard/{dashboard_id}")
 
-    def test_get_dashboard_list(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "dashboards": [
+                        {"id": "00000000-0000-0000-0000-000000000001", "title": "Dashboard 1"},
+                        {"id": "00000000-0000-0000-0000-000000000002", "title": "Dashboard 2"},
+                    ],
+                    "pagination": {"page": 1, "pageSize": 25, "totalItems": 2, "totalPages": 1},
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_dashboard_list(self, mock_api_client, create_mock_response):
         """Test case for get_dashboard_list"""
         api = DashboardApi(api_client=mock_api_client)
 
-        dashboard_list_data = {
-            "dashboards": [
-                {"id": str(uuid4()), "title": "Dashboard 1"},
-                {"id": str(uuid4()), "title": "Dashboard 2"},
-            ],
-            "pagination": {"page": 1, "pageSize": 25, "totalItems": 2, "totalPages": 1},
-        }
-
         # Mock the API response
-        mock_response = mock_rest_response(data=dashboard_list_data, status=200)
-        mock_api_client.call_api.return_value = mock_response
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         response = api.get_dashboard_list(page=1, page_size=25)
@@ -121,18 +156,29 @@ class TestDashboardApi:
         assert query_params["page"] == ["1"]
         assert query_params["pageSize"] == ["25"]
 
-    def test_update_dashboard(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "DASHBOARD_ID_PLACEHOLDER",
+                    "title": "Updated Dashboard",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_update_dashboard(self, mock_api_client, create_mock_response):
         """Test case for update_dashboard"""
         api = DashboardApi(api_client=mock_api_client)
         dashboard_id = uuid4()
-        dashboard_data = {
-            "id": str(dashboard_id),
-            "title": "Updated Dashboard",
-        }
 
-        # Mock the API response
-        mock_response = mock_rest_response(data=dashboard_data, status=200)
-        mock_api_client.call_api.return_value = mock_response
+        # Update the mock response with the actual dashboard_id
+        create_mock_response.data = create_mock_response.data.replace(
+            b"DASHBOARD_ID_PLACEHOLDER", str(dashboard_id).encode()
+        )
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         update_dashboard = Dashboard(title="Updated Dashboard")

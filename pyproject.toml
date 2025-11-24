@@ -38,6 +38,7 @@ Tracker = "https://github.com/ibutsu/ibutsu-client-python/issues"
 test = [
   "pytest",
   "pytest-cov",
+  "pytest-mock",
   "coverage[toml]",
 ]
 dev = [
