@@ -15,26 +15,26 @@ from ibutsu_client.api.health_api import HealthApi
 from ibutsu_client.exceptions import ServiceException
 from ibutsu_client.models.health import Health
 from ibutsu_client.models.health_info import HealthInfo
-from test import create_mock_response
 
 
 class TestHealthApi:
     """HealthApi unit tests"""
 
-    def test_get_database_health(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"status": "ok", "message": "Database is healthy"}, "status": 200}],
+        indirect=True,
+    )
+    def test_get_database_health(self, mocker, create_mock_response):
         """Test case for get_database_health
 
         Get a health report for the database
         """
-        # Mock response data
-        response_data = {"status": "ok", "message": "Database is healthy"}
-
         # Create API instance
         api = HealthApi()
 
         # Mock the call_api method
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         # Call the method
         result = api.get_database_health()
@@ -47,13 +47,15 @@ class TestHealthApi:
         # Verify call_api was called
         api.api_client.call_api.assert_called_once()
 
-    def test_get_database_health_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"status": "error", "message": "Database connection failed"}, "status": 500}],
+        indirect=True,
+    )
+    def test_get_database_health_error(self, mocker, create_mock_response):
         """Test case for get_database_health with error response"""
-        response_data = {"status": "error", "message": "Database connection failed"}
-
         api = HealthApi()
-        mock_response = create_mock_response(response_data, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         # 500 errors raise ServiceException
         with pytest.raises(ServiceException) as exc_info:
@@ -62,16 +64,18 @@ class TestHealthApi:
         assert exc_info.value.status == 500
         assert "error" in str(exc_info.value.body).lower()
 
-    def test_get_health(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"status": "ok", "message": "Service is healthy"}, "status": 200}],
+        indirect=True,
+    )
+    def test_get_health(self, mocker, create_mock_response):
         """Test case for get_health
 
         Get a general health report
         """
-        response_data = {"status": "ok", "message": "Service is healthy"}
-
         api = HealthApi()
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_health()
 
@@ -79,20 +83,27 @@ class TestHealthApi:
         assert result.status == "ok"
         assert result.message == "Service is healthy"
 
-    def test_get_health_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "frontend": "https://ibutsu.example.com",
+                    "backend": "https://api.ibutsu.example.com",
+                    "api_ui": "https://api.ibutsu.example.com/docs",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_health_info(self, mocker, create_mock_response):
         """Test case for get_health_info
 
         Get information about the server
         """
-        response_data = {
-            "frontend": "https://ibutsu.example.com",
-            "backend": "https://api.ibutsu.example.com",
-            "api_ui": "https://api.ibutsu.example.com/docs",
-        }
-
         api = HealthApi()
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_health_info()
 
@@ -101,17 +112,24 @@ class TestHealthApi:
         assert result.backend == "https://api.ibutsu.example.com"
         assert result.api_ui == "https://api.ibutsu.example.com/docs"
 
-    def test_get_health_info_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "frontend": "https://ibutsu.example.com",
+                    "backend": "https://api.ibutsu.example.com",
+                    "api_ui": "https://api.ibutsu.example.com/docs",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_health_info_with_http_info(self, mocker, create_mock_response):
         """Test case for get_health_info_with_http_info"""
-        response_data = {
-            "frontend": "https://ibutsu.example.com",
-            "backend": "https://api.ibutsu.example.com",
-            "api_ui": "https://api.ibutsu.example.com/docs",
-        }
-
         api = HealthApi()
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_health_info_with_http_info()
 

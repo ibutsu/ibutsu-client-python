@@ -16,7 +16,6 @@ from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.login_config import LoginConfig
 from ibutsu_client.models.login_support import LoginSupport
 from ibutsu_client.models.login_token import LoginToken
-from test import create_mock_response
 
 
 class TestLoginApi:
@@ -37,11 +36,15 @@ class TestLoginApi:
         assert result is None
         api.api_client.call_api.assert_called_once()
 
-    def test_activate_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_activate_not_found(self, mocker, create_mock_response):
         """Test case for activate with invalid activation code"""
         api = LoginApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises(NotFoundException):
             api.activate(activation_code="invalid-code")
@@ -74,11 +77,15 @@ class TestLoginApi:
         assert result is None
         api.api_client.call_api.assert_called_once()
 
-    def test_auth_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "invalid provider"}, "status": 400}],
+        indirect=True,
+    )
+    def test_auth_unauthorized(self, mocker, create_mock_response):
         """Test case for auth with invalid provider"""
         api = LoginApi()
-        mock_response = create_mock_response({"error": "invalid provider"}, status=400)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises(
             (ServiceException, Exception)
@@ -99,42 +106,61 @@ class TestLoginApi:
         assert result.status_code == 302
         assert result.data is None
 
-    def test_config_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "client_id": "test-client-id",
+                    "redirect_uri": "https://example.com/callback",
+                    "scope": "openid profile email",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_config_success(self, mocker, create_mock_response):
         """Test case for config - get login configuration"""
         api = LoginApi()
-        response_data = {
-            "client_id": "test-client-id",
-            "redirect_uri": "https://example.com/callback",
-            "scope": "openid profile email",
-        }
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.config(provider="oidc")
         assert isinstance(result, LoginConfig)
         assert result.client_id == "test-client-id"
         assert result.redirect_uri == "https://example.com/callback"
 
-    def test_config_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"client_id": "test-client"}, "status": 200}],
+        indirect=True,
+    )
+    def test_config_with_http_info(self, mocker, create_mock_response):
         """Test case for config_with_http_info"""
         api = LoginApi()
-        response_data = {"client_id": "test-client"}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.config_with_http_info(provider="oidc")
         assert result.status_code == 200
         assert isinstance(result.data, LoginConfig)
 
-    def test_login_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "token": "jwt-token-here",
+                    "refresh_token": "refresh-token-here",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_login_success(self, mocker, create_mock_response):
         """Test case for login with valid credentials"""
         api = LoginApi()
-        response_data = {
-            "token": "jwt-token-here",
-            "refresh_token": "refresh-token-here",
-        }
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.credentials import Credentials
 
@@ -143,11 +169,15 @@ class TestLoginApi:
         assert isinstance(result, LoginToken)
         assert result.token == "jwt-token-here"
 
-    def test_login_invalid_credentials(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "invalid credentials"}, "status": 401}],
+        indirect=True,
+    )
+    def test_login_invalid_credentials(self, mocker, create_mock_response):
         """Test case for login with invalid credentials"""
         api = LoginApi()
-        mock_response = create_mock_response({"error": "invalid credentials"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.credentials import Credentials
 
@@ -155,12 +185,15 @@ class TestLoginApi:
         with pytest.raises((ServiceException, Exception)):
             api.login(credentials=credentials)
 
-    def test_login_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"token": "test-token"}, "status": 200}],
+        indirect=True,
+    )
+    def test_login_with_http_info(self, mocker, create_mock_response):
         """Test case for login_with_http_info"""
         api = LoginApi()
-        response_data = {"token": "test-token"}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.credentials import Credentials
 
@@ -169,11 +202,15 @@ class TestLoginApi:
         assert result.status_code == 200
         assert isinstance(result.data, LoginToken)
 
-    def test_recover_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 200}],
+        indirect=True,
+    )
+    def test_recover_success(self, mocker, create_mock_response):
         """Test case for recover - initiate password recovery"""
         api = LoginApi()
-        mock_response = create_mock_response({}, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_recovery import AccountRecovery
 
@@ -182,11 +219,15 @@ class TestLoginApi:
         # Method should complete without raising exception
         api.api_client.call_api.assert_called_once()
 
-    def test_recover_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "user not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_recover_not_found(self, mocker, create_mock_response):
         """Test case for recover with non-existent email"""
         api = LoginApi()
-        mock_response = create_mock_response({"error": "user not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_recovery import AccountRecovery
 
@@ -194,11 +235,15 @@ class TestLoginApi:
         with pytest.raises(NotFoundException):
             api.recover(account_recovery=recovery_data)
 
-    def test_recover_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 200}],
+        indirect=True,
+    )
+    def test_recover_with_http_info(self, mocker, create_mock_response):
         """Test case for recover_with_http_info"""
         api = LoginApi()
-        mock_response = create_mock_response({}, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_recovery import AccountRecovery
 
@@ -206,12 +251,15 @@ class TestLoginApi:
         result = api.recover_with_http_info(account_recovery=recovery_data)
         assert result.status_code == 200
 
-    def test_register_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"message": "Registration successful"}, "status": 201}],
+        indirect=True,
+    )
+    def test_register_success(self, mocker, create_mock_response):
         """Test case for register with valid registration data"""
         api = LoginApi()
-        response_data = {"message": "Registration successful"}
-        mock_response = create_mock_response(response_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_registration import AccountRegistration
 
@@ -221,11 +269,15 @@ class TestLoginApi:
         api.register(account_registration=registration)
         api.api_client.call_api.assert_called_once()
 
-    def test_register_conflict(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "email already exists"}, "status": 409}],
+        indirect=True,
+    )
+    def test_register_conflict(self, mocker, create_mock_response):
         """Test case for register with existing email"""
         api = LoginApi()
-        mock_response = create_mock_response({"error": "email already exists"}, status=409)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_registration import AccountRegistration
 
@@ -235,12 +287,15 @@ class TestLoginApi:
         with pytest.raises((ServiceException, Exception)):  # Should raise conflict exception
             api.register(account_registration=registration)
 
-    def test_register_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"message": "success"}, "status": 201}],
+        indirect=True,
+    )
+    def test_register_with_http_info(self, mocker, create_mock_response):
         """Test case for register_with_http_info"""
         api = LoginApi()
-        response_data = {"message": "success"}
-        mock_response = create_mock_response(response_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_registration import AccountRegistration
 
@@ -248,11 +303,15 @@ class TestLoginApi:
         result = api.register_with_http_info(account_registration=registration)
         assert result.status_code == 201
 
-    def test_reset_password_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 200}],
+        indirect=True,
+    )
+    def test_reset_password_success(self, mocker, create_mock_response):
         """Test case for reset_password with valid reset data"""
         api = LoginApi()
-        mock_response = create_mock_response({}, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_reset import AccountReset
 
@@ -260,11 +319,15 @@ class TestLoginApi:
         api.reset_password(account_reset=reset_data)
         api.api_client.call_api.assert_called_once()
 
-    def test_reset_password_invalid_code(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "invalid reset code"}, "status": 400}],
+        indirect=True,
+    )
+    def test_reset_password_invalid_code(self, mocker, create_mock_response):
         """Test case for reset_password with invalid reset code"""
         api = LoginApi()
-        mock_response = create_mock_response({"error": "invalid reset code"}, status=400)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_reset import AccountReset
 
@@ -272,11 +335,15 @@ class TestLoginApi:
         with pytest.raises((ServiceException, Exception)):
             api.reset_password(account_reset=reset_data)
 
-    def test_reset_password_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 200}],
+        indirect=True,
+    )
+    def test_reset_password_with_http_info(self, mocker, create_mock_response):
         """Test case for reset_password_with_http_info"""
         api = LoginApi()
-        mock_response = create_mock_response({}, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         from ibutsu_client.models.account_reset import AccountReset
 
@@ -284,41 +351,56 @@ class TestLoginApi:
         result = api.reset_password_with_http_info(account_reset=reset_data)
         assert result.status_code == 200
 
-    def test_support_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "user": True,
+                    "keycloak": True,
+                    "google": False,
+                    "github": False,
+                    "facebook": False,
+                    "gitlab": False,
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_support_success(self, mocker, create_mock_response):
         """Test case for support - get support configuration"""
         api = LoginApi()
-        response_data = {
-            "user": True,
-            "keycloak": True,
-            "google": False,
-            "github": False,
-            "facebook": False,
-            "gitlab": False,
-        }
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.support()
         assert isinstance(result, LoginSupport)
         assert result.user is True
         assert result.keycloak is True
 
-    def test_support_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"user": True, "google": True}, "status": 200}],
+        indirect=True,
+    )
+    def test_support_with_http_info(self, mocker, create_mock_response):
         """Test case for support_with_http_info"""
         api = LoginApi()
-        response_data = {"user": True, "google": True}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.support_with_http_info()
         assert result.status_code == 200
         assert isinstance(result.data, LoginSupport)
 
-    def test_support_server_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "internal error"}, "status": 500}],
+        indirect=True,
+    )
+    def test_support_server_error(self, mocker, create_mock_response):
         """Test case for support with server error"""
         api = LoginApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises(ServiceException):
             api.support()

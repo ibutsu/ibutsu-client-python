@@ -14,23 +14,30 @@ import pytest
 from ibutsu_client.api.import_api import ImportApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.model_import import ModelImport
-from test import create_mock_response
 
 
 class TestImportApi:
     """ImportApi comprehensive tests"""
 
-    def test_add_import_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "test_results.xml",
+                    "format": "junit",
+                    "status": "pending",
+                },
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_add_import_success(self, mocker, create_mock_response):
         """Test case for add_import - successfully import a file"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "test_results.xml",
-            "format": "junit",
-            "status": "pending",
-        }
-        mock_response = create_mock_response(import_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         # Mock file upload - import_file as tuple (filename, content)
         result = api.add_import(
@@ -42,18 +49,26 @@ class TestImportApi:
         assert result.format == "junit"
         api.api_client.call_api.assert_called_once()
 
-    def test_add_import_with_project(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "results.xml",
+                    "format": "junit",
+                    "project": "test-project",
+                    "status": "pending",
+                },
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_add_import_with_project(self, mocker, create_mock_response):
         """Test case for add_import with project parameter"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "results.xml",
-            "format": "junit",
-            "project": "test-project",
-            "status": "pending",
-        }
-        mock_response = create_mock_response(import_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.add_import(
             import_file=("results.xml", b"<xml>test</xml>"),
@@ -64,17 +79,25 @@ class TestImportApi:
         assert result.filename == "results.xml"
         api.api_client.call_api.assert_called_once()
 
-    def test_add_import_archive_format(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "archive.tar.gz",
+                    "format": "ibutsu",
+                    "status": "pending",
+                },
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_add_import_archive_format(self, mocker, create_mock_response):
         """Test case for add_import with Ibutsu archive format"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "archive.tar.gz",
-            "format": "ibutsu",
-            "status": "pending",
-        }
-        mock_response = create_mock_response(import_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.add_import(
             import_file=("archive.tar.gz", b"binary archive content"),
@@ -83,34 +106,50 @@ class TestImportApi:
         assert isinstance(result, ModelImport)
         assert result.format == "ibutsu"
 
-    def test_add_import_invalid_file(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "invalid file format"}, "status": 400}],
+        indirect=True,
+    )
+    def test_add_import_invalid_file(self, mocker, create_mock_response):
         """Test case for add_import with invalid file"""
         api = ImportApi()
-        mock_response = create_mock_response({"error": "invalid file format"}, status=400)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises((ServiceException, Exception)):
             api.add_import(import_file=("invalid.txt", b"invalid content"))
 
-    def test_add_import_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 401}],
+        indirect=True,
+    )
+    def test_add_import_unauthorized(self, mocker, create_mock_response):
         """Test case for add_import without authentication"""
         api = ImportApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises((ServiceException, Exception)):
             api.add_import(import_file=("test.xml", b"content"))
 
-    def test_add_import_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "test.xml",
+                    "status": "pending",
+                },
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_add_import_with_http_info(self, mocker, create_mock_response):
         """Test case for add_import_with_http_info"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "test.xml",
-            "status": "pending",
-        }
-        mock_response = create_mock_response(import_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.add_import_with_http_info(
             import_file=("test.xml", b"content"),
@@ -119,18 +158,26 @@ class TestImportApi:
         assert result.status_code == 201
         assert isinstance(result.data, ModelImport)
 
-    def test_get_import_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "test_results.xml",
+                    "format": "junit",
+                    "status": "done",
+                    "run_id": "660e8400-e29b-41d4-a716-446655440000",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_import_success(self, mocker, create_mock_response):
         """Test case for get_import - retrieve import status"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "test_results.xml",
-            "format": "junit",
-            "status": "done",
-            "run_id": "660e8400-e29b-41d4-a716-446655440000",
-        }
-        mock_response = create_mock_response(import_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         import_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_import(id=import_id)
@@ -139,16 +186,24 @@ class TestImportApi:
         assert result.status == "done"
         assert result.run_id is not None
 
-    def test_get_import_pending_status(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "test.xml",
+                    "status": "pending",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_import_pending_status(self, mocker, create_mock_response):
         """Test case for get_import with pending status"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "test.xml",
-            "status": "pending",
-        }
-        mock_response = create_mock_response(import_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         import_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_import(id=import_id)
@@ -156,17 +211,25 @@ class TestImportApi:
         assert isinstance(result, ModelImport)
         assert result.status == "pending"
 
-    def test_get_import_running_status(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "test.xml",
+                    "status": "running",
+                    "format": "junit",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_import_running_status(self, mocker, create_mock_response):
         """Test case for get_import with running status"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "test.xml",
-            "status": "running",
-            "format": "junit",
-        }
-        mock_response = create_mock_response(import_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         import_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_import(id=import_id)
@@ -174,26 +237,38 @@ class TestImportApi:
         assert isinstance(result, ModelImport)
         assert result.status == "running"
 
-    def test_get_import_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_get_import_not_found(self, mocker, create_mock_response):
         """Test case for get_import with non-existent import"""
         api = ImportApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         import_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.get_import(id=import_id)
 
-    def test_get_import_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "filename": "test.xml",
+                    "status": "done",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_import_with_http_info(self, mocker, create_mock_response):
         """Test case for get_import_with_http_info"""
         api = ImportApi()
-        import_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "filename": "test.xml",
-            "status": "done",
-        }
-        mock_response = create_mock_response(import_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         import_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_import_with_http_info(id=import_id)
@@ -201,11 +276,15 @@ class TestImportApi:
         assert result.status_code == 200
         assert isinstance(result.data, ModelImport)
 
-    def test_get_import_server_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "internal error"}, "status": 500}],
+        indirect=True,
+    )
+    def test_get_import_server_error(self, mocker, create_mock_response):
         """Test case for get_import with server error"""
         api = ImportApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         import_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(ServiceException):

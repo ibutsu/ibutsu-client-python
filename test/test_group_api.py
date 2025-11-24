@@ -15,18 +15,21 @@ from ibutsu_client.api.group_api import GroupApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
 from ibutsu_client.models.group import Group
 from ibutsu_client.models.group_list import GroupList
-from test import create_mock_response
+from test.utils import sample_group_data, sample_pagination_data
 
 
 class TestGroupApi:
     """GroupApi comprehensive tests"""
 
-    def test_add_group_success(self, mocker, sample_group_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_group_data(name="engineering-team"), "status": 201}],
+        indirect=True,
+    )
+    def test_add_group_success(self, mocker, create_mock_response):
         """Test case for add_group - successfully create a new group"""
         api = GroupApi()
-        group_data = sample_group_data(name="engineering-team")
-        mock_response = create_mock_response(group_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group = Group(name="engineering-team")
         result = api.add_group(group=group)
@@ -35,32 +38,43 @@ class TestGroupApi:
         assert result.name == "engineering-team"
         api.api_client.call_api.assert_called_once()
 
-    def test_add_group_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 401}],
+        indirect=True,
+    )
+    def test_add_group_unauthorized(self, mocker, create_mock_response):
         """Test case for add_group without proper authentication"""
         api = GroupApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group = Group(name="test-group")
         with pytest.raises((ServiceException, Exception)):
             api.add_group(group=group)
 
-    def test_add_group_conflict(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "group already exists"}, "status": 409}],
+        indirect=True,
+    )
+    def test_add_group_conflict(self, mocker, create_mock_response):
         """Test case for add_group with existing group name"""
         api = GroupApi()
-        mock_response = create_mock_response({"error": "group already exists"}, status=409)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group = Group(name="existing-group")
         with pytest.raises((ServiceException, Exception)):
             api.add_group(group=group)
 
-    def test_add_group_with_http_info(self, mocker, sample_group_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_group_data(name="new-team"), "status": 201}],
+        indirect=True,
+    )
+    def test_add_group_with_http_info(self, mocker, create_mock_response):
         """Test case for add_group_with_http_info"""
         api = GroupApi()
-        group_data = sample_group_data(name="new-team")
-        mock_response = create_mock_response(group_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group = Group(name="new-team")
         result = api.add_group_with_http_info(group=group)
@@ -68,12 +82,15 @@ class TestGroupApi:
         assert result.status_code == 201
         assert isinstance(result.data, Group)
 
-    def test_get_group_success(self, mocker, sample_group_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_group_data(name="qa-team"), "status": 200}],
+        indirect=True,
+    )
+    def test_get_group_success(self, mocker, create_mock_response):
         """Test case for get_group - retrieve a single group"""
         api = GroupApi()
-        group_data = sample_group_data(name="qa-team")
-        mock_response = create_mock_response(group_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_group(id=group_id)
@@ -81,22 +98,29 @@ class TestGroupApi:
         assert isinstance(result, Group)
         assert result.name == "qa-team"
 
-    def test_get_group_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_get_group_not_found(self, mocker, create_mock_response):
         """Test case for get_group with non-existent group"""
         api = GroupApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.get_group(id=group_id)
 
-    def test_get_group_with_http_info(self, mocker, sample_group_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_group_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_get_group_with_http_info(self, mocker, create_mock_response):
         """Test case for get_group_with_http_info"""
         api = GroupApi()
-        group_data = sample_group_data()
-        mock_response = create_mock_response(group_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_group_with_http_info(id=group_id)
@@ -104,71 +128,110 @@ class TestGroupApi:
         assert result.status_code == 200
         assert isinstance(result.data, Group)
 
-    def test_get_group_list_success(self, mocker, sample_group_data, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "groups": [
+                        sample_group_data(name="team-alpha"),
+                        sample_group_data(name="team-beta"),
+                    ],
+                    "pagination": sample_pagination_data(total_items=2),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_group_list_success(self, mocker, create_mock_response):
         """Test case for get_group_list - retrieve list of groups"""
         api = GroupApi()
-        group1 = sample_group_data(name="team-alpha")
-        group2 = sample_group_data(name="team-beta")
-        pagination = sample_pagination_data(total_items=2)
-
-        response_data = {"groups": [group1, group2], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_group_list()
 
         assert isinstance(result, GroupList)
         assert len(result.groups) == 2
 
-    def test_get_group_list_with_pagination(
-        self, mocker, sample_group_data, sample_pagination_data
-    ):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "groups": [sample_group_data()],
+                    "pagination": sample_pagination_data(page=2, page_size=10),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_group_list_with_pagination(self, mocker, create_mock_response):
         """Test case for get_group_list with pagination parameters"""
         api = GroupApi()
-        group1 = sample_group_data()
-        pagination = sample_pagination_data(page=2, page_size=10)
-
-        response_data = {"groups": [group1], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_group_list(page=2, page_size=10)
 
         assert isinstance(result, GroupList)
         api.api_client.call_api.assert_called_once()
 
-    def test_get_group_list_empty(self, mocker, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "groups": [],
+                    "pagination": sample_pagination_data(total_items=0),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_group_list_empty(self, mocker, create_mock_response):
         """Test case for get_group_list with no groups"""
         api = GroupApi()
-        pagination = sample_pagination_data(total_items=0)
-        response_data = {"groups": [], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_group_list()
 
         assert isinstance(result, GroupList)
         assert len(result.groups) == 0
 
-    def test_get_group_list_with_http_info(self, mocker, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "groups": [],
+                    "pagination": sample_pagination_data(),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_group_list_with_http_info(self, mocker, create_mock_response):
         """Test case for get_group_list_with_http_info"""
         api = GroupApi()
-        pagination = sample_pagination_data()
-        response_data = {"groups": [], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_group_list_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, GroupList)
 
-    def test_update_group_success(self, mocker, sample_group_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_group_data(name="updated-team-name"), "status": 200}],
+        indirect=True,
+    )
+    def test_update_group_success(self, mocker, create_mock_response):
         """Test case for update_group - successfully update a group"""
         api = GroupApi()
-        updated_data = sample_group_data(name="updated-team-name")
-        mock_response = create_mock_response(updated_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group_id = "550e8400-e29b-41d4-a716-446655440000"
         group = Group(name="updated-team-name")
@@ -177,23 +240,30 @@ class TestGroupApi:
         assert isinstance(result, Group)
         assert result.name == "updated-team-name"
 
-    def test_update_group_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_update_group_not_found(self, mocker, create_mock_response):
         """Test case for update_group with non-existent group"""
         api = GroupApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group_id = "550e8400-e29b-41d4-a716-446655440000"
         group = Group(name="test-group")
         with pytest.raises(NotFoundException):
             api.update_group(id=group_id, group=group)
 
-    def test_update_group_with_http_info(self, mocker, sample_group_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_group_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_update_group_with_http_info(self, mocker, create_mock_response):
         """Test case for update_group_with_http_info"""
         api = GroupApi()
-        group_data = sample_group_data()
-        mock_response = create_mock_response(group_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group_id = "550e8400-e29b-41d4-a716-446655440000"
         group = Group(name="test-group")
@@ -202,11 +272,15 @@ class TestGroupApi:
         assert result.status_code == 200
         assert isinstance(result.data, Group)
 
-    def test_update_group_server_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "internal error"}, "status": 500}],
+        indirect=True,
+    )
+    def test_update_group_server_error(self, mocker, create_mock_response):
         """Test case for update_group with server error"""
         api = GroupApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         group_id = "550e8400-e29b-41d4-a716-446655440000"
         group = Group(name="test-group")

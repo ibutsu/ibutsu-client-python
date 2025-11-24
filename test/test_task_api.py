@@ -13,22 +13,29 @@ import pytest
 
 from ibutsu_client.api.task_api import TaskApi
 from ibutsu_client.exceptions import NotFoundException, ServiceException
-from test import create_mock_response
 
 
 class TestTaskApi:
     """TaskApi comprehensive tests"""
 
-    def test_get_task_pending(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "status": "pending",
+                    "task_type": "export",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_task_pending(self, mocker, create_mock_response):
         """Test case for get_task with pending status"""
         api = TaskApi()
-        task_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "status": "pending",
-            "task_type": "export",
-        }
-        mock_response = create_mock_response(task_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_task(id=task_id)
@@ -38,17 +45,25 @@ class TestTaskApi:
         assert result["task_type"] == "export"
         api.api_client.call_api.assert_called_once()
 
-    def test_get_task_running(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "status": "running",
+                    "task_type": "bulk_update",
+                    "progress": 45,
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_task_running(self, mocker, create_mock_response):
         """Test case for get_task with running status"""
         api = TaskApi()
-        task_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "status": "running",
-            "task_type": "bulk_update",
-            "progress": 45,
-        }
-        mock_response = create_mock_response(task_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_task(id=task_id)
@@ -57,20 +72,28 @@ class TestTaskApi:
         assert result["status"] == "running"
         assert result["progress"] == 45
 
-    def test_get_task_completed(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "status": "completed",
+                    "task_type": "export",
+                    "result": {
+                        "file_url": "https://example.com/exports/results.tar.gz",
+                        "file_size": 1024000,
+                    },
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_task_completed(self, mocker, create_mock_response):
         """Test case for get_task with completed status"""
         api = TaskApi()
-        task_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "status": "completed",
-            "task_type": "export",
-            "result": {
-                "file_url": "https://example.com/exports/results.tar.gz",
-                "file_size": 1024000,
-            },
-        }
-        mock_response = create_mock_response(task_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_task(id=task_id)
@@ -79,17 +102,25 @@ class TestTaskApi:
         assert result["status"] == "completed"
         assert result["result"]["file_url"] == "https://example.com/exports/results.tar.gz"
 
-    def test_get_task_failed(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "status": "failed",
+                    "task_type": "bulk_update",
+                    "error": "Database connection timeout",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_task_failed(self, mocker, create_mock_response):
         """Test case for get_task with failed status"""
         api = TaskApi()
-        task_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "status": "failed",
-            "task_type": "bulk_update",
-            "error": "Database connection timeout",
-        }
-        mock_response = create_mock_response(task_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_task(id=task_id)
@@ -98,25 +129,37 @@ class TestTaskApi:
         assert result["status"] == "failed"
         assert result["error"] == "Database connection timeout"
 
-    def test_get_task_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "task not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_get_task_not_found(self, mocker, create_mock_response):
         """Test case for get_task with non-existent task"""
         api = TaskApi()
-        mock_response = create_mock_response({"error": "task not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.get_task(id=task_id)
 
-    def test_get_task_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "status": "completed",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_task_with_http_info(self, mocker, create_mock_response):
         """Test case for get_task_with_http_info"""
         api = TaskApi()
-        task_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "status": "completed",
-        }
-        mock_response = create_mock_response(task_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_task_with_http_info(id=task_id)
@@ -124,40 +167,56 @@ class TestTaskApi:
         assert result.status_code == 200
         assert result.data is not None
 
-    def test_get_task_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 401}],
+        indirect=True,
+    )
+    def test_get_task_unauthorized(self, mocker, create_mock_response):
         """Test case for get_task without authentication"""
         api = TaskApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises((ServiceException, Exception)):
             api.get_task(id=task_id)
 
-    def test_get_task_server_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "internal error"}, "status": 500}],
+        indirect=True,
+    )
+    def test_get_task_server_error(self, mocker, create_mock_response):
         """Test case for get_task with server error"""
         api = TaskApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(ServiceException):
             api.get_task(id=task_id)
 
-    def test_get_task_export_type(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "status": "completed",
+                    "task_type": "export",
+                    "result": {
+                        "format": "json",
+                        "records_exported": 1000,
+                    },
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_task_export_type(self, mocker, create_mock_response):
         """Test case for get_task with export task type"""
         api = TaskApi()
-        task_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "status": "completed",
-            "task_type": "export",
-            "result": {
-                "format": "json",
-                "records_exported": 1000,
-            },
-        }
-        mock_response = create_mock_response(task_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_task(id=task_id)
@@ -165,19 +224,27 @@ class TestTaskApi:
         assert result["task_type"] == "export"
         assert result["result"]["records_exported"] == 1000
 
-    def test_get_task_bulk_update_type(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "550e8400-e29b-41d4-a716-446655440000",
+                    "status": "completed",
+                    "task_type": "bulk_update",
+                    "result": {
+                        "updated_count": 150,
+                    },
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_task_bulk_update_type(self, mocker, create_mock_response):
         """Test case for get_task with bulk_update task type"""
         api = TaskApi()
-        task_data = {
-            "id": "550e8400-e29b-41d4-a716-446655440000",
-            "status": "completed",
-            "task_type": "bulk_update",
-            "result": {
-                "updated_count": 150,
-            },
-        }
-        mock_response = create_mock_response(task_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         task_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_task(id=task_id)

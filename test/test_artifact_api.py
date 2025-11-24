@@ -2,6 +2,8 @@
 
 from uuid import uuid4
 
+import pytest
+
 from ibutsu_client.api.artifact_api import ArtifactApi
 from ibutsu_client.models.artifact import Artifact
 from ibutsu_client.models.artifact_list import ArtifactList
@@ -10,21 +12,36 @@ from ibutsu_client.models.artifact_list import ArtifactList
 class TestArtifactApi:
     """ArtifactApi Tests"""
 
-    def test_get_artifact_list(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "artifacts": [
+                        {
+                            "id": "00000000-0000-0000-0000-000000000001",
+                            "filename": "test1.txt",
+                            "mime_type": "text/plain",
+                        },
+                        {
+                            "id": "00000000-0000-0000-0000-000000000002",
+                            "filename": "test2.png",
+                            "mime_type": "image/png",
+                        },
+                    ],
+                    "pagination": {"page": 1, "pageSize": 25, "totalItems": 2, "totalPages": 1},
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_artifact_list(self, mock_api_client, create_mock_response):
         """Test case for get_artifact_list"""
         api = ArtifactApi(api_client=mock_api_client)
 
-        artifact_list_data = {
-            "artifacts": [
-                {"id": str(uuid4()), "filename": "test1.txt", "mime_type": "text/plain"},
-                {"id": str(uuid4()), "filename": "test2.png", "mime_type": "image/png"},
-            ],
-            "pagination": {"page": 1, "pageSize": 25, "totalItems": 2, "totalPages": 1},
-        }
-
         # Mock the API response
-        mock_response = mock_rest_response(data=artifact_list_data, status=200)
-        mock_api_client.call_api.return_value = mock_response
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         response = api.get_artifact_list(page=1, page_size=25)
@@ -43,19 +60,30 @@ class TestArtifactApi:
         assert "page=1" in args[1]
         assert "pageSize=25" in args[1]
 
-    def test_get_artifact(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "ARTIFACT_ID_PLACEHOLDER",
+                    "filename": "test.txt",
+                    "mime_type": "text/plain",
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_artifact(self, mock_api_client, create_mock_response):
         """Test case for get_artifact"""
         api = ArtifactApi(api_client=mock_api_client)
         artifact_id = uuid4()
-        artifact_data = {
-            "id": str(artifact_id),
-            "filename": "test.txt",
-            "mime_type": "text/plain",
-        }
 
-        # Mock the API response
-        mock_response = mock_rest_response(data=artifact_data, status=200)
-        mock_api_client.call_api.return_value = mock_response
+        # Update the mock response with the actual artifact_id
+        create_mock_response.data = create_mock_response.data.replace(
+            b"ARTIFACT_ID_PLACEHOLDER", str(artifact_id).encode()
+        )
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         response = api.get_artifact(id=artifact_id)
@@ -71,17 +99,19 @@ class TestArtifactApi:
         assert args[0] == "GET"
         assert args[1].endswith(f"/artifact/{artifact_id}")
 
-    def test_download_artifact(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": b"file content", "status": 200}],
+        indirect=True,
+    )
+    def test_download_artifact(self, mock_api_client, create_mock_response):
         """Test case for download_artifact"""
         api = ArtifactApi(api_client=mock_api_client)
         artifact_id = uuid4()
         file_content = b"file content"
 
         # Mock the API response
-        # Note: download_artifact returns bytearray, so we mock the raw data
-        mock_response = mock_rest_response(status=200)
-        mock_response.data = file_content
-        mock_api_client.call_api.return_value = mock_response
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         response = api.download_artifact(id=artifact_id)
@@ -95,16 +125,19 @@ class TestArtifactApi:
         assert args[0] == "GET"
         assert args[1].endswith(f"/artifact/{artifact_id}/download")
 
-    def test_view_artifact(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": b"file content", "status": 200}],
+        indirect=True,
+    )
+    def test_view_artifact(self, mock_api_client, create_mock_response):
         """Test case for view_artifact"""
         api = ArtifactApi(api_client=mock_api_client)
         artifact_id = uuid4()
         file_content = b"file content"
 
         # Mock the API response
-        mock_response = mock_rest_response(status=200)
-        mock_response.data = file_content
-        mock_api_client.call_api.return_value = mock_response
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         response = api.view_artifact(id=artifact_id)
@@ -118,23 +151,37 @@ class TestArtifactApi:
         assert args[0] == "GET"
         assert args[1].endswith(f"/artifact/{artifact_id}/view")
 
-    def test_upload_artifact(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "id": "ARTIFACT_ID_PLACEHOLDER",
+                    "filename": "test.txt",
+                    "result_id": None,
+                    "run_id": "RUN_ID_PLACEHOLDER",
+                },
+                "status": 201,
+            }
+        ],
+        indirect=True,
+    )
+    def test_upload_artifact(self, mock_api_client, create_mock_response):
         """Test case for upload_artifact"""
         api = ArtifactApi(api_client=mock_api_client)
         run_id = uuid4()
+        artifact_id = uuid4()
         filename = "test.txt"
         file_content = b"content"
 
-        artifact_data = {
-            "id": str(uuid4()),
-            "filename": filename,
-            "result_id": None,
-            "run_id": str(run_id),
-        }
-
-        # Mock the API response
-        mock_response = mock_rest_response(data=artifact_data, status=201)
-        mock_api_client.call_api.return_value = mock_response
+        # Update the mock response with the actual IDs
+        create_mock_response.data = create_mock_response.data.replace(
+            b"ARTIFACT_ID_PLACEHOLDER", str(artifact_id).encode()
+        )
+        create_mock_response.data = create_mock_response.data.replace(
+            b"RUN_ID_PLACEHOLDER", str(run_id).encode()
+        )
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         response = api.upload_artifact(filename=filename, file=file_content, run_id=run_id)
@@ -161,14 +208,18 @@ class TestArtifactApi:
         )
         assert file_found
 
-    def test_delete_artifact(self, mock_api_client, mock_rest_response):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 200}],
+        indirect=True,
+    )
+    def test_delete_artifact(self, mock_api_client, create_mock_response):
         """Test case for delete_artifact"""
         api = ArtifactApi(api_client=mock_api_client)
         artifact_id = uuid4()
 
         # Mock the API response
-        mock_response = mock_rest_response(status=200)
-        mock_api_client.call_api.return_value = mock_response
+        mock_api_client.call_api.return_value = create_mock_response
 
         # Call the API
         api.delete_artifact(id=artifact_id)

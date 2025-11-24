@@ -17,18 +17,21 @@ from ibutsu_client.models.create_token import CreateToken
 from ibutsu_client.models.token import Token
 from ibutsu_client.models.token_list import TokenList
 from ibutsu_client.models.user import User
-from test import create_mock_response
+from test.utils import sample_pagination_data, sample_token_data, sample_user_data
 
 
 class TestUserApi:
     """UserApi comprehensive tests"""
 
-    def test_add_token_success(self, mocker, sample_token_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_token_data(name="api-token", expires="2025-12-31"), "status": 201}],
+        indirect=True,
+    )
+    def test_add_token_success(self, mocker, create_mock_response):
         """Test case for add_token - successfully create a token"""
         api = UserApi()
-        token_data = sample_token_data(name="api-token", expires="2025-12-31")
-        mock_response = create_mock_response(token_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         create_token = CreateToken(name="api-token", expires="2025-12-31")
         result = api.add_token(create_token=create_token)
@@ -38,22 +41,29 @@ class TestUserApi:
         assert result.expires == "2025-12-31"
         api.api_client.call_api.assert_called_once()
 
-    def test_add_token_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 401}],
+        indirect=True,
+    )
+    def test_add_token_unauthorized(self, mocker, create_mock_response):
         """Test case for add_token with no authentication"""
         api = UserApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         create_token = CreateToken(name="test-token", expires="2025-12-31")
         with pytest.raises((ServiceException, Exception)):  # Should raise unauthorized exception
             api.add_token(create_token=create_token)
 
-    def test_add_token_with_http_info(self, mocker, sample_token_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_token_data(name="test-token"), "status": 201}],
+        indirect=True,
+    )
+    def test_add_token_with_http_info(self, mocker, create_mock_response):
         """Test case for add_token_with_http_info"""
         api = UserApi()
-        token_data = sample_token_data(name="test-token")
-        mock_response = create_mock_response(token_data, status=201)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         create_token = CreateToken(name="test-token", expires="2025-12-31")
         result = api.add_token_with_http_info(create_token=create_token)
@@ -61,11 +71,15 @@ class TestUserApi:
         assert result.status_code == 201
         assert isinstance(result.data, Token)
 
-    def test_delete_token_success(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 204}],
+        indirect=True,
+    )
+    def test_delete_token_success(self, mocker, create_mock_response):
         """Test case for delete_token - successfully delete a token"""
         api = UserApi()
-        mock_response = create_mock_response({}, status=204)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         token_id = "550e8400-e29b-41d4-a716-446655440000"
         api.delete_token(id=token_id)
@@ -73,33 +87,49 @@ class TestUserApi:
         # 204 No Content typically returns None
         api.api_client.call_api.assert_called_once()
 
-    def test_delete_token_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_delete_token_not_found(self, mocker, create_mock_response):
         """Test case for delete_token with non-existent token"""
         api = UserApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         token_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.delete_token(id=token_id)
 
-    def test_delete_token_with_http_info(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {}, "status": 204}],
+        indirect=True,
+    )
+    def test_delete_token_with_http_info(self, mocker, create_mock_response):
         """Test case for delete_token_with_http_info"""
         api = UserApi()
-        mock_response = create_mock_response({}, status=204)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         token_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.delete_token_with_http_info(id=token_id)
 
         assert result.status_code == 204
 
-    def test_get_current_user_success(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_user_data(email="current@example.com", name="Current User"),
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_current_user_success(self, mocker, create_mock_response):
         """Test case for get_current_user - retrieve current user details"""
         api = UserApi()
-        user_data = sample_user_data(email="current@example.com", name="Current User")
-        mock_response = create_mock_response(user_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_current_user()
 
@@ -107,33 +137,43 @@ class TestUserApi:
         assert result.email == "current@example.com"
         assert result.name == "Current User"
 
-    def test_get_current_user_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 401}],
+        indirect=True,
+    )
+    def test_get_current_user_unauthorized(self, mocker, create_mock_response):
         """Test case for get_current_user without authentication"""
         api = UserApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises((ServiceException, Exception)):
             api.get_current_user()
 
-    def test_get_current_user_with_http_info(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_user_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_get_current_user_with_http_info(self, mocker, create_mock_response):
         """Test case for get_current_user_with_http_info"""
         api = UserApi()
-        user_data = sample_user_data()
-        mock_response = create_mock_response(user_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_current_user_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, User)
 
-    def test_get_token_success(self, mocker, sample_token_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_token_data(name="specific-token"), "status": 200}],
+        indirect=True,
+    )
+    def test_get_token_success(self, mocker, create_mock_response):
         """Test case for get_token - retrieve a single token"""
         api = UserApi()
-        token_data = sample_token_data(name="specific-token")
-        mock_response = create_mock_response(token_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         token_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_token(id=token_id)
@@ -141,22 +181,29 @@ class TestUserApi:
         assert isinstance(result, Token)
         assert result.name == "specific-token"
 
-    def test_get_token_not_found(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "not found"}, "status": 404}],
+        indirect=True,
+    )
+    def test_get_token_not_found(self, mocker, create_mock_response):
         """Test case for get_token with non-existent token"""
         api = UserApi()
-        mock_response = create_mock_response({"error": "not found"}, status=404)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         token_id = "550e8400-e29b-41d4-a716-446655440000"
         with pytest.raises(NotFoundException):
             api.get_token(id=token_id)
 
-    def test_get_token_with_http_info(self, mocker, sample_token_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_token_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_get_token_with_http_info(self, mocker, create_mock_response):
         """Test case for get_token_with_http_info"""
         api = UserApi()
-        token_data = sample_token_data()
-        mock_response = create_mock_response(token_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         token_id = "550e8400-e29b-41d4-a716-446655440000"
         result = api.get_token_with_http_info(id=token_id)
@@ -164,58 +211,92 @@ class TestUserApi:
         assert result.status_code == 200
         assert isinstance(result.data, Token)
 
-    def test_get_token_list_success(self, mocker, sample_token_data, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "tokens": [
+                        sample_token_data(name="token1"),
+                        sample_token_data(name="token2"),
+                    ],
+                    "pagination": sample_pagination_data(page=1, page_size=25, total_items=2),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_token_list_success(self, mocker, create_mock_response):
         """Test case for get_token_list - retrieve list of tokens"""
         api = UserApi()
-        token1 = sample_token_data(name="token1")
-        token2 = sample_token_data(name="token2")
-        pagination = sample_pagination_data(page=1, page_size=25, total_items=2)
-
-        response_data = {"tokens": [token1, token2], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_token_list()
 
         assert isinstance(result, TokenList)
         assert len(result.tokens) == 2
 
-    def test_get_token_list_with_pagination(
-        self, mocker, sample_token_data, sample_pagination_data
-    ):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "tokens": [sample_token_data()],
+                    "pagination": sample_pagination_data(page=2, page_size=10),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_token_list_with_pagination(self, mocker, create_mock_response):
         """Test case for get_token_list with pagination parameters"""
         api = UserApi()
-        token1 = sample_token_data()
-        pagination = sample_pagination_data(page=2, page_size=10)
-
-        response_data = {"tokens": [token1], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_token_list(page=2, page_size=10)
 
         assert isinstance(result, TokenList)
         api.api_client.call_api.assert_called_once()
 
-    def test_get_token_list_with_http_info(self, mocker, sample_pagination_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": {
+                    "tokens": [],
+                    "pagination": sample_pagination_data(),
+                },
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_get_token_list_with_http_info(self, mocker, create_mock_response):
         """Test case for get_token_list_with_http_info"""
         api = UserApi()
-        pagination = sample_pagination_data()
-        response_data = {"tokens": [], "pagination": pagination}
-        mock_response = create_mock_response(response_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.get_token_list_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, TokenList)
 
-    def test_update_current_user_success(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [
+            {
+                "data": sample_user_data(email="current@example.com", name="Current User"),
+                "status": 200,
+            }
+        ],
+        indirect=True,
+    )
+    def test_update_current_user_success(self, mocker, create_mock_response):
         """Test case for update_current_user - get current user details"""
         api = UserApi()
-        user_data = sample_user_data(email="current@example.com", name="Current User")
-        mock_response = create_mock_response(user_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.update_current_user()
 
@@ -223,32 +304,43 @@ class TestUserApi:
         assert result.email == "current@example.com"
         assert result.name == "Current User"
 
-    def test_update_current_user_unauthorized(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "unauthorized"}, "status": 401}],
+        indirect=True,
+    )
+    def test_update_current_user_unauthorized(self, mocker, create_mock_response):
         """Test case for update_current_user without authentication"""
         api = UserApi()
-        mock_response = create_mock_response({"error": "unauthorized"}, status=401)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises((ServiceException, Exception)):
             api.update_current_user()
 
-    def test_update_current_user_with_http_info(self, mocker, sample_user_data):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": sample_user_data(), "status": 200}],
+        indirect=True,
+    )
+    def test_update_current_user_with_http_info(self, mocker, create_mock_response):
         """Test case for update_current_user_with_http_info"""
         api = UserApi()
-        user_data = sample_user_data()
-        mock_response = create_mock_response(user_data, status=200)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         result = api.update_current_user_with_http_info()
 
         assert result.status_code == 200
         assert isinstance(result.data, User)
 
-    def test_update_current_user_server_error(self, mocker):
+    @pytest.mark.parametrize(
+        "create_mock_response",
+        [{"data": {"error": "internal error"}, "status": 500}],
+        indirect=True,
+    )
+    def test_update_current_user_server_error(self, mocker, create_mock_response):
         """Test case for update_current_user with server error"""
         api = UserApi()
-        mock_response = create_mock_response({"error": "internal error"}, status=500)
-        mocker.patch.object(api.api_client, "call_api", return_value=mock_response)
+        mocker.patch.object(api.api_client, "call_api", return_value=create_mock_response)
 
         with pytest.raises(ServiceException):
             api.update_current_user()
