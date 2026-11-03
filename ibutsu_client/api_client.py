@@ -20,7 +20,6 @@ import uuid
 from enum import Enum
 from urllib.parse import quote
 
-from dateutil.parser import parse
 from pydantic import SecretStr
 
 import ibutsu_client.models
@@ -672,9 +671,7 @@ class ApiClient:
         :return: date.
         """
         try:
-            return parse(string).date()
-        except ImportError:
-            return string
+            return datetime.date.fromisoformat(string)
         except ValueError:
             raise rest.ApiException(status=0, reason=f"Failed to parse `{string}` as date object")
 
@@ -687,9 +684,7 @@ class ApiClient:
         :return: datetime.
         """
         try:
-            return parse(string)
-        except ImportError:
-            return string
+            return datetime.datetime.fromisoformat(string)
         except ValueError:
             raise rest.ApiException(
                 status=0, reason=(f"Failed to parse `{string}` as datetime object")

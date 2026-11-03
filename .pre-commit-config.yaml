@@ -27,9 +27,7 @@ repos:
       language_version: python3
       exclude: ^ibutsu_client/
       additional_dependencies:
-        - python-dateutil
         - urllib3
-        - types-python-dateutil
 
 ci:
   skip: ["ruff-check", "ruff-format"]
