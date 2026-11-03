@@ -247,6 +247,13 @@ ignore = [
     "N818", # Exception name should be named with an Error suffix - generated code
     "SIM105", # Use contextlib.suppress(Exception) instead of try-except-pass - generated code
     "TCH003", # Move standard library import into type-checking block - UUID needed at runtime for Pydantic
+    "RUF036", # `None` not at the end of a type union - generated code template
+    "PERF102", # Use `values()` instead of `items()` - generated code pattern
+    "TRY004", # Prefer `TypeError` for invalid type - generated code pattern
+    "TRY201", # Use `raise` without specifying exception name - generated code
+    "TRY203", # Useless try-except - generated code pattern
+    "S110", # try-except-pass - generated code pattern
+    "BLE001", # Do not catch blind exception - generated code pattern
 ]
 "setup.py" = [
     "ERA001", # Found commented-out code - setup file comments
