@@ -42,18 +42,16 @@ import ibutsu_client
 Please follow the [installation procedure](#installation--usage) and then run the following:
 
 ```python
-
 import time
 import ibutsu_client
 from pprint import pprint
 from ibutsu_client.api import admin_project_management_api
 from ibutsu_client.model.project import Project
 from ibutsu_client.model.project_list import ProjectList
+
 # Defining the host is optional and defaults to /api
 # See configuration.py for a list of all supported configuration parameters.
-configuration = ibutsu_client.Configuration(
-    host = "/api"
-)
+configuration = ibutsu_client.Configuration(host="/api")
 
 # The client must configure the authentication and authorization parameters
 # in accordance with the API server security policy.
@@ -61,9 +59,7 @@ configuration = ibutsu_client.Configuration(
 # satisfies your auth use case.
 
 # Configure Bearer authorization (JWT): jwt
-configuration = ibutsu_client.Configuration(
-    access_token = 'YOUR_BEARER_TOKEN'
-)
+configuration = ibutsu_client.Configuration(access_token="YOUR_BEARER_TOKEN")
 
 
 # Enter a context with an instance of the API client
@@ -76,7 +72,7 @@ with ibutsu_client.ApiClient(configuration) as api_client:
         title="My project",
         owner_id="6b8b01ad-a17e-4ca1-8df5-fadb41439567",
         group_id="a16ad60e-bf23-4195-99dc-594858ad3e5e",
-    ) # Project | A project (optional)
+    )  # Project | A project (optional)
 
     try:
         # Administration endpoint to manually add a project. Only accessible to superadmins.
